@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<widget-definition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://www.hybris.com/schema/cockpitng/widget-definition.xsd"
+	id="de.wooliesgcbackoffice.widgets.orderPersonalisationMedia">
+	 	
+	 <name>PersonalisationMedia Search Condition Adapter</name>
+    <description>PersonalisationMedia Search Condition Adapter</description>
+    <defaultTitle>PersonalisationMedia Search Condition Adapter</defaultTitle>
+    <author>653154</author>
+    <version>1.0</version>
+    <view src="none" />
+    <keywords>
+        <keyword>_hidden</keyword>
+    </keywords>
+	
+	<controller class="de.hybris.wooliesegiftcard.widgets.OrderPersonalizationMediaFilterController" />
+	
+	<sockets>
+		<input id="nodeSelected" type="com.hybris.backoffice.navigation.NavigationNode" />
+		<output id="outContext" type="com.hybris.backoffice.widgets.advancedsearch.impl.AdvancedSearchInitContext" />
+	</sockets>
+</widget-definition>

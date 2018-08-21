@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- [y] hybris Platform Copyright (c) 2017 SAP SE or an SAP affiliate company. 
+	All rights reserved. This software is the confidential and proprietary information 
+	of SAP ("Confidential Information"). You shall not disclose such Confidential 
+	Information and shall use it only in accordance with the terms of the license 
+	agreement you entered into with SAP. -->
+<config xmlns="http://www.hybris.com/cockpit/config"
+xmlns:advanced-search="http://www.hybris.com/cockpitng/config/advancedsearch"
+xmlns:list-view="http://www.hybris.com/cockpitng/component/listView">
+	<context component="explorer-tree" merge-by="module">
+		<n:explorer-tree xmlns:n="http://www.hybris.com/cockpitng/config/explorertree">
+			<!-- <n:type-node id="WWCardImagesReview" code="WWCardImagesReview" /> -->
+			<n:type-node id="DeliveryMode" code="DeliveryMode" />
+			<n:type-node id="ResellerCustomer" code="ResellerCustomer" />
+			<n:type-node id="OrderPersonalisationMedia" code="PersonalisationMedia" />
+		</n:explorer-tree>
+	</context>
+
+	<!-- <context type="WWCardImagesReview" component="listview">
+		<list:list-view xmlns:list="http://www.hybris.com/cockpitng/component/listView">
+			<list:column spring-bean="previewListCellRenderer" width="86px" />
+		</list:list-view>
+	</context>
+
+	<context type="WWCardImagesReview" component="listview">
+		<list:list-view xmlns:list="http://www.hybris.com/cockpitng/component/listView">
+			<list:column spring-bean="previewListCellRenderer" width="86px" />
+		</list:list-view>
+	</context> -->
+
+	<context component="cs-explorer-tree" module="customersupportbackoffice"  principal="customersupportagentrole" merge-by="source" >
+        <n:explorer-tree xmlns:n="http://www.hybris.com/cockpitng/config/explorertree" title="customer_support" >
+            <n:type-node code="Customer" id="customersupport_backoffice_explorerTree_customers"/>
+            <n:type-node id="customersupportbackoffice.typenode.order.all"  />
+             <n:type-node code="MemberUnit"/>
+             <n:type-node code="CorporateB2BUnit"/>
+             <n:type-node code="PersonalisationMedia" id="OrderPersonalisationMedia">
+             
+             </n:type-node>
+             <n:type-node code="CorporateB2BCustomer"/>
+             <n:type-node code="MemberCustomer"/>
+        </n:explorer-tree>
+    </context>
+    
+    <context type="PersonalisationMedia" component="cs-listview" principal="customersupportagentrole" module="customersupportbackoffice">
+		<list:list-view xmlns:list="http://www.hybris.com/cockpitng/component/listView">
+			<list:column spring-bean="previewListCellRenderer" width="86px" />
+			<list:column qualifier="image" label="PersonalisationMedia.image" />
+			<list:column qualifier="imageApprovalStatus" label="PersonalisationMedia.imageApprovalStatus"/>
+		</list:list-view>
+	</context>
+	
+	<context merge-by="type" parent="User" type="Customer" component="cs-listview" principal="customersupportagentrole" module="customersupportbackoffice">
+		<list-view:list-view>
+			<list-view:column qualifier="uid"/>
+			<list-view:column qualifier="name"/>
+			<list-view:column qualifier="customerID"/>
+			<list-view:column qualifier="type"/>
+			<list-view:column qualifier="customerType" label="label.userType"/>
+		</list-view:list-view>
+	</context>
+	
+	<context merge-by="type" type="CorporateB2BUnit" component="cs-listview" principal="customersupportagentrole" module="customersupportbackoffice">
+		<list-view:list-view>
+			<list-view:column qualifier="uid"/>
+			<list-view:column qualifier="name"/>
+		</list-view:list-view>
+	</context>
+	
+	<context merge-by="type" type="MemberUnit" component="cs-listview" principal="customersupportagentrole" module="customersupportbackoffice">
+		<list-view:list-view>
+			<list-view:column qualifier="uid"/>
+			<list-view:column qualifier="name"/>
+		</list-view:list-view>
+	</context>
+	
+	<!-- ResellerCustomer Customization Begin -->
+	<!-- Create Wizard -->
+	<context component="create-wizard" type="ResellerCustomer">
+		<wz:flow xmlns:wz="http://www.hybris.com/cockpitng/config/wizard-config"
+			id="ResellerCustomerWizard" title="create.resellerCustomer.title">
+			<wz:prepare id="resellerCustomerPrepare">
+				<wz:initialize property="newResellerCustomer" type="ResellerCustomer" />
+			</wz:prepare>
+			<wz:step id="step1" label="create.resellerCustomer.general.label">
+				<wz:content id="step1.content">
+					<wz:property-list root="newResellerCustomer">
+						<wz:property qualifier="name" />
+						<wz:property qualifier="contactName" />
+						<wz:property qualifier="contactEmailId" />
+					</wz:property-list>
+				</wz:content>
+				<wz:navigation id="step1.navigation">
+					<wz:cancel />
+					<wz:done
+						visible="!#empty(newResellerCustomer.name) and newResellerCustomer.name != null">
+						<wz:save property="newResellerCustomer" />
+					</wz:done>
+				</wz:navigation>
+			</wz:step>
+		</wz:flow>
+	</context>
+
+	<!-- Simple Search Area -->
+	<context type="ResellerCustomer" component="simple-search">
+		<yss:simple-search
+			xmlns:yss="http://www.hybris.com/cockpitng/config/simplesearch">
+			<yss:field name="resellerId" />
+			<yss:field name="name" />
+		</yss:simple-search>
+	</context>
+
+	<!-- List View Area -->
+	<context type="ResellerCustomer" component="listview">
+		<list:list-view xmlns:list="http://www.hybris.com/cockpitng/component/listView">
+			<list:column qualifier="resellerId" width="186px" />
+			<list:column qualifier="name" />
+		</list:list-view>
+	</context>
+	<!-- Editor Area -->
+	<context type="ResellerCustomer" component="editor-area">
+		<editorArea:editorArea
+			xmlns:editorArea="http://www.hybris.com/cockpitng/component/editorArea">
+			<editorArea:tab name="essentials">
+				<editorArea:section name="essentials">
+					<editorArea:attribute qualifier="resellerId"
+						readonly="true" position="1" />
+					<editorArea:attribute qualifier="name"
+						position="2" />
+					<editorArea:attribute qualifier="contactName"
+						position="3" />
+					<editorArea:attribute qualifier="contactEmailId"
+						position="4" />
+					<editorArea:attribute qualifier="order"
+						position="5" />
+				</editorArea:section>
+			</editorArea:tab>
+		</editorArea:editorArea>
+	</context>
+
+	<!-- ResellerCustomer Customization End -->
+	<context merge-by="type" parent="GenericItem" type="CorporateB2BUnit"
+		component="editor-area">
+		<editorArea:editorArea
+			xmlns:editorArea="http://www.hybris.com/cockpitng/component/editorArea">
+			<editorArea:tab name="hmc.tab.b2bunit.cobrandtab"
+				position="10">
+				<editorArea:section name="hmc.section.b2bunit.cobrandsection">
+					<editorArea:attribute qualifier="coBrandImages" />
+				</editorArea:section>
+			</editorArea:tab>
+		</editorArea:editorArea>
+	</context>
+	
+      
+      <context type="MemberUnit" component="editor-area">
+		<editorArea:editorArea
+			xmlns:editorArea="http://www.hybris.com/cockpitng/component/editorArea">
+			<editorArea:tab name="essentials">
+				<editorArea:section name="essentials">
+					
+					<editorArea:attribute qualifier="memberDescription"
+						position="1" />
+					<editorArea:attribute qualifier="memberEmail"
+						position="2" />
+					<editorArea:attribute qualifier="memberContact"
+						position="3" />
+					<editorArea:attribute qualifier="memberAccountGroup"
+						position="4" />
+					<editorArea:attribute qualifier="memberActiveStatus"
+						position="5" />
+					<editorArea:attribute qualifier="memberKey"
+						position="6" />
+					<editorArea:attribute qualifier="memberBackgroundImage"
+						position="7" />
+					<editorArea:attribute qualifier="memberLogoImage"
+						position="8" />
+					<editorArea:attribute qualifier="heading1"
+						position="9" />
+					<editorArea:attribute qualifier="fontColor1"
+						position="10" />
+					<editorArea:attribute qualifier="heading2"
+						position="11" />
+					<editorArea:attribute qualifier="fontColor2"
+						position="12" />
+						<editorArea:attribute qualifier="heading3"
+						position="13" />
+					<editorArea:attribute qualifier="fontColor3"
+						position="14" />
+				</editorArea:section>
+			</editorArea:tab>
+		</editorArea:editorArea>
+	</context>
+	<context  parent="B2BUnit" component="create-wizard" type="MemberUnit">
+		<wz:flow xmlns:wz="http://www.hybris.com/cockpitng/config/wizard-config"
+			id="MemberUnitWizard" title="create.memberUnit.title">
+			<wz:prepare id="memberUnitPrepare">
+				<wz:initialize property="newMemberUnit" type="MemberUnit" />
+			</wz:prepare>
+			<wz:step id="step1" label="create.memberUnit.general.label">
+				<wz:content id="step1.content">
+					<wz:property-list root="newMemberUnit">
+					<wz:property qualifier="uid" type="java.lang.String"/>
+					<wz:property qualifier="locName"/>
+					<wz:property qualifier="memberKey" />
+					<wz:property qualifier="memberActiveStatus" />
+					
+					</wz:property-list>
+				</wz:content>
+				<wz:navigation id="step1.navigation">
+					<wz:cancel />
+					<wz:done
+						visible="!#empty(newMemberUnit.uid) and newMemberUnit.uid != null">
+						<wz:save property="newMemberUnit" />
+					</wz:done>
+				</wz:navigation>
+			</wz:step>
+		</wz:flow>
+	</context>
+
+    <context merge-by="type" parent="B2BUnit"  type="MemberUnit" component="simple-search">
+		<yss:simple-search
+			xmlns:yss="http://www.hybris.com/cockpitng/config/simplesearch">
+			<yss:field name="uid" />
+				<!-- <yss:field name="locName" /> -->
+		</yss:simple-search>
+	</context>
+	
+  <context merge-by="type" parent="B2BUnit"  type="MemberUnit" component="listview">
+		<list:list-view xmlns:list="http://www.hybris.com/cockpitng/component/listView">
+			<list:column qualifier="uid" width="186px" />
+			<!-- <list:column qualifier="locName" /> -->
+		</list:list-view>
+	</context> 
+
+
+	
+	<context merge-by="type" parent="B2BUnit" type="MemberUnit" component="editor-area">
+        <editorArea:editorArea xmlns:editorArea="http://www.hybris.com/cockpitng/component/editorArea">
+            <editorArea:tab name="hmc.tab.groups">
+                <editorArea:section name="hmc.section.b2bunit.hierarchy.descendents">
+                    <editorArea:attribute editor="com.hybris.cockpitng.editor.extendedmultireferenceeditor" qualifier="UserGroups">
+	                    <editorArea:editor-parameter>
+			                <editorArea:name>listConfigContext</editorArea:name>
+			                <editorArea:value>referenceListViewUserGroup</editorArea:value>
+			            </editorArea:editor-parameter>
+		            </editorArea:attribute>
+                </editorArea:section>
+            </editorArea:tab>
+            <editorArea:tab name="hmc.tab.b2bunit.approver">
+                <editorArea:section name="hmc.section.b2bunit.approver">
+                    <editorArea:attribute editor="com.hybris.cockpitng.editor.extendedmultireferenceeditor" qualifier="ApproverGroups">
+	                	<editorArea:editor-parameter>
+			                <editorArea:name>listConfigContext</editorArea:name>
+			                <editorArea:value>referenceListViewUserGroup</editorArea:value>
+			            </editorArea:editor-parameter>
+		            </editorArea:attribute>
+                    <editorArea:attribute editor="com.hybris.cockpitng.editor.extendedmultireferenceeditor" qualifier="Approvers">
+	                	<editorArea:editor-parameter>
+			                <editorArea:name>listConfigContext</editorArea:name>
+			                <editorArea:value>referenceListViewApprovers</editorArea:value>
+			            </editorArea:editor-parameter>
+		            </editorArea:attribute>
+                </editorArea:section>
+            </editorArea:tab>
+            
+            <editorArea:tab name="hmc.administration">
+                <editorArea:section name="hmc.tab.b2bbudget.general">
+                    <editorArea:attribute xmlns="http://www.hybris.com/cockpitng/component/editorArea" qualifier="active" readonly="true"/>
+					
+					<editorArea:attribute qualifier="memberBackgroundImage"
+						position="1" />
+					<editorArea:attribute qualifier="memberLogoImage"
+						position="2" />
+					<editorArea:attribute qualifier="heading1"
+						position="3" />
+					<editorArea:attribute qualifier="fontColor1"
+						position="4" />
+					<editorArea:attribute qualifier="heading2"
+						position="5" />
+					<editorArea:attribute qualifier="fontColor2"
+						position="6" />
+						<editorArea:attribute qualifier="heading3"
+						position="7" />
+					<editorArea:attribute qualifier="fontColor3"
+						position="8" />
+				</editorArea:section>
+               
+               
+            </editorArea:tab>          
+            
+            <editorArea:tab name="hmc.tab.hmclayout">
+                <editorArea:section name="hmc.section.hmclayout">
+                    <editorArea:attribute xmlns="http://www.hybris.com/cockpitng/component/editorArea" qualifier="hmcXML"/>
+                </editorArea:section>
+            </editorArea:tab>
+        </editorArea:editorArea>
+    </context>
+	
+	
+	
+	
+	<context merge-by="type" parent="B2BUnit" type="MemberUnit" component="advanced-search">
+        <advanced-search:advanced-search xmlns:advanced-search="http://www.hybris.com/cockpitng/config/advancedsearch">
+            <advanced-search:field-list/>
+        </advanced-search:advanced-search>
+    </context>
+	
+	
+	
+	<context merge-by="type" parent="B2BUnit" type="MemberUnit" component="referenceListViewUnitCustomers">
+		<list-view:list-view xmlns:list-view="http://www.hybris.com/cockpitng/component/listView">
+			<list-view:column qualifier="name"/>
+		</list-view:list-view>
+	</context>
+	
+	
+	<context merge-by="module" parent="auto" component="explorer-tree">
+        <explorer-tree:explorer-tree xmlns:explorer-tree="http://www.hybris.com/cockpitng/config/explorertree">
+            <explorer-tree:navigation-node id="hmc.b2bcommercegroup">
+                <explorer-tree:type-node code="MemberUnit" id="MemberUnit"/>
+                <explorer-tree:type-node code="MemberCustomer" id="MemberCustomer"/>
+                <explorer-tree:type-node code="CorporateB2BUnit" id="CorporateB2BUnit"/>
+                <explorer-tree:type-node code="CorporateB2BCustomer" id="CorporateB2BCustomer"/>
+            </explorer-tree:navigation-node>
+        </explorer-tree:explorer-tree>
+    </context>
+    
+    
+   <context  parent="B2BCustomer" type="MemberCustomer" component="create-wizard">
+        <wz:flow xmlns:wz="http://www.hybris.com/cockpitng/config/wizard-config" id="MemberCustomerWizard" title="create.title(ctx.TYPE_CODE)">
+		<wz:prepare id="memberCustomerPrepare">
+				<wz:initialize property="newMemberCustomer" type="MemberCustomer" />
+			</wz:prepare>
+            <wz:step id="step1" label="create.customer.essential.label" sublabel="create.customer.essential.sublabel">
+                <wz:content id="step1.content">
+                    <wz:property-list root="newCust">
+					<wz:property qualifier="memberID" type="java.lang.String"/>
+				    <wz:property qualifier="memberUserId" type="java.lang.String" />
+					<wz:property qualifier="phone" type="java.lang.String"/>
+					<wz:property qualifier="CRNNumber" type="java.lang.String"/>
+					<wz:property qualifier="email" type="java.lang.String"/>
+                    </wz:property-list>
+                </wz:content>
+                <wz:navigation id="step1.navigation">
+					<wz:cancel />
+					<wz:done
+						visible="!#empty(newCust.memberUserId) and newCust.memberUserId != null">
+						<wz:save property="newCust" />
+					</wz:done>
+				</wz:navigation>
+            </wz:step>
+        </wz:flow>
+    </context>
+    <context type="MemberCustomer" component="editor-area">
+		<editorArea:editorArea
+			xmlns:editorArea="http://www.hybris.com/cockpitng/component/editorArea">
+			<editorArea:tab name="essentials">
+				<editorArea:section name="essentials">
+					<editorArea:attribute qualifier="memberID"
+						readonly="true" position="1" />
+					<editorArea:attribute qualifier="memberUserId"
+						position="2" />
+					<editorArea:attribute qualifier="email"
+						position="3" />
+				</editorArea:section>
+			</editorArea:tab>
+		</editorArea:editorArea>
+	</context>
+    	
+	<context merge-by="type" parent="B2BCustomer" type="MemberCustomer" component="referenceListViewApprovers">
+        <list-view:list-view xmlns:list-view="http://www.hybris.com/cockpitng/component/listView">
+            <list-view:column qualifier="uid"/>
+            <list-view:column qualifier="active"/>
+        </list-view:list-view>
+    </context>
+	<context merge-by="type" parent="B2BCustomer" type="MemberCustomer" component="listview">
+		<list-view:list-view xmlns:list-view="http://www.hybris.com/cockpitng/component/listView">
+			<list-view:column qualifier="customerID"/>
+		</list-view:list-view>
+	</context>
+	<context merge-by="type" parent="B2BCustomer" type="MemberCustomer" component="editor-area">
+        <editorArea:editorArea xmlns:editorArea="http://www.hybris.com/cockpitng/component/editorArea">
+            <editorArea:tab name="hmc.tab.b2bcustomer.approver" position="2">
+                <editorArea:section name="hmc.section.b2bcustomer.approver">
+                    <editorArea:attribute editor="com.hybris.cockpitng.editor.extendedmultireferenceeditor" qualifier="ApproverGroups">
+	                	<editorArea:editor-parameter>
+			                <editorArea:name>listConfigContext</editorArea:name>
+			                <editorArea:value>referenceListViewUserGroup</editorArea:value>
+			            </editorArea:editor-parameter>
+		            </editorArea:attribute>
+                    <editorArea:attribute editor="com.hybris.cockpitng.editor.extendedmultireferenceeditor" qualifier="Approvers">
+	                	<editorArea:editor-parameter>
+			                <editorArea:name>listConfigContext</editorArea:name>
+			                <editorArea:value>referenceListViewApprovers</editorArea:value>
+			            </editorArea:editor-parameter>
+		            </editorArea:attribute>
+                </editorArea:section>
+            </editorArea:tab>
+            <editorArea:tab name="hmc.tab.b2bcustomer.permissions" position="6">
+                <editorArea:section name="hmc.section.b2bcustomer.permissions">
+                    <editorArea:attribute editor="com.hybris.cockpitng.editor.extendedmultireferenceeditor" qualifier="PermissionGroups">
+	                	<editorArea:editor-parameter>
+			                <editorArea:name>listConfigContext</editorArea:name>
+			                <editorArea:value>referenceListViewUserGroup</editorArea:value>
+			            </editorArea:editor-parameter>
+		            </editorArea:attribute>
+                    <editorArea:attribute editor="com.hybris.cockpitng.editor.extendedmultireferenceeditor" qualifier="Permissions">
+	                	<editorArea:editor-parameter>
+			                <editorArea:name>listConfigContext</editorArea:name>
+			                <editorArea:value>referenceListViewPermission</editorArea:value>
+			            </editorArea:editor-parameter>
+		            </editorArea:attribute>
+                </editorArea:section>
+            </editorArea:tab>
+            <editorArea:tab name="hmc.addresses">
+                <editorArea:section name="hmc.addresses">
+                    <editorArea:attribute xmlns="http://www.hybris.com/cockpitng/component/editorArea" qualifier="email"/>
+                </editorArea:section>
+            </editorArea:tab>
+        </editorArea:editorArea>
+    </context>
+	
+	
+	
+	
+	<context merge-by="module" type="B2BCustomer" component="editorareaactions">
+		<y:actions xmlns:y="http://www.hybris.com/cockpit/config/hybris">
+			<y:group qualifier="common">
+				<y:label>actiongroup.common</y:label>				
+				<y:action action-id="de.hybris.platform.b2bcommerce.backoffice.actions.disableb2bcustomeraction" property="currentObject"/>
+				<y:action action-id="de.hybris.platform.b2bcommerce.backoffice.actions.enableb2bcustomeraction" property="currentObject"/>
+			</y:group>
+		</y:actions>
+	</context>
+	
+	 <context type="MemberUnit" component="editor-area">
+		<editorArea:editorArea
+			xmlns:editorArea="http://www.hybris.com/cockpitng/component/editorArea">
+			<editorArea:tab name="essentials">
+				<editorArea:section name="essentials">
+					
+					<editorArea:attribute qualifier="memberDescription"
+						position="1" />
+				</editorArea:section>
+			</editorArea:tab>
+		</editorArea:editorArea>
+	</context>
+	<context  parent="B2BUnit" component="create-wizard" type="CorporateB2BUnit">
+		<wz:flow xmlns:wz="http://www.hybris.com/cockpitng/config/wizard-config"
+			id="CorporateB2BUnitWizard" title="create.corporateb2bunit.title">
+			<wz:prepare id="corporateUnitPrepare">
+				<wz:initialize property="newCorporateB2BUnit" type="CorporateB2BUnit" />
+			</wz:prepare>
+			<wz:step id="step1" label="create.memberUnit.general.label">
+				<wz:content id="step1.content">
+					<wz:property-list root="newCorporateB2BUnit">
+					<wz:property qualifier="uid" type="java.lang.String"/>
+					<wz:property qualifier="locName"/>
+					
+					</wz:property-list>
+				</wz:content>
+				<wz:navigation id="step1.navigation">
+					<wz:cancel />
+					<wz:done
+						visible="!#empty(newCorporateB2BUnit.uid) and newCorporateB2BUnit.uid != null">
+						<wz:save property="newCorporateB2BUnit" />
+					</wz:done>
+				</wz:navigation>
+			</wz:step>
+		</wz:flow>
+	</context>
+
+    <context merge-by="type" parent="B2BUnit"  type="CorporateB2BUnit" component="simple-search">
+		<yss:simple-search
+			xmlns:yss="http://www.hybris.com/cockpitng/config/simplesearch">
+			<yss:field name="uid" />
+				<!-- <yss:field name="locName" /> -->
+		</yss:simple-search>
+	</context>
+	
+  <context merge-by="type" parent="B2BUnit"  type="CorporateB2BUnit" component="listview">
+		<list:list-view xmlns:list="http://www.hybris.com/cockpitng/component/listView">
+			<list:column qualifier="uid" width="186px" />
+			<!-- <list:column qualifier="locName" /> -->
+		</list:list-view>
+	</context> 
+
+
+	
+	<context merge-by="type" parent="B2BUnit" type="CorporateB2BUnit" component="editor-area">
+        <editorArea:editorArea xmlns:editorArea="http://www.hybris.com/cockpitng/component/editorArea">
+            <editorArea:tab name="hmc.tab.groups">
+                <editorArea:section name="hmc.section.b2bunit.hierarchy.descendents">
+                    <editorArea:attribute editor="com.hybris.cockpitng.editor.extendedmultireferenceeditor" qualifier="UserGroups">
+	                    <editorArea:editor-parameter>
+			                <editorArea:name>listConfigContext</editorArea:name>
+			                <editorArea:value>referenceListViewUserGroup</editorArea:value>
+			            </editorArea:editor-parameter>
+		            </editorArea:attribute>
+                </editorArea:section>
+            </editorArea:tab>
+            <editorArea:tab name="hmc.tab.b2bunit.approver">
+                <editorArea:section name="hmc.section.b2bunit.approver">
+                    <editorArea:attribute editor="com.hybris.cockpitng.editor.extendedmultireferenceeditor" qualifier="ApproverGroups">
+	                	<editorArea:editor-parameter>
+			                <editorArea:name>listConfigContext</editorArea:name>
+			                <editorArea:value>referenceListViewUserGroup</editorArea:value>
+			            </editorArea:editor-parameter>
+		            </editorArea:attribute>
+                    <editorArea:attribute editor="com.hybris.cockpitng.editor.extendedmultireferenceeditor" qualifier="Approvers">
+	                	<editorArea:editor-parameter>
+			                <editorArea:name>listConfigContext</editorArea:name>
+			                <editorArea:value>referenceListViewApprovers</editorArea:value>
+			            </editorArea:editor-parameter>
+		            </editorArea:attribute>
+                </editorArea:section>
+            </editorArea:tab>
+            
+            <editorArea:tab name="hmc.administration">
+                <editorArea:section name="hmc.tab.b2bbudget.general">
+                    <editorArea:attribute xmlns="http://www.hybris.com/cockpitng/component/editorArea" qualifier="active" readonly="true"/>
+				</editorArea:section>
+            </editorArea:tab>          
+            
+            <editorArea:tab name="hmc.tab.hmclayout">
+                <editorArea:section name="hmc.section.hmclayout">
+                    <editorArea:attribute xmlns="http://www.hybris.com/cockpitng/component/editorArea" qualifier="hmcXML"/>
+                </editorArea:section>
+            </editorArea:tab>
+        </editorArea:editorArea>
+    </context>
+	
+	
+	
+	
+	<context merge-by="type" parent="B2BUnit" type="CorporateB2BUnit" component="advanced-search">
+        <advanced-search:advanced-search xmlns:advanced-search="http://www.hybris.com/cockpitng/config/advancedsearch">
+            <advanced-search:field-list/>
+        </advanced-search:advanced-search>
+    </context>
+	
+	
+	
+	<context merge-by="type" parent="B2BUnit" type="CorporateB2BUnit" component="referenceListViewUnitCustomers">
+		<list-view:list-view xmlns:list-view="http://www.hybris.com/cockpitng/component/listView">
+			<list-view:column qualifier="name"/>
+		</list-view:list-view>
+	</context>
+	
+	<!-- Image Approval Customization Start -->
+	<!-- List View Area -->
+	 <context type="PersonalisationMedia" component="listview">
+		<list:list-view xmlns:list="http://www.hybris.com/cockpitng/component/listView">
+			<list:column spring-bean="previewListCellRenderer" width="86px" />
+			<list:column qualifier="code"  label="PersonalisationMedia.image"/>
+			<list:column qualifier="imageApprovalStatus"  label="PersonalisationMedia.imageApprovalStatus"/>
+		</list:list-view>
+	</context>
+	<!-- Simple Search Area -->
+	<context type="PersonalisationMedia" component="simple-search">
+		<yss:simple-search
+			xmlns:yss="http://www.hybris.com/cockpitng/config/simplesearch">
+		</yss:simple-search>
+	</context>
+	<!-- Editor Area -->
+	
+	<context type="PersonalisationMedia" component="editor-area">
+              <editorArea:editorArea
+                     xmlns:editorArea="http://www.hybris.com/cockpitng/component/editorArea">
+                     <editorArea:tab name="essentials">
+                           <editorArea:section name="essentials">
+                                  <editorArea:attribute qualifier="imageApprovalStatus"
+                                         position="1" />
+                           </editorArea:section >
+                           <editorArea:section name="hmc.media.section.general">
+                                  <editorArea:customPanel name="mediaSection" spring-bean="mediaItemUploadRenderer" >
+                                         <editorArea:render-parameter>
+                                         <editorArea:name>dataModelProperty</editorArea:name>
+                                                <editorArea:value>currentObject</editorArea:value>
+                                         </editorArea:render-parameter>
+                                  </editorArea:customPanel>
+                           </editorArea:section>
+                     </editorArea:tab>
+              </editorArea:editorArea>
+       </context>
+
+	
+	<!-- Image Approval Customization End -->
+		
+		<context type="Customer" component="advanced-search" merge-by="type" parent="User">
+		<advanced-search:advanced-search>
+			<advanced-search:field-list> 
+			<advanced-search:field name="customerType" selected="false"/>
+			<advanced-search:field name="userEmail" selected="false"/>
+			</advanced-search:field-list>
+		</advanced-search:advanced-search>
+	</context>
+	<context merge-by="type" parent="User" type="Customer" component="listview">
+		<list-view:list-view>
+			<list-view:column qualifier="customerType" label="label.userType"/>
+		</list-view:list-view>
+	</context>
+	
+</config>

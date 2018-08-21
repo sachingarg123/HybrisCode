@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2017 SAP SE or an SAP affiliate company.  All rights reserved.
+
+ This software is the confidential and proprietary information of SAP
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with SAP.
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:file="http://www.springframework.org/schema/integration/file"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/integration 
+	http://www.springframework.org/schema/integration/spring-integration.xsd
+	http://www.springframework.org/schema/integration/file 
+	http://www.springframework.org/schema/integration/file/spring-integration-file.xsd
+	http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:annotation-config/> 
+
+	<bean id="baseDirectoryWoolies" class="java.lang.String">
+		<constructor-arg value="#{baseDirectory}/${tenantId}" />
+	</bean>
+	
+	<!-- 1) Scan for files -->
+	<file:inbound-channel-adapter id="batchFilesWoolies" directory="#{baseDirectoryWoolies}"
+		filename-regex="^(.*)_(\d+)\.csv" comparator="fileOrderComparator" auto-startup="#{configurationService.configuration.getProperty('hotfolder.inbound.enabled')}">
+		<int:poller fixed-rate="1000" />
+	</file:inbound-channel-adapter>
+	
+	<!-- 2) move the file to processing and create header -->
+	<file:outbound-gateway request-channel="batchFilesWoolies" reply-channel="batchFilesWooliesProc"
+		directory="#{baseDirectoryWoolies}/processing" delete-source-files="true" />
+	<int:service-activator input-channel="batchFilesWooliesProc" output-channel="batchFilesHeaderInit" ref="wooliesHeaderSetupTask"
+		method="execute" />
+	<bean id="wooliesHeaderSetupTask" class="de.hybris.platform.acceleratorservices.dataimport.batch.task.HeaderSetupTask">
+		<property name="catalog" value="auWooliesProductCatalog" />
+		<property name="net" value="false" />
+		<property name="storeBaseDirectory" ref="baseDirectoryWoolies" />
+	</bean>
+	
+	<int:service-activator input-channel="batchFilesHeaderInit" output-channel="batchFilesHeader" ref="headerInitTask" method="execute" />
+	<bean id="headerInitTask" class="de.hybris.platform.acceleratorservices.dataimport.batch.task.HeaderInitTask">
+		<property name="sequenceIdParser" ref="batchSequenceIdParser"/>
+		<property name="languageParser" ref="batchLanguageParser"/>
+		<property name="fallbackLanguage" value="en" />
+	</bean>
+	<bean id="batchSequenceIdParser" class="de.hybris.platform.acceleratorservices.dataimport.batch.util.SequenceIdParser">
+		<property name="parser">
+			<bean class="de.hybris.platform.acceleratorservices.util.RegexParser">
+				<property name="regex" value="_(\d+)\.csv" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="batchLanguageParser" class="de.hybris.platform.acceleratorservices.util.RegexParser">
+		<property name="regex" value="_(\w{2})_(\d+)\.csv" />
+	</bean>
+	
+	<!-- 3) transform csv to impex file -->
+	<int:service-activator input-channel="batchFilesHeader" output-channel="batchFilesTran" ref="batchTransformerTask"
+		method="execute" />
+	<bean id="batchTransformerTask" 
+		  class="de.hybris.platform.acceleratorservices.dataimport.batch.task.ImpexTransformerTask" 
+		  init-method="initConvertersMap">
+		<property name="fieldSeparator" value="|" />
+		<property name="encoding" value="UTF-8" />
+		<property name="linesToSkip" value="0"/>
+		<property name="cleanupHelper" ref="cleanupHelper" />
+	</bean>
+	
+	<!-- B2C User Start -->
+	
+	<bean id="batchWooliesUserImportConverterMapping" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.mapping.impl.DefaultConverterMapping" 
+	p:mapping="Customer_B2C" p:converter-ref="batchWooliesUserImportConverter"/>
+	
+	<bean id="batchWooliesUserImportConverter" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.impl.DefaultImpexConverter">
+		<property name="header">
+			<value>
+<!-- 			INSERT_UPDATE Customer;uid[unique=true];customerID;email;firstName;lastname;name;phone;dob[dateformat=YYYY-MM-DD];customerType(code);type(code);optInForMarketing;policyAgreement[default='true'];sessionCurrency(isocode)[default='AUD'];sessionLanguage(isocode)[default='en'];groups(uid)[update=true];cardNo
+ -->			
+			INSERT_UPDATE Customer;uid[unique=true];customerID;userEmail;firstName;lastname;name;phone;dob[dateformat=YYYY-MM-DD];customerType(code);type(code);optInForMarketing;policyAgreement[default='true'];sessionCurrency(isocode)[default='AUD'];sessionLanguage(isocode)[default='en'];groups(uid)[update=true]
+			</value>
+		</property>
+		<property name="impexRow">
+			<value>
+				#% if: org.apache.commons.lang.StringUtils.isNotEmpty("{0}")
+					;{+0};{1};{2};{3};{4};{5};{6};{7};{8};{9};{10};{11};{12};{13};{14};{15}
+				#% endif:
+			</value>
+		</property>
+		<property name="type" value="Customer"/>
+	</bean>
+	<!-- B2C User End -->
+	
+	<!-- Corporate User Start -->
+	
+	<bean id="batchWooliesCorporateUserImportConverterMapping" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.mapping.impl.DefaultConverterMapping" 
+	p:mapping="Customer_B2B" p:converter-ref="batchWooliesCorporateUserImportConverter"/>
+	
+	<bean id="batchWooliesCorporateUserImportConverter" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.impl.DefaultImpexConverter">
+		<property name="header">
+			<value>
+			INSERT_UPDATE CorporateB2BCustomer;uid[unique=true];customerID;email;firstName;lastname;name;phone;dob[dateformat=YYYY-MM-DD];customerType(code);type(code);optInForMarketing;policyAgreement[default='true'];sessionCurrency(isocode)[default='AUD'];sessionLanguage(isocode)[default='en'];groups(uid)[update=true][default='b2badmingroup,b2bcustomergroup'];defaultB2BUnit(uid)
+			</value>
+		</property>
+		<property name="impexRow">
+			<value>
+				#% if: org.apache.commons.lang.StringUtils.isNotEmpty("{0}")
+					;{+0};{1};{2};{3};{4};{5};{6};{7};{8};{9};{10};{11};{12};{13};;{14}
+				#% endif:
+			</value>
+		</property>
+		<property name="type" value="CorporateB2BCustomer"/>
+	</bean>
+	
+	<!-- Corporate User Start -->
+	
+	<!-- Member User Start -->
+	
+	<bean id="batchWooliesMemberUserImportConverterMapping" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.mapping.impl.DefaultConverterMapping" 
+	p:mapping="Customer_MEM" p:converter-ref="batchWooliesMemberUserImportConverter"/>
+	
+	<bean id="batchWooliesMemberUserImportConverter" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.impl.DefaultImpexConverter">
+		<property name="header">
+			<value>
+ 				INSERT_UPDATE MemberCustomer;uid[unique=true];customerID;email;firstName;lastname;name;phone;dob[dateformat=YYYY-MM-DD];customerType(code);type(code);optInForMarketing;policyAgreement[default='true'];sessionCurrency(isocode)[default='AUD'];sessionLanguage(isocode)[default='en'];groups(uid)[update=true][default='b2badmingroup,b2bcustomergroup'];defaultB2BUnit(uid)
+			</value>
+		</property>
+		<property name="impexRow">
+			<value>
+				#% if: org.apache.commons.lang.StringUtils.isNotEmpty("{0}")
+					;{+0};{1};{2};{3};{4};{5};{6};{7};{8};{9};{10};{11};{12};{13};;{14}
+				#% endif:
+			</value>
+		</property>
+		<property name="type" value="MemberCustomer"/>
+	</bean>
+	
+	<!-- Member User Start -->
+	
+	<!-- Guest User Start -->
+	
+	<bean id="batchWooliesGuestUserImportConverterMapping" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.mapping.impl.DefaultConverterMapping" 
+	p:mapping="Customer_GUEST" p:converter-ref="batchWooliesGuestUserImportConverter"/>
+	
+	<bean id="batchWooliesGuestUserImportConverter" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.impl.DefaultImpexConverter">
+		<property name="header">
+			<value>
+<!-- 			INSERT_UPDATE Customer;uid[unique=true];customerID;email;firstName;lastname;name;phone;dob[dateformat=YYYY-MM-DD];customerType(code);type(code);optInForMarketing;policyAgreement[default='true'];sessionCurrency(isocode)[default='AUD'];sessionLanguage(isocode)[default='en'];groups(uid)[update=true];cardNo
+ -->			
+			INSERT_UPDATE Customer;uid[unique=true];customerID;userEmail;firstName;lastname;name;phone;dob[dateformat=YYYY-MM-DD];type(code);optInForMarketing;policyAgreement[default='true'];sessionCurrency(isocode)[default='AUD'];sessionLanguage(isocode)[default='en'];groups(uid)[update=true];cardNo;customerType(code)[default='B2C']
+			</value>
+		</property>
+		<property name="impexRow">
+			<value>
+				#% if: org.apache.commons.lang.StringUtils.isNotEmpty("{0}")
+				<!-- 	;{+0};{1};{2};{3};{4};{5};{6};{7};{8};{9};{10};{11};{12};{13};{14};{15};{16} -->
+					;{+0};{1};{2};{3};{4};{5};{6};{7};{9};{10};{11};{12};{13};{14};{15}
+				#% endif:
+			</value>
+		</property>
+		<property name="type" value="Customer"/>
+	</bean>
+	
+	<!-- Guest User Start -->
+	
+	
+	<bean id="batchWooliesAddressImportConverterMapping" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.mapping.impl.DefaultConverterMapping" 
+	p:mapping="ADDRESS" p:converter-ref="batchWooliesAddressImportConverter"/>
+	
+	<bean id="batchWooliesAddressImportConverter" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.impl.DefaultImpexConverter">
+		<property name="header">
+			<value>
+			INSERT_UPDATE Address;owner(Customer.uid)[unique=true];firstName;lastName;addressID[unique=true];town;postalCode;district;country(isocode);line1;line2;cellphone;shippingAddress[default=false];billingAddress[default=false]
+			</value>
+		</property>
+		<property name="impexRow">
+			<value>
+				#% if: org.apache.commons.lang.StringUtils.isNotEmpty("{0}")
+					;{+0};{1};{2};{3};{4};{5};{6};{7};{8};{9};{10};{11};{12};{13}
+				#% endif:
+			</value>
+		</property>
+		<property name="type" value="Address"/>
+	</bean>
+	
+	<bean id="batchWooliesOrderAddressImportConverterMapping" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.mapping.impl.DefaultConverterMapping" 
+	p:mapping="ORDERADDRESS" p:converter-ref="batchWooliesOrderAddressImportConverter"/>
+	
+	<bean id="batchWooliesOrderAddressImportConverter" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.impl.DefaultImpexConverter">
+		<property name="header">
+			<value>
+INSERT_UPDATE Address;owner(Customer.uid)[unique=true];firstName;lastName;addressID[unique=true];town;postalCode;district;country(isocode);line1;line2;cellphone;shippingAddress[default=false];billingAddress[default=false]			</value>
+		</property>
+		<property name="impexRow">
+			<value>
+				#% if: org.apache.commons.lang.StringUtils.isNotEmpty("{0}")
+					;{+0};{1};{2};{3};{4};{5};{6};{7};{8};{9};{10};{11};{12};{13}
+				#% endif:
+			</value>
+		</property>
+		<property name="type" value="Address"/>
+	</bean>
+	
+	<bean id="batchWooliesOrderImportConverterMapping" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.mapping.impl.DefaultConverterMapping" 
+	p:mapping="ORDERHEADER" p:converter-ref="batchWooliesOrderImportConverter"/>
+	
+	<bean id="batchWooliesOrderImportConverter" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.impl.DefaultImpexConverter">
+		<property name="header">
+			<value>
+<!-- 			INSERT_UPDATE Order;code[unique=true];user(uid);date[dateformat=dd.MM.yyyy HH:mm];currency(isocode[default='AUD']);deliveryMode(code);totalDiscounts;paymentCost;deliveryCost;totalPrice;subtotal;totalTax;site(uid[default='wooliesgcAu']);store(uid[default='wooliesgcAu']);status(code[default='COMPLETED']);paymentStatus(code[default='PAID']);paymentAddress(addressID);deliveryAddress;paymentInfo(code);taxInvoiceId;purchaseOrderNumber -->
+				INSERT_UPDATE Order;code[unique=true];user(uid);date[dateformat=dd.MM.yyyy HH:mm];currency(isocode[default='AUD']);deliveryMode(code);;totalDiscounts;deliveryCost;totalPrice;subtotal;totalTax;site(uid[default='wooliesgcAu']);store(uid[default='wooliesgcAu']);status(code[default='COMPLETED']);paymentStatus(code[default='PAID']);paymentAddress(addressID);deliveryAddress(addressID);paymentInfo(code);taxInvoiceId;purchaseOrderNumber
+			</value>
+		</property>
+		<property name="impexRow">
+			<value>
+				#% if: org.apache.commons.lang.StringUtils.isNotEmpty("{0}")
+					;{+0};{1};{2};{3};{4};{5};{6};{7};{8};{9};{10};{11};{12};{13};{14};{15};{16};{17};{18};{19};{20}
+				#% endif:
+			</value>
+		</property>
+		<property name="type" value="Order"/>
+	</bean>
+	
+	
+	<bean id="batchWooliesPaymentInfoImportConverterMapping" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.mapping.impl.DefaultConverterMapping" 
+	p:mapping="Payment_Info" p:converter-ref="batchWooliesPaymentInfoImportConverter"/>
+	
+	<bean id="batchWooliesPaymentInfoImportConverter" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.impl.DefaultImpexConverter">
+		<property name="header">
+			<value>
+				INSERT_UPDATE PaymentInfo;code[unique=true];user(uid);ccNumber;schema;paymentoption(code)
+			</value>
+		</property>
+		<property name="impexRow">
+			<value>
+				#% if: org.apache.commons.lang.StringUtils.isNotEmpty("{0}")
+					;{+0};{1};{2};{3};{4}
+				#% endif:
+			</value>
+		</property>
+		<property name="type" value="PaymentInfo"/>
+	</bean>
+	
+	<bean id="batchWooliesOrderEntryImportConverterMapping" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.mapping.impl.DefaultConverterMapping" 
+	p:mapping="ORDERLINE" p:converter-ref="batchWooliesOrderEntryImportConverter"/>
+	
+	<bean id="batchWooliesOrderEntryImportConverter" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.impl.DefaultImpexConverter">
+		<property name="header">
+			<value>
+			INSERT_UPDATE OrderEntry;order(code);orderLineID[unique=true];product(code,catalogVersion(catalog(id[default=auWooliesProductCatalog]),version[default=Online]));quantity;unit(code)[default='pieces'];entryNumber;basePrice;totalPrice;coBrandID
+			</value>
+		</property>
+		<property name="impexRow">
+			<value>
+				#% if: org.apache.commons.lang.StringUtils.isNotEmpty("{0}")
+					;{+0};{1};{2};{3};{4};{5};{6};{7};{8};{9}
+				#% endif:
+			</value>
+		</property>
+		<property name="type" value="OrderEntry"/>
+	</bean>
+	
+	<bean id="batchWooliesOrderPersonalisationMediaImportConverterMapping" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.mapping.impl.DefaultConverterMapping" 
+	p:mapping="Media" p:converter-ref="batchWooliesOrderPersonalisationMediaImportConverter"/>
+	
+	<bean id="batchWooliesOrderPersonalisationMediaImportConverter" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.impl.DefaultImpexConverter">
+		<property name="header">
+			<value>
+				$siteResource=jar:de.hybris.wooliesegiftcard.initialdata.setup.InitialDataSystemSetup&amp;/wooliesgcinitialdata/import/sampledata/productCatalogs/auWooliesProductCatalog
+				INSERT_UPDATE PersonalisationMedia;code[unique=true];mime;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];user(uid);imageApprovalStatus(code);hasOrder;catalogVersion(catalog(id[default=auWooliesProductCatalog]),version[default=Online])
+			</value>
+		</property>
+		<property name="impexRow">
+			<value>
+				#% if: org.apache.commons.lang.StringUtils.isNotEmpty("{0}")
+					;{+0};{1};{2};{3};{4};{5};{6}
+				#% endif:
+			</value>
+		</property>
+		<property name="type" value="PersonalisationMedia"/>
+	</bean>
+	
+	<bean id="batchWooliesPersonalisationEGiftCardImportConverterMapping" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.mapping.impl.DefaultConverterMapping" 
+	p:mapping="PersonalizedEGiftCard" p:converter-ref="batchWooliesPersonalisationEGiftCardImportConverter"/>
+	
+	<bean id="batchWooliesPersonalisationEGiftCardImportConverter" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.impl.DefaultImpexConverter">
+		<property name="header">
+			<value>
+				INSERT_UPDATE PersonalisationEGiftCard;uid[unique=true];orderEntry(orderLineID);orderLineID;pid;fromName;toName;message;toEmail;customerImage(code)	
+			</value>
+		</property>
+		<property name="impexRow">
+			<value>
+				#% if: org.apache.commons.lang.StringUtils.isNotEmpty("{0}")
+					;{+0};{2};{2};{4};{5};{6};{7};{8};{9}
+				#% endif:
+			</value>
+		</property>
+		<property name="type" value="PersonalisationEGiftCard"/>
+	</bean>
+	
+	<bean id="batchWooliesEGiftCardImportConverterMapping" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.mapping.impl.DefaultConverterMapping" 
+	p:mapping="GiftCard" p:converter-ref="batchWooliesEGiftCardImportConverter"/>
+	
+	<bean id="batchWooliesEGiftCardImportConverter" class="de.hybris.platform.acceleratorservices.dataimport.batch.converter.impl.DefaultImpexConverter">
+		<property name="header">
+			<value>
+				INSERT_UPDATE EGiftCard;code[unique=true];ordeLineID;giftCardStatus(code);expiryDate[dateformat=dd/MMM/yy];giftCardNumber;pin;emailId;activationDate[dateformat=dd/MMM/yy];giftCardValue;giftCardToken;personalisationGiftCard(UID)
+			</value>
+		</property>
+		<property name="impexRow">
+			<value>
+				#% if: org.apache.commons.lang.StringUtils.isNotEmpty("{0}")
+					;{+0};{1};{2};{3};{4};{5};{6};{7};{8};{9};{10};{11}
+				#% endif:
+			</value>
+		</property>
+		<property name="type" value="EGiftCard"/>
+	</bean>
+	
+	<alias name="wooliesfileOrderComparator" alias="fileOrderComparator"/>
+	<bean id="wooliesfileOrderComparator" class="de.hybris.platform.acceleratorservices.dataimport.batch.FileOrderComparator">
+		<property name="prefixPriority">
+			<map>
+				<!-- default priority is 0 -->
+				<entry key="Customer_B2C" value="1"/>
+				<entry key="Customer_B2B" value="2"/>
+				<entry key="Customer_MEM" value="3"/>
+				<entry key="Customer_GUEST" value="4"/>
+				<entry key="ADDRESS" value="5"/>
+				<entry key="Payment_Info" value="6"/>
+				<entry key="ORDERHEADER" value="7"/>
+				<entry key="ORDERLINE" value="8"/>
+				<entry key="ORDERADDRESS" value="9"/>
+				<entry key="Media" value="10"/>
+				<entry key="PersonalizedEGiftCard" value="11"/>
+				<entry key="GiftCard" value="12"/>
+			</map>
+		</property>
+	</bean>
+	
+</beans>

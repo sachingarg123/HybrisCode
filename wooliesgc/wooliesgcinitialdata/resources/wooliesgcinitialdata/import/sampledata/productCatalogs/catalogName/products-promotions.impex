@@ -1,0 +1,44 @@
+# -----------------------------------------------------------------------
+# [y] hybris Platform
+#
+# Copyright (c) 2017 SAP SE or an SAP affiliate company.  All rights reserved.
+#
+# This software is the confidential and proprietary information of SAP
+# ("Confidential Information"). You shall not disclose such Confidential
+# Information and shall use it only in accordance with the terms of the
+# license agreement you entered into with SAP.
+# -----------------------------------------------------------------------
+# ImpEx for Importing Products
+
+# Macros / Replacement Parameter definitions
+
+
+INSERT_UPDATE DroolsKIEModule;name[unique=true];mvnGroupId;mvnArtifactId;mvnVersion;ruleType(code);active;version;
+;promotions-module;hybris-rules;promotions;1.0.0;PROMOTION;true;0;
+
+INSERT_UPDATE DroolsKIEBase;name[unique=true];kieModule(name)[unique=true];equalityBehavior(code);eventProcessingMode(code);
+;promotions-base;promotions-module;EQUALITY;STREAM;
+
+INSERT_UPDATE DroolsKIESession;name[unique=true];kieBase(name)[unique=true];sessionType(code)
+;promotions-session;promotions-base;STATEFUL
+
+INSERT_UPDATE DroolsRuleEngineContext;name[unique=true];kieSession(name);ruleFiringLimit;
+;promotions-context;promotions-session;200;
+
+INSERT_UPDATE CatalogVersionToRuleEngineContextMapping;context(name)[unique=true];catalogVersion(catalog(id),version)[unique=true]
+;promotions-context;auWooliesProductCatalog:Online
+;promotions-context;nzWooliesProductCatalog:Online
+
+INSERT_UPDATE PromotionGroup;Identifier[unique=true];
+;wooliesgcPromoGrpAu;
+;wooliesgcPromoGrpNz;
+
+UPDATE DroolsKIEModule;name[unique=true];defaultKIEBase(name)
+;promotions-module;promotions-base
+
+UPDATE DroolsKIEBase;name[unique=true];defaultKIESession(name)
+;promotions-base;promotions-session
+
+INSERT_UPDATE CMSSite;uid[unique=true];defaultPromotionGroup(Identifier)
+;wooliesgcAu;wooliesgcPromoGrpAu
+;wooliesgcNz;wooliesgcPromoGrpNz

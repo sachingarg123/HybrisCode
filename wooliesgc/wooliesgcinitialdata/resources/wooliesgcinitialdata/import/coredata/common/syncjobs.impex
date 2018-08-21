@@ -1,0 +1,12 @@
+
+$productCatalog=auWooliesProductCatalog
+$sourceProductCV=sourceVersion(catalog(id[default=$productCatalog]),version[default='Staged'])[unique=true,default='$productCatalog:Staged']
+$targetProductCV=targetVersion(catalog(id[default=$productCatalog]),version[default='Online'])[unique=true,default='$productCatalog:Online']
+INSERT_UPDATE CatalogVersionSyncJob;code[unique=true];$sourceProductCV;$targetProductCV;
+;AUSCatalogSyncJob;;;;
+
+$productCatalog=nzWooliesProductCatalog
+$sourceProductCV=sourceVersion(catalog(id[default=$productCatalog]),version[default='Staged'])[unique=true,default='$productCatalog:Staged']
+$targetProductCV=targetVersion(catalog(id[default=$productCatalog]),version[default='Online'])[unique=true,default='$productCatalog:Online']
+INSERT_UPDATE CatalogVersionSyncJob;code[unique=true];$sourceProductCV;$targetProductCV;
+;NZCatalogSyncJob;;;;

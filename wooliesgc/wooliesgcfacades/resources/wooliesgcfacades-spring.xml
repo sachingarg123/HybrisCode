@@ -1,0 +1,815 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- [y] hybris Platform Copyright (c) 2017 SAP SE or an SAP affiliate company. 
+	All rights reserved. This software is the confidential and proprietary information 
+	of SAP ("Confidential Information"). You shall not disclose such Confidential 
+	Information and shall use it only in accordance with the terms of the license 
+	agreement you entered into with SAP. -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<context:annotation-config />
+
+	<alias alias="simpleSuggestionFacade" name="defaultSimpleSuggestionFacade" />
+	<bean id="defaultSimpleSuggestionFacade"
+		class="de.hybris.wooliesegiftcard.facades.suggestion.impl.DefaultSimpleSuggestionFacade">
+		<property name="simpleSuggestionService" ref="simpleSuggestionService" />
+		<property name="userService" ref="userService" />
+		<property name="categoryService" ref="categoryService" />
+		<property name="productService" ref="productService" />
+		<property name="productConverter" ref="carouselProductConverter" />
+		<property name="cartService" ref="cartService" />
+	</bean>
+
+	<bean id="carouselProductConverter" parent="defaultProductConverter">
+		<property name="populators">
+			<list merge="true">
+				<ref bean="productPricePopulator" />
+			</list>
+		</property>
+	</bean>
+	<bean id="customerEmailContext"
+		class="de.hybris.wooliesegiftcard.facades.process.email.context.CustomerEmailContext"
+		parent="abstractEmailContext" scope="prototype">
+		<property name="customerConverter" ref="customerConverter" />
+	</bean>
+
+	<bean id="forgottenPasswordEmailContext"
+		class="de.hybris.wooliesegiftcard.facades.process.email.context.ForgottenPasswordEmailContext"
+		parent="customerEmailContext" scope="prototype">
+		<property name="customerConverter" ref="customerConverter" />
+	</bean>
+
+	<bean id="invoiceTaxNotificationEmailContext"
+		class="de.hybris.wooliesegiftcard.facades.process.email.context.InvoiceTaxNotificationEmailContext"
+		parent="abstractEmailContext" scope="prototype">
+		<property name="orderConverter" ref="orderConverter" />
+	</bean>
+
+	<bean id="eGiftCartOrderNotificationEmailContext"
+		class="de.hybris.wooliesegiftcard.facades.process.email.context.EGiftCartOrderNotificationEmailContext"
+		parent="abstractEmailContext" scope="prototype">
+	</bean>
+	
+	<bean id="orderNotificationEmailContext"
+		class="de.hybris.wooliesegiftcard.facades.process.email.context.OrderNotificationEmailContext"
+		parent="abstractEmailContext" scope="prototype">
+		<property name="orderConverter" ref="orderConverter" />
+	</bean>
+
+	<bean id="quoteNotificationEmailContext"
+		class="de.hybris.wooliesegiftcard.facades.process.email.context.QuoteNotificationEmailContext"
+		parent="abstractEmailContext" scope="prototype">
+		<property name="quoteService" ref="quoteService" />
+		<property name="quoteConverter" ref="quoteConverter" />
+	</bean>
+
+	<bean id="deliverySentEmailContext"
+		class="de.hybris.wooliesegiftcard.facades.process.email.context.DeliverySentEmailContext"
+		parent="abstractEmailContext" scope="prototype">
+		<property name="consignmentConverter" ref="consignmentConverter" />
+	</bean>
+
+	<bean id="readyForPickupEmailContext"
+		class="de.hybris.wooliesegiftcard.facades.process.email.context.ReadyForPickupEmailContext"
+		parent="abstractEmailContext" scope="prototype">
+		<property name="consignmentConverter" ref="consignmentConverter" />
+	</bean>
+
+	<bean id="orderCancelledEmailContext"
+		class="de.hybris.wooliesegiftcard.facades.process.email.context.OrderCancelledEmailContext"
+		parent="abstractEmailContext" scope="prototype">
+		<property name="orderConverter" ref="orderConverter" />
+	</bean>
+
+	<bean id="orderRefundEmailContext"
+		class="de.hybris.wooliesegiftcard.facades.process.email.context.OrderRefundEmailContext"
+		parent="abstractEmailContext" scope="prototype">
+		<property name="orderConverter" ref="orderConverter" />
+	</bean>
+	<bean id="consignmentCollectionReminderEmailContext"
+		class="de.hybris.wooliesegiftcard.facades.process.email.context.ConsignmentCollectionReminderEmailContext"
+		parent="abstractEmailContext" scope="prototype">
+		<property name="consignmentConverter" ref="consignmentConverter" />
+		<property name="formatFactory" ref="formatFactory" />
+		<property name="customerServiceUncollectedConsignmentStrategy"
+			ref="customerServiceUncollectedConsignmentStrategy" />
+		<property name="orderConverter" ref="orderConverter" />
+	</bean>
+
+	<bean id="orderPartiallyModifiedEmailContext"
+		class="de.hybris.wooliesegiftcard.facades.process.email.context.OrderPartiallyModifiedEmailContext"
+		parent="abstractEmailContext" scope="prototype">
+		<property name="orderConverter" ref="orderConverter" />
+		<property name="orderEntryConverter" ref="orderEntryConverter" />
+		<property name="priceDataFactory" ref="priceDataFactory" />
+	</bean>
+
+	<bean id="orderPartiallyCanceledEmailContext"
+		class="de.hybris.wooliesegiftcard.facades.process.email.context.OrderPartiallyCanceledEmailContext"
+		parent="orderPartiallyModifiedEmailContext" scope="prototype">
+	</bean>
+
+	<bean id="orderPartiallyRefundedEmailContext"
+		class="de.hybris.wooliesegiftcard.facades.process.email.context.OrderPartiallyRefundedEmailContext"
+		parent="orderPartiallyModifiedEmailContext" scope="prototype">
+	</bean>
+
+	<bean id="notPickedUpConsignmentCanceledEmailContext"
+		class="de.hybris.wooliesegiftcard.facades.process.email.context.NotPickedUpConsignmentCanceledEmailContext"
+		parent="abstractEmailContext" scope="prototype">
+		<property name="consignmentConverter" ref="consignmentConverter" />
+		<property name="priceDataFactory" ref="priceDataFactory" />
+	</bean>
+
+	<alias name="yacceleratorSearchPagePointOfServiceDistancePopulator"
+		alias="searchPagePointOfServiceDistancePopulator" />
+	<bean id="yacceleratorSearchPagePointOfServiceDistancePopulator"
+		class="de.hybris.wooliesegiftcard.facades.storefinder.populators.SearchPagePointOfServiceDistancePopulator">
+		<property name="pointOfServiceDistanceConverter" ref="pointOfServiceDistanceConverter" />
+	</bean>
+
+	<bean id="wooliesDefaultCartFacade"
+		class="de.hybris.wooliesegiftcard.facades.order.impl.WooliesDefaultCartFacade"
+		parent="commerceCheckoutCartFacade">
+		<property name="cartService" ref="cartService" />
+		<property name="zoneDeliveryModeConverter" ref="zoneDeliveryModeConverter" />
+		<property name="configurationService" ref="configurationService" />
+		<property name="commonI18NService" ref="commonI18NService"></property>
+		<property name="deliveryService" ref="deliveryService"></property>
+		<property name="commerceCheckoutService" ref="commerceCheckoutService"></property>
+		<property name="addressReverseConverter" ref="addressReverseConverter"></property>
+	</bean>
+
+	<bean id="wooliesCommerceCartParameterBasicPopulator"
+		class="de.hybris.wooliesegiftcard.facades.order.converters.populator.WooliesCommerceCartParameterBasicPopulator"
+		parent="commerceCartParameterBasicPopulator">
+	</bean>
+
+	<bean id="wooliesDefaultCartModificationPopulator"
+		class="de.hybris.wooliesegiftcard.facades.order.converters.populator.WooliesDefaultCartModificationPopulator"
+		parent="defaultCartModificationPopulator">
+		<property name="priceDataFactory" ref="priceDataFactory"></property>
+		<property name="wooliesDefaultCartFacade" ref="wooliesDefaultCartFacade"></property>
+	</bean>
+
+	<bean parent="modifyPopulatorList">
+		<property name="list" ref="commerceCartParameterConverter" />
+		<property name="add" ref="wooliesCommerceCartParameterBasicPopulator" />
+	</bean>
+
+	<bean parent="modifyPopulatorList">
+		<property name="list" ref="cartModificationConverter" />
+		<property name="add" ref="wooliesDefaultCartModificationPopulator" />
+
+	</bean>
+<bean id="wooliesMemberViewPopulator"
+		class="de.hybris.wooliesegiftcard.facades.user.converters.populator.WooliesMemberViewPopulator">
+	</bean>
+
+		<alias name="WooliesCustomerReversePopulator" alias="customerReversePopulator" />
+	<bean id="WooliesCustomerReversePopulator"
+		class="de.hybris.wooliesegiftcard.facades.user.converters.populator.WooliesCustomerReversePopulator"
+		parent="defaultCustomerReversePopulator">
+		<property name="addressReverseConverter" ref="addressReverseConverter"></property>
+		<property name="wooliesCustomerUtility" ref="wooliesCustomerUtility"></property>
+	</bean>
+		<!--  b2c registartion API start-->
+	<alias alias="customerFacade" name="wooliesCustomerFacade"/>
+    <bean id="wooliesCustomerFacade" class="de.hybris.wooliesegiftcard.facades.WooliesDefaultCustomerFacade" parent="defaultCustomerFacade">
+		<property name="wooliesCustomerAccountService" ref="wooliesCustomerAccountService"/>
+		<property name="addressReverseConverter" ref="addressReverseConverter"></property>
+		<property name="customerReversePopulator" ref="customerReversePopulator"></property>
+		<property name="wooliesCountryServiceImpl" ref="wooliesCountryServiceImpl"></property>
+    </bean>
+	<alias alias="customerFacade" name="wooliesCustomerFacade"/>
+	 <bean id="wooliesDefaultCustomerFacade" class="de.hybris.wooliesegiftcard.facades.WooliesDefaultCustomerFacade" parent="defaultCustomerFacade">
+	 <property name="wooliesCustomerAccountService" ref="wooliesCustomerAccountService"/>
+		<property name="addressReverseConverter" ref="addressReverseConverter"></property>
+		<property name="customerReversePopulator" ref="customerReversePopulator"></property>
+		<property name="wooliesCountryServiceImpl" ref="wooliesCountryServiceImpl"></property>
+	 </bean>
+	 <alias alias="customerFacade" name="wooliesCustomerFacade"/>
+	 <bean id="wooliesDefaultCustomerFacades" class="de.hybris.wooliesegiftcard.facades.WooliesDefaultCustomerFacade" parent="defaultCustomerFacade">
+	 <property name="wooliesCustomerAccountService" ref="wooliesCustomerAccountService"/>
+		<property name="addressReverseConverter" ref="addressReverseConverter"></property>
+		<property name="customerReversePopulator" ref="customerReversePopulator"></property>
+		<property name="wooliesCountryServiceImpl" ref="wooliesCountryServiceImpl"></property>
+	 </bean>
+     <bean id="wooliesAddressReversePopulator"
+			class="de.hybris.wooliesegiftcard.facades.user.converters.populator.WooliesAddressReversePopulator" parent="addressReversePopulator"/>
+	
+	<bean parent="modifyPopulatorList">
+		<property name="list" ref="addressReverseConverter" />
+		<property name="add" ref="wooliesAddressReversePopulator" />
+	</bean>
+		<!--  b2c registartion API end-->
+	<bean parent="modifyPopulatorList">
+		<property name="list" ref="customerReverseConverter" />
+		<property name="add" ref="WooliesCustomerReversePopulator" />
+	</bean>
+	 
+	 <bean id="wooliesAddressPopulator"
+		class="de.hybris.wooliesegiftcard.facades.order.converters.populator.WooliesAddressPopulator"
+		parent="addressPopulator">
+	</bean>
+	<bean parent="modifyPopulatorList">
+		<property name="list" ref="addressConverter" />
+		<property name="add" ref="wooliesAddressPopulator" />
+
+	</bean>
+	
+	<bean id="orderHistoryFacade" class="de.hybris.wooliesegiftcard.facades.order.impl.OrderHistoryFacadeImpl"  parent="defaultOrderFacade"/>	
+	<!-- WooliesGuestAPI start -->
+	<bean id="wooliesGuestUserFacade"
+		class="de.hybris.wooliesegiftcard.facade.impl.WooliesGuestUserFacadeImpl"
+		parent="defaultCustomerFacade">
+		<property name="wooliesCustomerAccountService" ref="wooliesCustomerAccountService" />
+		<property name="addressReverseConverter" ref="addressReverseConverter"></property>
+		<property name="wooliesCountryServiceImpl" ref="wooliesCountryServiceImpl"></property>
+	</bean>
+	<!-- WooliesGuestAPI end -->
+	
+	<alias name="wooliesDefaultCartService" alias="cartService" />
+	<bean id="wooliesDefaultCartService"
+		class="de.hybris.wooliesegiftcard.service.impl.WooliesDefaultCartService"
+		parent="defaultCartService">
+		<property name="configurationService" ref="configurationService" />
+		<property name="wooliesDefaultCartDao" ref="wooliesDefaultCartDao" />
+		<property name="keyGenerator" ref="PIDGenerator"/>
+		<property name="mediaService" ref="mediaService"/>
+		<property name="orderEntryConverter" ref="orderEntryConverter"/>
+		<property name="userService" ref = "userService" />
+		<property name="wooliesMediaModelConverter" ref="wooliesMediaModelConverter" />
+		<property name="cmsSiteService" ref="cmsSiteService" />
+		<property name="imageCodeGenerator" ref="imageCodeGenerator" />
+		<property name="typeService" ref="typeService" />
+		 <property name="orderKeyGenerator" ref="#{configurationService.configuration.getProperty('commerceservices.orderCode.keyGenerator')}"/>
+
+	</bean>
+	
+	<bean id="PIDGenerator"
+	      class="de.hybris.platform.servicelayer.keygenerator.impl.PersistentKeyGenerator">
+		<property name="key" value="${keygen.PID.name}"/>
+		<property name="digits" value="${keygen.PID.digits}"/>
+		<property name="start" value="${keygen.PID.start}"/>
+		<property name="type" value="${keygen.PID.type}"/>
+		<property name="template" value="${keygen.PID.template}"/>
+	</bean>
+	
+	<bean id="wooliesDefaultCartDao"
+		class="de.hybris.wooliesegiftcard.dao.impl.WooliesDefaultCartDao">
+		<property name="flexibleSearchService" ref="flexibleSearchService" />
+		<property name="configurationService" ref="configurationService" />
+		<property name="commonI18NService" ref="commonI18NService" />
+		<property name="userService" ref="userService" />
+	</bean> 
+	
+	
+	<bean id="wooliesCartPopulator"
+		class="de.hybris.wooliesegiftcard.facades.order.converters.populator.WooliesCartPopulator"
+		parent="defaultCartPopulator">
+		<property name="configurationService" ref="configurationService"></property>
+		<property name="commonI18NService" ref="commonI18NService"></property>
+		<property name="wooliesDefaultCartFacade" ref="wooliesDefaultCartFacade"></property>
+	</bean>
+	
+		<bean parent="modifyPopulatorList">
+		<property name="list" ref="defaultExtendedCartConverter" />
+		<property name="add" ref="wooliesCartPopulator" />
+	</bean>
+	
+	<bean id="wooliesPromotionPopulator"
+		class="de.hybris.wooliesegiftcard.facades.order.converters.populator.WooliesPromotionPopulator"
+		parent="defaultPromotionsPopulator">
+		
+	</bean>
+
+	<bean parent="modifyPopulatorList">
+		<property name="list" ref="defaultPromotionsConverter" />
+		<property name="add" ref="wooliesPromotionPopulator" />
+	</bean>
+	
+	<alias name="wooliesUserFacade" alias="userFacade" />
+	<bean id="wooliesUserFacade"
+		class="de.hybris.wooliesegiftcard.facades.user.impl.WooliesDefaultUserFacade"
+		parent="defaultUserFacade">
+		<property name="addressReverseConverter" ref="addressReverseConverter"></property>
+		<property name="wooliesCustomerUtility" ref="wooliesCustomerUtility"></property>
+	</bean>
+
+		<bean id="wooliesCustomerUtility"
+		class="de.hybris.wooliesegiftcard.utility.WooliesCustomerUtility">
+	</bean>
+	
+	<!--b2b corporate customer start  -->
+	<bean id="wooliesB2BUnitFacade" class="de.hybris.wooliesegiftcard.facade.impl.WooliesB2BUnitFacadeImpl"
+		parent="defaultCustomerFacade">
+		<property name="userService" ref="userService" />
+		<property name="wooliesB2BCustomerAccountService" ref="wooliesB2BCustomerAccountService" />
+		<property name="addressReverseConverter" ref="addressReverseConverter"></property>
+		<property name="wooliesCountryServiceImpl" ref="wooliesCountryServiceImpl"></property>
+		<property name="wooliesB2BUnitServiceImpl" ref="wooliesB2BUnitServiceImpl"></property>
+	</bean>
+	
+	<!--memeber customer facade start  -->
+	<bean id="wooliesMemCustomerFacade" class="de.hybris.wooliesegiftcard.facade.impl.WooliesMemCustomerFacadeImpl"
+		parent="defaultCustomerFacade">
+		<property name="userService" ref="userService" />
+		<property name="wooliesMemberCustomerAccountService" ref="wooliesMemberCustomerAccountService" />
+		<property name="profileSummeryFacade" ref="profileSummeryFacade" />
+		<property name="addressReverseConverter" ref="addressReverseConverter"></property>
+		<!-- <property name="wooliesCountryServiceImpl" ref="wooliesCountryServiceImpl"></property> -->
+		<!-- <property name="wooliesB2BUnitServiceImpl" ref="wooliesB2BUnitServiceImpl"></property> -->
+	</bean>
+	
+	<bean id="corporateIDGenerator"
+	      class="de.hybris.platform.servicelayer.keygenerator.impl.PersistentKeyGenerator">
+		<property name="key" value="${keygen.corporateID.name}"/>
+		<property name="digits" value="${keygen.corporateID.digits}"/>
+		<property name="start" value="${keygen.corporateID.start}"/>
+		<property name="type" value="${keygen.corporateID.type}"/>
+		<property name="template" value="${keygen.corporateID.template}"/>
+	</bean>
+	
+	<bean id="PrepareCorporateIDInterceptor"
+	      class="de.hybris.wooliesegiftcard.service.interceptor.impl.PrepareCorporateIDInterceptor">
+		<property name="keyGenerator" ref="corporateIDGenerator"/>
+	</bean>
+	
+	<bean id="prepareCorporateInterceptorMapping"
+	      class="de.hybris.platform.servicelayer.interceptor.impl.InterceptorMapping">
+		<property name="interceptor" ref="PrepareCorporateIDInterceptor"/>
+		<property name="typeCode" value="B2BUnit"/>
+	</bean>
+	
+	<bean id="customerNumberGenerator"
+	      class="de.hybris.platform.servicelayer.keygenerator.impl.PersistentKeyGenerator">
+		<property name="key" value="${keygen.customerID.name}"/>
+		<property name="digits" value="${keygen.customerID.digits}"/>
+		<property name="start" value="${keygen.customerID.start}"/>
+		<property name="type" value="${keygen.customerID.type}"/>
+		<property name="template" value="${keygen.customerID.template}"/>
+	</bean>
+	
+	<bean id="customerNumberInitInterceptor" class="de.hybris.wooliesegiftcard.service.interceptor.impl.CustomerNumberInitInterceptor">
+	<property name="keyGenerator" ref="customerNumberGenerator"/>
+    </bean>
+    
+	<bean id="customerNumberInitInterceptorMapping" class="de.hybris.platform.servicelayer.interceptor.impl.InterceptorMapping">
+       <property name="interceptor" ref="customerNumberInitInterceptor" />
+       <property name="typeCode" value="Customer" />
+    </bean>
+    
+    <bean id="memberUnitInitInterceptor" class="de.hybris.wooliesegiftcard.service.interceptor.impl.MemberUnitInitInterceptor">
+    </bean>
+	<bean id="initMemberUnitInterceptorMapping" class="de.hybris.platform.servicelayer.interceptor.impl.InterceptorMapping">
+       <property name="interceptor" ref="memberUnitInitInterceptor" />
+       <property name="typeCode" value="MemberUnit" />
+    </bean>
+	<!--b2b corporate customer end  -->
+	<bean id="wooliesOrderEntryPopulator"
+		class="de.hybris.wooliesegiftcard.facades.order.converters.populator.WooliesOrderEntryPopulator"
+		parent="orderEntryPopulator">
+	</bean>
+	
+		<bean parent="modifyPopulatorList">
+		<property name="list" ref="orderEntryConverter" />
+		<property name="add" ref="wooliesOrderEntryPopulator" />
+	</bean>
+	
+	<bean id="woolliesApprovedImagesMediaFacade" class="de.hybris.wooliesegiftcard.facade.impl.DefaultWoolliesApprovedImagesMediaFacadeImpl" parent="mediaFacade"/>
+
+	<!-- country service and dao start -->
+	<alias alias="countryAccountService" name="wooliesCountryServiceImpl"/>
+    <bean id="wooliesCountryServiceImpl" class="de.hybris.wooliesegiftcard.service.impl.WooliesCountryServiceImpl">
+    		<property name="wooliesDefaultCustomerDao" ref="wooliesDefaultCustomerDao" />
+    		<property name="modelService" ref="modelService" />
+    		<property name="commonI18NService" ref="commonI18NService" />
+    </bean>
+	<bean id="wooliesDefaultCustomerDao"
+		class="de.hybris.wooliesegiftcard.dao.impl.WooliesDefaultCustomerDao">
+		<property name="flexibleSearchService" ref="flexibleSearchService" />
+			</bean> 
+			
+	<!-- <bean id="DefaultWooliesGenericDao"
+		class="de.hybris.wooliesegiftcard.core.genric.dao.impl.DefaultWooliesGenericDao">
+		<property name="flexibleSearchService" ref="flexibleSearchService" />
+			</bean> 		
+			 -->
+			<!-- country service and dao end -->
+			
+	 <bean id="wooliesOrderPopulator"
+		class="de.hybris.wooliesegiftcard.facades.order.converters.populator.WooliesOrderPopulator" parent="orderPopulator">
+		<property name="configurationService" ref="configurationService" />
+		<property name="wooliesDefaultCartDao" ref="wooliesDefaultCartDao"/>
+		<property name="paymentInfoConverter" ref="paymentInfoConverter"/>
+	</bean>
+	<bean parent="modifyPopulatorList">
+		<property name="list" ref="orderConverter" />
+		<property name="add" ref="wooliesOrderPopulator" />
+	</bean> 
+	
+	<alias name="defaultPaymentInfoConverter" alias="paymentInfoConverter"/>
+	<bean id="defaultPaymentInfoConverter" parent="abstractPopulatingConverter">
+		<property name="targetClass" value="de.hybris.platform.commercefacades.order.data.CCPaymentInfoData"/>
+		<property name="populators">
+			<list>
+				<ref bean="paymentInfoPopulator"/>
+			</list>
+		</property>
+	</bean>
+
+	<alias name="defaultPaymentInfoPopulator" alias="paymentInfoPopulator"/>
+	<bean id="defaultPaymentInfoPopulator"
+			class="de.hybris.wooliesegiftcard.facades.order.converters.populator.PaymentInfoPopulator">
+		<property name="addressConverter" ref="addressConverter"/>
+	</bean>
+
+<alias name="wooliesDeliveryModePopulator" alias="deliveryModePopulator"/>			
+<bean id="wooliesDeliveryModePopulator" class="de.hybris.wooliesegiftcard.facades.populators.WooliesDeliveryModePopulator"
+ parent="defaultDeliveryModePopulator"/>
+			
+	<!-- B2b userManagement start -->
+	<alias alias="wooliesB2BUnitService" name="wooliesB2BUnitServiceImpl" />
+	<bean id="wooliesB2BUnitServiceImpl"
+		class="de.hybris.wooliesegiftcard.service.impl.WooliesB2BUnitServiceImpl">
+		<property name="wooliesB2BUnitDaoImpl" ref="wooliesB2BUnitDaoImpl" />
+	</bean>
+	<bean id="wooliesB2BUnitDaoImpl"
+		class="de.hybris.wooliesegiftcard.dao.impl.WooliesB2BUnitDaoImpl">
+		<property name="flexibleSearchService" ref="flexibleSearchService" />
+	</bean>
+	
+	<bean id="wooliesB2BCustomerListPopulator"
+		class="de.hybris.wooliesegiftcard.facades.user.converters.populator.WooliesB2BCustomerListPopulator" />
+	<!-- B2b userManagement end -->
+	
+		<!-- Woolies Catalog API Start --> 
+	<alias name="defaultWooliesProductPricePopulator" alias="wooliesProductPricePopulator" />
+	<bean id="defaultWooliesProductPricePopulator"
+		class="de.hybris.wooliesegiftcard.facades.populators.WooliesProductPricePopulator"
+		parent="productPricePopulator">
+	</bean>
+	<alias name="defaultWooliesProductPopulator" alias="wooliesProductPopulator"/>
+	<bean id="defaultWooliesProductPopulator"
+		class="de.hybris.wooliesegiftcard.facades.populators.WooliesProductPopulator">
+		<property name="wooliesProductPricePopulator" ref="wooliesProductPricePopulator" />
+		<property name="productDescriptionPopulator" ref="productDescriptionPopulator" />
+		<property name="configurationService" ref="configurationService" />
+	</bean>
+	
+	<alias name="defaultWooliesProductConverter" alias="wooliesProductConverter" />
+	<bean id="defaultWooliesProductConverter" parent="abstractPopulatingConverter">
+		<property name="targetClass"
+			value="de.hybris.platform.commercefacades.product.data.ProductData" />
+		<property name="populators">
+			<list>
+				<ref bean="wooliesProductPopulator" />
+			</list>
+		</property>
+	</bean>
+
+	
+		<alias name="defaultItemsPopulator" alias="itemsPopulator"/>
+		<bean id="defaultItemsPopulator"
+			class="de.hybris.wooliesegiftcard.facades.category.populators.WooliesItemsPopulator">
+		<property name="mediaService" ref="mediaService"/>
+		<property name="configurationService" ref="configurationService" />
+		</bean>
+	
+	
+		<alias name="defaultItemsConverter" alias="itemsConverter"/>
+		<bean id="defaultItemsConverter" parent="abstractPopulatingConverter">
+		<property name="targetClass" value="de.hybris.platform.wooliesgcfacades.category.data.ItemsData"/>
+		<property name="populators">
+			<list>
+				<ref bean="itemsPopulator"/>
+			</list>
+		</property>
+		</bean>
+	
+		
+		<alias name="defaultSubCategoriesPopulator" alias="subCategoriesPopulator"/>
+		<bean id="defaultSubCategoriesPopulator"
+			class="de.hybris.wooliesegiftcard.facades.category.populators.WooliesSubCategoriesPopulator">
+		<property name="itemsConverter" ref="itemsConverter"/>
+		</bean>
+	
+	
+		<alias name="defaultSubCategoriesConverter" alias="subCategoriesConverter"/>
+		<bean id="defaultSubCategoriesConverter" parent="abstractPopulatingConverter">
+		<property name="targetClass" value="de.hybris.platform.wooliesgcfacades.category.data.SubCategoriesData"/>
+		<property name="populators">
+			<list>
+				<ref bean="subCategoriesPopulator"/>
+			</list>
+		</property>
+		</bean>
+	
+	   <alias name="wooliesCategoryPopulator" alias="wooliesCategoryPopulator"/>
+	   <bean id="wooliesCategoryPopulator"
+			class="de.hybris.wooliesegiftcard.facades.category.populators.WooliesCategoryPopulator">
+				<property name="subCategoriesConverter" ref="subCategoriesConverter" />
+				<property name="wooliesProductConverter" ref="wooliesProductConverter" />
+				<property name="configurationService" ref="configurationService" />
+		</bean>
+	
+	
+	   <alias name="defaultWooilesCategoryFacade" alias="wooilesCategoryFacade"/>
+	   <bean id="defaultWooilesCategoryFacade"
+			class="de.hybris.wooliesegiftcard.facade.impl.DefaultWooilesCategoryFacade">
+				<property name="wooliesCategoryService" ref="wooliesCategoryService" />
+				<property name="wooliesCategoryPopulator" ref="wooliesCategoryPopulator" />
+				<property name="configurationService" ref="configurationService" />
+				
+		</bean>
+	<!-- Woolies Catalog API End -->
+	<!-- Profile Summary data start -->
+	<bean id="profileSummeryFacade"
+		class="de.hybris.wooliesegiftcard.facade.impl.ProfileSummeryFacadeImpl">
+		<property name="userService" ref="userService" />
+		<property name="cartService" ref="cartService" />
+		<property name="cartFacade" ref="cartFacade" />
+		<property name="wooliesCustomerProfilePopulator" ref="wooliesCustomerProfilePopulator" />
+		<property name="wooliesB2BCustomerProfilePopulator" ref="wooliesB2BCustomerProfilePopulator" />	
+		<property name="wooliesMemberCustomerProfilePopulator" ref="wooliesMemberCustomerProfilePopulator" />
+		<property name="viewProfilePopulator" ref="viewProfilePopulator"></property>
+		<property name="viewsProfilePopulator" ref="viewsProfilePopulator"></property>
+		<property name="wooliesMemberViewPopulator" ref="wooliesMemberViewPopulator"></property>
+		<property name="customerConverter" ref="customerConverter" />
+		<property name="cartConverter" ref="cartConverter" />
+	</bean>
+
+	<bean id="wooliesCustomerProfilePopulator"
+		class="de.hybris.wooliesegiftcard.facades.user.converters.populator.WooliesCustomerProfilePopulator">
+	</bean>
+
+	<bean id="wooliesB2BCustomerProfilePopulator"
+		class="de.hybris.wooliesegiftcard.facades.user.converters.populator.WooliesB2BCustomerProfilePopulator">
+		<property name="userService" ref="userService" />
+	</bean>
+
+
+	<bean id="wooliesMemberCustomerProfilePopulator"
+		class="de.hybris.wooliesegiftcard.facades.user.converters.populator.WooliesMemberCustomerProfilePopulator">
+	</bean>
+	<!-- Profile Summary data end -->
+
+	<!-- Payment Details facade for woolies -->
+
+	<bean id="wooliesPaymentFacade"
+		class="de.hybris.wooliesegiftcard.facade.impl.WooliesPaymentFacadeImpl"
+		parent="defaultCheckoutFacade">
+		<property name="wooliesPaymentServiceImpl" ref="wooliesPaymentServiceImpl"></property>
+		<property name="addressReverseConverter" ref="addressReverseConverter"></property>
+	</bean>
+
+	<alias alias="wooliesPaymentService" name="wooliesPaymentServiceImpl" />
+	<bean id="wooliesPaymentServiceImpl"
+		class="de.hybris.wooliesegiftcard.service.impl.WooliesPaymentServiceImpl">
+		<property name="wooliesPaymentDaoImpl" ref="wooliesPaymentDaoImpl" />
+	</bean>
+	<bean id="wooliesPaymentDaoImpl"
+		class="de.hybris.wooliesegiftcard.dao.impl.WooliesPaymentDaoImpl">
+		<property name="flexibleSearchService" ref="flexibleSearchService" />
+	</bean>
+
+	<!-- Bulk order Details facade for woolies -->
+
+	<bean id="wooliesBulkOrderFacade"
+		class="de.hybris.wooliesegiftcard.facades.impl.WooliesBulkOrderFacadeImpl"
+		parent="defaultCheckoutFacade">
+		<property name="bulkOrderKeyGenerator" ref="bulkOrderKeyGenerator" />
+		<property name="flexibleSearchService" ref="flexibleSearchService" />
+		<property name="wooliesBulkOrderService" ref="wooliesBulkOrderService" />
+		<property name="modelService" ref="modelService" />
+			<property name="userService" ref="userService" />
+	</bean>
+
+
+	<bean id="imageCodeGenerator"
+	      class="de.hybris.platform.servicelayer.keygenerator.impl.PersistentKeyGenerator">
+		<property name="key" value="${keygen.Image.name}"/>
+		<property name="digits" value="${keygen.Image.digits}"/>
+		<property name="start" value="${keygen.Image.start}"/>
+		<property name="type" value="${keygen.Image.type}"/>
+		<property name="template" value="${keygen.Image.template}"/>
+		</bean>
+
+	<!-- for b2b order limit start -->
+	<bean parent="modifyPopulatorList">
+		<property name="list" ref="customerConverter" />
+		<property name="add" ref="wooliesB2BCustomerPopulator" />
+	</bean>
+	<alias name="defaultWooliesB2BCustomerPopulator" alias="wooliesB2BCustomerPopulator" />
+	<bean id="defaultWooliesB2BCustomerPopulator"
+		class="de.hybris.wooliesegiftcard.facades.user.converters.populator.WooliesB2BCustomerPopulator">
+		 <property name="priceDataFactory" ref="priceDataFactory" />
+		 <property name="userService" ref="userService" />
+	</bean>
+	<!-- for b2b order limit end -->
+  
+		<!-- corporate details API stated -->
+	<bean id="corporateDetailsFacade"
+		class="de.hybris.wooliesegiftcard.facade.impl.CorporateDetailsFacadeImpl">
+		<property name="userService" ref="userService" />
+		<property name="modelService" ref="modelService" />
+	</bean>
+	<!-- corporate details API end -->
+
+
+	<alias name="wooliesDefaultDeliveryService" alias="deliveryService"/>
+	<bean id="wooliesDefaultDeliveryService"
+		class="de.hybris.wooliesegiftcard.service.delivery.WooliesDefaultDeliveryService" parent="defaultDeliveryService">
+
+	</bean>
+	
+	<!--  b2b user management-->
+	<bean parent="modifyPopulatorList">
+		<property name="list" ref="customerConverter" />
+		<property name="add" ref="wooliesCustomerDataPapolator" />
+	</bean>
+	<alias name="defaultWooliesCustomerDataPapolator" alias="wooliesCustomerDataPapolator" />
+	<bean id="defaultWooliesCustomerDataPapolator"
+		class="de.hybris.wooliesegiftcard.facades.user.converters.populator.WooliesCustomerDataPapolator">
+		 <property name="priceDataFactory" ref="priceDataFactory" />
+		 <property name="userService" ref="userService" />
+	</bean>
+	
+	<bean id="orderPlacedFacade" class="de.hybris.wooliesegiftcard.facades.order.impl.OrderPlacedFacadeImpl"  parent="defaultOrderFacade">
+	<!-- <property name="wooliesOrderTaxInvoiceService" ref="wooliesOrderTaxInvoiceService" /> -->
+	</bean>	
+
+	   <bean id="wooliesCheckoutFacade"
+			class="de.hybris.wooliesegiftcard.facades.impl.DefaultWooliesCheckoutFacade">
+			<property name="customerAccountService" ref="customerAccountService" />
+			<property name="baseStoreService" ref="baseStoreService" />
+			<property name="checkoutCustomerStrategy" ref="checkoutCustomerStrategy" />
+			<property name="userService" ref="userService" />
+			<property name="cartService" ref="cartService" />
+			<property name="modelService" ref="modelService" />
+			<property name="commerceCartService" ref="commerceCartService" />
+			<property name="wooliesDefaultCartDao" ref="wooliesDefaultCartDao" />
+			<property name="configurationService" ref="configurationService" />
+			<property name="keyGenerator" ref="customerNumberGenerator"/>
+			
+		</bean>
+ <alias alias="orderFacade" name="wooliesOrderFacade"/>
+    
+    <bean id="wooliesOrderFacade" class="de.hybris.wooliesegiftcard.facades.WooliesDefaultOrderFacade" parent="defaultOrderFacade">
+		<property name="baseStoreService" ref="baseStoreService" />
+		<property name="customerAccountService" ref="customerAccountService" />
+		<property name="userService" ref="userService" />
+		<property name="orderConverter" ref="orderConverter" />
+			<property name="wooliesOrderServiceImpl" ref="wooliesOrderServiceImpl" />
+				</bean>
+				
+	<bean id="coBrandIDGenerator"
+	      class="de.hybris.platform.servicelayer.keygenerator.impl.PersistentKeyGenerator">
+		<property name="key" value="${keygen.CoBrand.name}"/>
+		<property name="digits" value="${keygen.CoBrand.digits}"/>
+		<property name="start" value="${keygen.CoBrand.start}"/>
+		<property name="type" value="${keygen.CoBrand.type}"/>
+		<property name="template" value="${keygen.CoBrand.template}"/>
+	</bean>
+	
+	<bean id="preparecoBrandInterceptor"
+	      class="de.hybris.wooliesegiftcard.service.interceptor.impl.PrepareCoBrandInterceptor">
+		<property name="keyGenerator" ref="coBrandIDGenerator"/>
+	</bean>
+	
+	<bean id="preparecoBrandInterceptorMapping"
+	      class="de.hybris.platform.servicelayer.interceptor.impl.InterceptorMapping">
+		<property name="interceptor" ref="preparecoBrandInterceptor"/>
+		<property name="typeCode" value="CoBrandImage"/>
+	</bean>
+	
+	<bean id="coBrandValidateInterceptor"
+	      class="de.hybris.wooliesegiftcard.service.interceptor.impl.CoBrandValidateInterceptor">
+		<property name="cmsAdminSiteService" ref="cmsAdminSiteService"/>
+	</bean>
+	
+	<bean id="coBrandValidateInterceptorMapping"
+	      class="de.hybris.platform.servicelayer.interceptor.impl.InterceptorMapping">
+		<property name="interceptor" ref="coBrandValidateInterceptor"/>
+		<property name="typeCode" value="CoBrandImage"/>
+	</bean>
+	<bean id="viewProfilePopulator"
+		class="de.hybris.wooliesegiftcard.facades.user.converters.populator.WooliesB2CViewPopulator">
+	</bean>
+	<bean id="viewsProfilePopulator"
+		class="de.hybris.wooliesegiftcard.facades.user.converters.populator.WooliesB2BViewPopulator">
+	</bean>
+	
+	<bean id="bulkOrderKeyGenerator"
+	      class="de.hybris.platform.servicelayer.keygenerator.impl.PersistentKeyGenerator">
+		<property name="key" value="${keygen.BulkOrder.name}"/>
+		<property name="digits" value="${keygen.BulkOrder.digits}"/>
+		<property name="start" value="${keygen.BulkOrder.start}"/>
+		<property name="type" value="${keygen.BulkOrder.type}"/>
+		<property name="template" value="${keygen.BulkOrder.template}"/>
+	</bean>	
+	
+	<alias name="defaultWooliesMediaFacade" alias="wooliesMediaFacade"/>
+	<bean id="defaultWooliesMediaFacade"
+		class="de.hybris.wooliesegiftcard.facade.impl.DefaultWooliesMediaFacade">
+	</bean>
+	
+	<alias name="defaultWooliesCustomerService" alias="wooliesCustomerService"/>
+	<bean id="defaultWooliesCustomerService"
+		class="de.hybris.wooliesegiftcard.service.impl.DefaultWooliesCustomerService">
+	</bean>
+	
+			<bean id="wooliesPromotionResultPopulator"
+		class="de.hybris.wooliesegiftcard.facades.populators.WooliesPromotionResultPopulator"
+		parent="defaultPromotionResultPopulator">
+		<property name="priceDataFactory" ref="priceDataFactory"></property>
+		<property name="commonI18NService" ref="commonI18NService"></property>
+	</bean>
+	
+		<bean parent="modifyPopulatorList">
+		<property name="list" ref="promotionResultConverter" />
+		<property name="add" ref="wooliesPromotionResultPopulator" />
+	</bean>
+	
+			<bean parent="modifyPopulatorList">
+		<property name="list" ref="productConverter" />
+		<property name="add" ref="wooliesProductPopulator" />
+		</bean>
+		
+			<alias name="wooliesShippingActionStrategy" alias="shippingActionStrategy"/>
+	<bean id="wooliesShippingActionStrategy" parent="defaultShippingActionStrategy" class="de.hybris.wooliesegiftcard.facades.action.impl.WooliesDefaultShippingActionStrategy" >
+	</bean>
+	
+	<alias alias="actionStrategies" name="defaultActionStrategies"/>
+	<util:list id="defaultActionStrategies">
+		<ref bean="defaultOrderAdjustTotalActionStrategy"/>
+		<ref bean="defaultOrderEntryAdjustActionStrategy"/>
+		<ref bean="defaultShippingActionStrategy"/>
+		<ref bean="defaultAddProductToCartActionStrategy"/>
+		<ref bean="defaultPotentialPromotionMessageActionStrategy"/>
+		<ref bean="wooliesShippingActionStrategy"/>
+	</util:list>
+	
+		<alias name="defaultWooliesMediaModelConverter" alias="wooliesMediaModelConverter" />
+	<bean id="defaultWooliesMediaModelConverter" parent="abstractPopulatingConverter">
+		<property name="targetClass" value="de.hybris.wooliesegiftcard.facades.product.data.PersonalisationMediaData" />
+		<property name="populators">
+			<list merge="true">
+				<ref bean="wooliesMediaModelPopulator" />
+			</list>
+		</property>
+	</bean>
+	<alias name="defaultWooliesMediaModelPopulator" alias="wooliesMediaModelPopulator" />
+	<bean id="defaultWooliesMediaModelPopulator" class="de.hybris.wooliesegiftcard.facades.populators.WooliesMediaModelPopulator">
+		<property name="uniqueItemIdentifierService" ref="cmsUniqueItemIdentifierService" />
+		<property name="configurationService" ref="configurationService" />
+	</bean>
+	
+	<bean id="wooliesOrderHistoryService"
+		class="de.hybris.wooliesegiftcard.service.impl.DefaultWooliesOrderHistoryService"></bean>
+		
+	<bean id="wooliesOrderHistoryDao"
+		class="de.hybris.wooliesegiftcard.dao.impl.DefaultWooliesOrderHistoryDao"></bean>
+		
+		<alias name="wooliesGiftCardConverter" alias="giftCardConverter" />
+	<bean id="wooliesGiftCardConverter" parent="abstractPopulatingConverter">
+		<property name="targetClass"
+			value="de.hybris.wooliesegiftcard.facades.GiftCardResponseData" />
+		<property name="populators">
+			<list>
+				<ref bean="giftCardPopulator" />
+			</list>
+		</property>
+	</bean>
+
+	<alias name="wooliesGiftCardPopulator" alias="giftCardPopulator" />
+	<bean id="wooliesGiftCardPopulator"
+		class="de.hybris.wooliesegiftcard.facades.order.converters.populator.WooliesGiftCardPopulator">
+	</bean>
+	
+		<bean id="wooliesOrderDaoImpl"
+		class="de.hybris.wooliesegiftcard.dao.impl.WooliesOrderDaoImpl">
+		<property name="flexibleSearchService" ref="flexibleSearchService" />
+	</bean>
+	
+	
+	<bean id="wooliesOrderServiceImpl"
+		class="de.hybris.wooliesegiftcard.service.impl.WooliesOrderServiceImpl">
+		<property name="wooliesOrderDaoImpl" ref="wooliesOrderDaoImpl" />
+	</bean>
+	
+	<alias alias="emailGenerationService" name="wooliesDefaultEmailGenerationService" />
+	<bean id="wooliesDefaultEmailGenerationService"
+		class="de.hybris.wooliesegiftcard.service.WooliesDefaultEmailGenerationService"
+		parent="defaultEmailGenerationService">
+	</bean>
+</beans>

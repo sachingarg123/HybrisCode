@@ -1,0 +1,54 @@
+# -----------------------------------------------------------------------
+# [y] hybris Platform
+#
+# Copyright (c) 2017 SAP SE or an SAP affiliate company.  All rights reserved.
+#
+# This software is the confidential and proprietary information of SAP
+# ("Confidential Information"). You shall not disclose such Confidential
+# Information and shall use it only in accordance with the terms of the
+# license agreement you entered into with SAP.
+# -----------------------------------------------------------------------
+#
+# Import Constraints for Product Cockpit
+# 
+
+INSERT_UPDATE CoverageConstraintGroup;id[unique=true];coverageDomainID;dedicatedTypes(code);interfaceName
+;productCoverageConstraintGroup;defaultDomain;Product;de.hybris.platform.validation.groupinterfaces.ProductCoverageConstraintGroup
+;variantCoverageConstraintGroup;defaultDomain;VariantProduct;de.hybris.platform.validation.groupinterfaces.VariantCoverageConstraintGroup
+
+INSERT_UPDATE SizeConstraint;descriptor(enclosingType(code),qualifier);id[unique=true,allownull=true];max[allownull=true];min[allownull=true];qualifier[allownull=true];severity(code,itemtype(code));target[allownull=true];type(code);constraintGroups(id);message[lang=de];message[lang=en]
+;Product:code;ProductCodeMinSizeCoverageConstraint;255;5;code;ERROR:Severity;de.hybris.platform.core.model.product.ProductModel;Product;productCoverageConstraintGroup
+;Product:name;ProductNameMinSizeCoverageConstraint;255;3;name;ERROR:Severity;de.hybris.platform.core.model.product.ProductModel;Product;productCoverageConstraintGroup
+;Product:description;ProductDescriptionMinSizeCoverageConstraint;10000;20;description;ERROR:Severity;de.hybris.platform.core.model.product.ProductModel;Product;productCoverageConstraintGroup
+;Product:europe1Prices;ProductPricesMinSizeCoverageConstraint;10000;1;europe1Prices;ERROR:Severity;de.hybris.platform.core.model.product.ProductModel;Product;productCoverageConstraintGroup;Es muss mindestens ein Preis definiert sein.;There must be at least one price assigned.
+;VariantProduct:code;VariantProductCodeMinSizeCoverageConstraint;255;5;code;ERROR:Severity;de.hybris.platform.variants.model.VariantProductModel;VariantProduct;variantCoverageConstraintGroup
+;VariantProduct:name;VariantProductNameMinSizeCoverageConstraint;255;3;name;ERROR:Severity;de.hybris.platform.variants.model.VariantProductModel;VariantProduct;variantCoverageConstraintGroup
+;VariantProduct:description;VariantProductDescriptionMinSizeCoverageConstraint;10000;20;description;ERROR:Severity;de.hybris.platform.variants.model.VariantProductModel;VariantProduct;variantCoverageConstraintGroup
+;VariantProduct:europe1Prices;VariantProductPricesMinSizeCoverageConstraint;10000;1;europe1Prices;ERROR:Severity;de.hybris.platform.variants.model.VariantProductModel;VariantProduct;variantCoverageConstraintGroup;Es muss mindestens ein Preis definiert sein.;There must be at least one price assigned.
+
+INSERT_UPDATE NotEmptyConstraint;descriptor(enclosingType(code),qualifier);id[unique=true,allownull=true];qualifier[allownull=true];severity(code,itemtype(code));target[allownull=true];type(code);constraintGroups(id)
+;Product:ean;ProductEanNotEmptyConstraint;ean;ERROR:Severity;de.hybris.platform.core.model.product.ProductModel;Product;productCoverageConstraintGroup
+;VariantProduct:ean;VariantProductEanNotEmptyConstraint;ean;ERROR:Severity;de.hybris.platform.variants.model.VariantProductModel;VariantProduct;variantCoverageConstraintGroup
+
+INSERT_UPDATE NotNullConstraint;descriptor(enclosingType(code),qualifier);id[unique=true,allownull=true];qualifier[allownull=true];severity(code,itemtype(code));target[allownull=true];type(code);constraintGroups(id)
+;Product:picture;ProductPictureNotNullConstraint;picture;ERROR:Severity;de.hybris.platform.core.model.product.ProductModel;Product;productCoverageConstraintGroup
+;Product:name;ProductNameNotNullConstraint;name;ERROR:Severity;de.hybris.platform.core.model.product.ProductModel;Product;productCoverageConstraintGroup
+;Product:description;ProductDescriptionNotNullConstraint;description;ERROR:Severity;de.hybris.platform.core.model.product.ProductModel;Product;productCoverageConstraintGroup
+;VariantProduct:picture;VariantProductPictureNotNullConstraint;picture;ERROR:Severity;de.hybris.platform.variants.model.VariantProductModel;VariantProduct;variantCoverageConstraintGroup
+;VariantProduct:name;VariantProductNameNotNullConstraint;name;ERROR:Severity;de.hybris.platform.variants.model.VariantProductModel;VariantProduct;variantCoverageConstraintGroup
+;VariantProduct:description;VariantProductDescriptionNotNullConstraint;description;ERROR:Severity;de.hybris.platform.variants.model.VariantProductModel;VariantProduct;variantCoverageConstraintGroup
+
+###############Custom##########
+
+INSERT_UPDATE ConstraintGroup;id[unique = true];dedicatedTypes(code);interfaceName
+;defaultBackofficeValidationGroup;Item;de.hybris.platform.validation.groupinterfaces.DefaultBackofficeValidationGroup
+
+INSERT_UPDATE SizeConstraint;active[allownull = true, default = true];descriptor(enclosingType(code),qualifier);id[unique = true];message[lang = en];min[allownull = true];max[allownull = true];qualifier[allownull = true];severity(code, itemtype(code));target[allownull = true];type(code);constraintGroups(id)
+;;MemberUnit:fontColor1;MemberUnitFontOneSizeConstraint;The Attribute "fontColor1" must not be greater than 100 characters;0;100;fontColor1;ERROR:Severity;de.hybris.wooliesegiftcard.core.model.MemberUnitModel;MemberUnit;defaultBackofficeValidationGroup;
+;;MemberUnit:fontColor2;MemberUnitFontTwoSizeConstraint;The Attribute "fontColor2" must not be greater than 100 characters;0;100;fontColor2;ERROR:Severity;de.hybris.wooliesegiftcard.core.model.MemberUnitModel;MemberUnit;defaultBackofficeValidationGroup;
+;;MemberUnit:fontColor3;MemberUnitFontThreeSizeConstraint;The Attribute "fontColor3" must not be greater than 100 characters;0;100;fontColor3;ERROR:Severity;de.hybris.wooliesegiftcard.core.model.MemberUnitModel;MemberUnit;defaultBackofficeValidationGroup;
+;;MemberUnit:heading1;MemberUnitHeadOneSizeConstraint;The Attribute "heading1" must not be greater than 250 characters;0;250;heading1;ERROR:Severity;de.hybris.wooliesegiftcard.core.model.MemberUnitModel;MemberUnit;defaultBackofficeValidationGroup;
+;;MemberUnit:heading2;MemberUnitHeadTwoSizeConstraint;The Attribute "heading2" must not be greater than 250 characters;0;250;heading2;ERROR:Severity;de.hybris.wooliesegiftcard.core.model.MemberUnitModel;MemberUnit;defaultBackofficeValidationGroup;
+;;MemberUnit:heading3;MemberUnitHeadThreeSizeConstraint;The Attribute "heading3" must not be greater than 250 characters;0;250;heading3;ERROR:Severity;de.hybris.wooliesegiftcard.core.model.MemberUnitModel;MemberUnit;defaultBackofficeValidationGroup;
+  
+$de.hybris.platform.core.Registry.getApplicationContext().getBean(de.hybris.platform.validation.services.ValidationService.class).reloadValidationEngine()

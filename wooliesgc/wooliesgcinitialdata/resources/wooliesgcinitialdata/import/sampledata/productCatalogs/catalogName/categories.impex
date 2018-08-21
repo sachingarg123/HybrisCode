@@ -1,0 +1,177 @@
+# -----------------------------------------------------------------------
+# [y] hybris Platform
+#
+# Copyright (c) 2017 SAP SE or an SAP affiliate company.  All rights reserved.
+#
+# This software is the confidential and proprietary information of SAP
+# ("Confidential Information"). You shall not disclose such Confidential
+# Information and shall use it only in accordance with the terms of the
+# license agreement you entered into with SAP.
+# -----------------------------------------------------------------------
+# ImpEx for Importing Categories
+
+# Macros / Replacement Parameter definitions
+$productCatalogAu=auWooliesProductCatalog
+$productCatalogNameAu=Australia Woolies Product Catalog
+$catalogVersionAu=catalogversion(catalog(id[default=$productCatalogAu]),version[default='Staged'])[unique=true,default=$productCatalogAu:Staged]
+$supercategoriesAu=source(code, $catalogVersionAu)[unique=true]
+$categoriesAu=target(code, $catalogVersionAu)[unique=true]
+
+$productCatalogNz=nzWooliesProductCatalog
+$productCatalogNameNz=New Zealand Woolies Product Catalog
+$catalogVersionNz=catalogversion(catalog(id[default=$productCatalogNz]),version[default='Staged'])[unique=true,default=$productCatalogNz:Staged]
+$supercategoriesNz=source(code, $catalogVersionNz)
+$categoriesNz=target(code, $catalogVersionNz)[unique=true]
+
+$thumbnail=thumbnail(code, $catalogVersionAu)
+$picture=picture(code, $catalogVersionAu)
+$siteResource=jar:de.hybris.wooliesegiftcard.initialdata.setup.InitialDataSystemSetup&/wooliesgcinitialdata/import/sampledata/productCatalogs/$productCatalogAu
+
+$lang=en
+
+INSERT_UPDATE Media;code[unique=true];realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];mime[default='image/jpeg'];$catalogVersionAu
+;wishGiftCard;wishGiftCard_1.jpg;$siteResource/images/96Wx96H/wishGiftCard_1.jpg;
+
+# Insert Categories
+INSERT_UPDATE Category;code[unique=true];allowedPrincipals(uid)[default='customergroup'];$catalogVersionAu
+;6280001
+;6280002
+;6281001
+;6281002
+;6281003
+;6281004
+;6281005
+;6281006
+;6282001
+;6282002
+;6282003
+;6282004
+;6282005
+;6282006
+;6282007
+;6282008
+;6282009
+
+# Insert Member Categories
+INSERT_UPDATE Category;code[unique=true];allowedPrincipals(uid);$catalogVersionAu
+;MEM_500001;500001
+;MEM_500002;500002
+;MEM_500003;500003
+;MEM_500006;500006
+;MEM_500009;500009
+;MEM_500010;500010
+;MEM_500011;500011
+;MEM_500012;500012
+;MEM_500017;500017
+;MEM_500018;500018
+;MEM_500020;500020
+;MEM_500021;500021
+;MEM_500022;500022
+;MEM_500029;500029
+;MEM_500034;500034
+;MEM_500035;;
+;MEM_500036;500036
+;MEM_500040;500040
+;MEM_500041;500041
+;MEM_500042;;
+;MEM_500043;500043
+;MEM_500044;500044
+;MEM_500045;500045
+;MEM_500046;500046
+;MEM_500047;;
+;MEM_500048;;
+;MEM_500049;500049
+;MEM_500050;500050
+;MEM_500051;500051
+;MEM_500052;500052
+;MEM_500053;;
+
+# Insert Category Structure
+INSERT_UPDATE CategoryCategoryRelation;$categoriesAu;$supercategoriesAu
+;6281001;6280001
+;6281002;6280001
+;6281003;6280001
+;6281004;6280001
+;6281005;6280002
+;6281006;6280002
+;6282001;6281001
+;6282002;6281001
+;6282003;6281001
+;6282004;6281001
+;6282005;6281001
+;6282006;6281001
+;6282007;6281001
+;6282008;6281001
+;6282009;6281001
+;6282001;6281005
+;6282002;6281005
+;6282003;6281005
+;6282004;6281005
+;6282005;6281005
+;6282006;6281005
+;6282007;6281005
+;6282008;6281005
+;6282009;6281005
+
+UPDATE Category;$catalogVersionAu;code[unique=true];name[lang=$lang];Classification;description[lang=$lang]
+;;6280001;Plastic_Card;Style;Plastic Card
+;;6280002;EGiftCard;Style;EGiftCard
+;;6281001;Wish_Plastic;Type;Wish Plastic
+;;6281002;Brands_Plastic;Type;Brands Plastic
+;;6281003;Essentials_Plastic;Type;Essentials Plastic
+;;6281004;Grocery_Plastic;Type;Grocery Plastic
+;;6281005;Wish_EGiftCard;Type;Wish EGiftCar 
+;;6281006;Brand_EGiftCard;Type;Brand EGiftCard
+;;6282001;Christmas;Occasion;Christmas
+;;6282002;New c;Occasion;Christmas
+;;6282003;Australia Day;Occasion;Australia Day
+;;6282004;Good Friday;Occasion;Good Friday
+;;6282005;Easter Saturday;Occasion;Easter Saturday
+;;6282006;Easter Monday;Occasion;Easter Monday
+;;6282007;Anzac Day;Occasion;Anzac Day
+;;6282008;Queens Birthday;Occasion;Queens Birthday
+;;6282009;Boxing Day;Occasion;Boxing Day
+
+# Insert Categories
+INSERT_UPDATE Category;code[unique=true];allowedPrincipals(uid)[default='customergroup'];$catalogVersionNz
+;6299241
+;6299242
+;6210001
+;6210002
+;6211001
+;6211002
+
+# Insert Category Structure
+INSERT_UPDATE CategoryCategoryRelation;$categoriesNz;$supercategoriesNz
+;6210001;6299241
+;6210002;6299242
+;6211001;6210001
+;6211002;6210002
+
+UPDATE Category;$catalogVersionNz;code[unique=true];name[lang=$lang];Classification;description[lang=$lang]
+;;6299241;E-Cards;Style;E-Cards Desc
+;;6299242;Plastic_Card;Style;Plastic Card Desc
+;;6210001;Card Type 1;Type;Card Type 1 Desc
+;;6210002;Card Type 2;Type;Card Type 2 Desc
+;;6211001;Card Sub Type 1;Occasion;Card Sub Type 1 Desc
+;;6211002;Card Sub Type 2;Occasion;Card Sub Type 2 Desc
+
+
+UPDATE Category;code[unique=true];$thumbnail;allowedPrincipals(uid)[default='customergroup'];$catalogVersionAu
+;6280001;wishGiftCard
+;6280002;wishGiftCard
+;6281001;wishGiftCard
+;6281002;wishGiftCard
+;6281003;wishGiftCard
+;6281004;wishGiftCard
+;6281005;wishGiftCard
+;6281006;wishGiftCard
+;6282001;wishGiftCard
+;6282002;wishGiftCard
+;6282003;wishGiftCard
+;6282004;wishGiftCard
+;6282005;wishGiftCard
+;6282006;wishGiftCard
+;6282007;wishGiftCard
+;6282008;wishGiftCard
+;6282009;wishGiftCard

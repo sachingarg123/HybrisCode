@@ -1,0 +1,150 @@
+# -----------------------------------------------------------------------
+# [y] hybris Platform
+#
+# Copyright (c) 2017 SAP SE or an SAP affiliate company.  All rights reserved.
+#
+# This software is the confidential and proprietary information of SAP
+# ("Confidential Information"). You shall not disclose such Confidential
+# Information and shall use it only in accordance with the terms of the
+# license agreement you entered into with SAP.
+# -----------------------------------------------------------------------
+# ImpEx for Importing Products
+
+# Macros / Replacement Parameter definitions
+$productCatalogAu=auWooliesProductCatalog
+$productCatalogNameAu=Australia Woolies Product Catalog
+
+$catalogVersionAu=catalogversion(catalog(id[default=$productCatalogAu]),version[default='Online'])[unique=true,default=$productCatalogAu:Online]
+$supercategoriesAu=supercategories(code, $catalogVersionAu)
+
+#$userGroups=userGroups(uid)
+
+$productsAu=source(code, $catalogVersionAu)[unique=true]
+#$usergroups=target(code, $catalogVersionAu)[unique=true]
+
+$productCatalogNz=nzWooliesProductCatalog
+$productCatalogNameNz=New Zealand Woolies Product Catalog
+$catalogVersionNz=catalogversion(catalog(id[default=$productCatalogNz]),version[default='Online'])[unique=true,default=$productCatalogNz:Online]
+$supercategoriesNz=supercategories(code, $catalogVersionNz)
+
+$approved=approvalstatus(code)[default='approved']
+
+INSERT_UPDATE Product;code[unique=true];$supercategoriesAu;name;description;activeStatus(code);isEGiftCard;$approved;$catalogVersionAu;
+;WOW3090092LG;6282001,MEM_500006,MEM_500009,MEM_500011,MEM_500012,MEM_500018,MEM_500020,MEM_500021,MEM_500029,MEM_500036,MEM_500043,MEM_500045,MEM_500046,MEM_500047,MEM_500048,MEM_500050,MEM_500051,MEM_500052,MEM_500053;WISH Gift Card. Celebrating You - Digital;WISH Gift Card. Celebrating You - Digital;A;true;approved;;
+;WOW3090093ST;6282001,MEM_500001,MEM_500002,MEM_500006;WISH Gift Card. It's a Fine Life - Digital;WISH Gift Card. It's a Fine Life - Digital;A;true;approved;;
+;WOW3090094BL;6282001,MEM_500006;WISH Christmas - Physical;WISH Christmas - Physical;I;false;approved;;
+;WOW30900POND;6282001;WISH Christmas SANTA - Digital;WISH Christmas SANTA - Digital;I;true;unapproved;;
+;WOW309BOTANICA;6282001;BigW Christmas - Digital;BigW Christmas - Digital;I;true;unapproved;;
+;WOW309CC001;6282001;WISH Xmas Ball - Digital;WISH Xmas Ball - Digital;I;true;unapproved;;
+;WOW309ENT001;6282001;WISH Christmas Gold - Digital;WISH Christmas Gold - Digital;I;true;unapproved;;
+;WOW309FEM001;6282001,MEM_500001,MEM_500002,MEM_500017;WISH Woolworths Insurance - Physical;WISH Woolworths Insurance - Physical;I;false;unapproved;;
+;WOW309INS001;6282001;WISH Woolworths Insurance - Digital;WISH Woolworths Insurance - Digital;A;true;approved;;
+;WOW309MAL001;6282001,MEM_500009,MEM_500012,MEM_500020,MEM_500021,MEM_500022,MEM_500034,MEM_500043,MEM_500045,MEM_500046,MEM_500047,MEM_500048,MEM_500050,MEM_500053;WISH Gift Card - Heritage series 8;WISH Gift Card - Heritage series 8;A;false;approved;;
+;WOW309NSW;6282001;WISH Gift Card - Heritage series 2;WISH Gift Card - Heritage series 2;A;false;approved;;
+;WOW309NTAA;6282001;WISH Gift Card - Heritage series 7;WISH Gift Card - Heritage series 7;A;false;approved;;
+;WOW309RAA;6282001,MEM_500022;WISH Gift Card - Heritage series 3;WISH Gift Card - Heritage series 3;A;false;approved;;
+;WOW309RACQ;6282001,MEM_500018,MEM_500051;WISH Gift Card - Heritage series 9;WISH Gift Card - Heritage series 9;A;false;approved;;
+;WOW309RACT;6282001,MEM_500036,MEM_500052;WISH Gift Card - Heritage series 5;WISH Gift Card - Heritage series 5;A;false;approved;;
+;WOW309RACV;6282005,MEM_500017;Cash 4 Easter Digital Gift Card 2015;Cash 4 Easter Digital Gift Card 2015;A;true;approved;;
+;WOW309XMS014;6282001;WISH NRMA Gift Card - Physical;WISH NRMA Gift Card - Physical;A;false;approved;;
+;WOW309XMS016;6282001;WISH NRMA Gift Card - Digital;WISH NRMA Gift Card - Digital;A;true;approved;;
+;WOW309XMS017;6282001;Dan Murphy's Divisional Gift Card Digital - Digital;Dan Murphy's Divisional Gift Card Digital - Digital;A;true;approved;;
+;WOW309XMSBLU;6282001;Master Gift Card Blue;Master Gift Card Blue;A;false;approved;;
+;WOW400001BLU;6282001;Master Gift Card Blue Digital - Digital;Master Gift Card Blue Digital - Digital;A;true;approved;;
+;WOW400002GRN;6281003;Supermarkets Divisional Gift Card;Supermarkets Divisional Gift Card;A;false;approved;;
+;WOW400004RED;6281003;Masters Gift Card Orange;Masters Gift Card Orange;A;false;approved;;
+;WOW400005YLW;6282001;Masters Gift Card Orange - Digital;Masters Gift Card Orange - Digital;A;true;approved;;
+;WOW400007PRP;6281003;Masters Gift Card Green;Masters Gift Card Green;A;false;approved;;
+;WOW487001GRC;6282001;Masters Gift Card Green - Digital;Masters Gift Card Green - Digital;A;true;approved;;
+;WOW500005SMK;6281002,MEM_500009;Cellar Masters Divisional Gift Card;Cellar Masters Divisional Gift Card;A;false;approved;;
+;WOW5010005BW;6281006;Cellar Masters Divisional Gift Card Digital - Digital;Cellar Masters Divisional Gift Card Digital - Digital;A;true;approved;;
+;WOW501ANGEL;6281006;WOW Liquor Divisional Gift Card Digital;WOW Liquor Divisional Gift Card Digital;I;true;unapproved;;
+;WOW501WINNER;6281006;WISH Gift Card. Birthday Surprise - Digital;WISH Gift Card. Birthday Surprise - Digital;A;true;approved;;
+;WOW5020005DS;6281006;WISH Gift Card. A Day to Remember - Digital;WISH Gift Card. A Day to Remember - Digital;A;true;approved;;
+;WOW5030005PT;6281006;WISH Gift Card. Fit for a Princess - Digital;WISH Gift Card. Fit for a Princess - Digital;A;true;approved;;
+;WOW504005BWS;6282002;WISH Gift Card. A Touch of Elegance - Digital;WISH Gift Card. A Touch of Elegance - Digital;A;true;approved;;
+;WOW5050005DM;6281003,MEM_500009;Essentials Yellow;Essentials Yellow;A;false;approved;;
+;WOW5060005TD;6281004;Groceries Only Card - Physical;Groceries Only Card - Physical;A;false;approved;;
+;WOW508001BLU;6282003;BigW Divisional Gift Card - Physical;BigW Divisional Gift Card - Physical;A;false;approved;;
+;WOW508001QFF;6282003;BIG W Divisional Gift Card Digital - Digital;BIG W Divisional Gift Card Digital - Digital;A;true;approved;;
+;WOW508002ORA;6282004;Petrol Divisional Gift Card - Physical;Petrol Divisional Gift Card - Physical;A;false;approved;;
+;WOW508003GRN;6282004;Petrol Divisional Gift Card Digital - Digital;Petrol Divisional Gift Card Digital - Digital;A;true;approved;;
+;WOW509CELLAR;6282005,MEM_500040;BWS Divisional Gift Card - Physical;BWS Divisional Gift Card - Physical;A;false;approved;;
+;WOW5550005BW;6282006;BWS Divisional Gift Card Digital - Digital;BWS Divisional Gift Card Digital - Digital;A;true;approved;;
+;WOW5550005DM;6282006,MEM_500009;Dan Murphy's Divisional Gift Card - Physical;Dan Murphy's Divisional Gift Card - Physical;A;false;approved;;
+;WOW5550005DS;6282006;Thomas Dux Divisional Gift Card - Physical;Thomas Dux Divisional Gift Card - Physical;I;false;unapproved;;
+;WOW5550005PT;6282006;Thomas Dux Divisional Gift Card Digital - Digital;Thomas Dux Divisional Gift Card Digital - Digital;I;true;unapproved;;
+;WOW5550005TD;6282006;WISH Light - Physical;WISH Light - Physical;A;false;approved;;
+;WOW5550005WL;6282006;WISH Streamers - Physical;WISH Streamers - Physical;A;false;approved;;
+;WOW555001BLU;6282006;WISH Streamers Digital - Digital;WISH Streamers Digital - Digital;A;true;approved;;
+;WOW555002ORA;6282006;WISH Blossom - Physical;WISH Blossom - Physical;A;false;approved;;
+;WOW555003GRN;6282006;WISH Blossom Digital - Digital;WISH Blossom Digital - Digital;A;true;approved;;
+;WOW555005BWS;6282006;WISH BlueSteel - Physical;WISH BlueSteel - Physical;A;true;approved;;
+;WOW555005INS;6282006; WISH Gift Card. The Perfect Gift - Digital; WISH Gift Card. The Perfect Gift - Digital;A;true;approved;;
+;WOW555005SAN;6282006;WISH Gift Card. Love is in the Air - Digital;WISH Gift Card. Love is in the Air - Digital;A;true;approved;;
+;WOW555005SMK;6282006,MEM_500009;WISH Gift Card. It's Party Time - Digital;WISH Gift Card. It's Party Time - Digital;A;true;approved;;
+;WOW5550092LG;6282006,MEM_500006,MEM_500009,MEM_500011,MEM_500012,MEM_500018,MEM_500020,MEM_500021,MEM_500029,MEM_500034,MEM_500036,MEM_500043,MEM_500045,MEM_500046,MEM_500047,MEM_500048,MEM_500049,MEM_500050,MEM_500051,MEM_500052,MEM_500053;The Pond;The Pond;A;false;approved;;
+;WOW5550093ST;6282006,MEM_500001,MEM_500002,MEM_500003,MEM_500006,MEM_500010;WISH Botanica;WISH Botanica;A;false;approved;;
+;WOW5550094BL;6282006;Woolworths Entertainment Book;Woolworths Entertainment Book;A;false;approved;;
+;WOW555ANGEL;6282006;Woolworths Entertainment Book - Digital;Woolworths Entertainment Book - Digital;A;true;approved;;
+;WOW555ARC001;6282006;Automobile Association of Northern Territory;Automobile Association of Northern Territory;A;false;approved;;
+;WOW555ARC002;6282006;Automobile Association of Northern Territory - Digital;Automobile Association of Northern Territory - Digital ;A;true;approved;;
+;WOW555ARC003;6282006;WISH Gift Card;WISH Gift Card;A;false;approved;;
+;WOW555ARC004;6282006;WISH Gift Card - Digital;WISH Gift Card - Digital;A;true;approved;;
+;WOW555ARC005;6282006;WISH Gift Card;WISH Gift Card;A;false;approved;;
+;WOW555ARC006;6282006;WISH Gift Card;WISH Gift Card;A;false;approved;;
+;WOW555ARC007;6282006;WISH Gift Card;WISH Gift Card;A;false;approved;;
+;WOW555ARC008;6282006;Blue $10;Blue $10;A;false;approved;;
+;WOW555ARC009;6282006;Green $15;Green $15;A;false;approved;;
+;WOW555BDY001;6282006,MEM_500006,MEM_500009;Red;Red;A;false;approved;;
+;WOW555BDY002;6282006,MEM_500041,MEM_500042,MEM_500044;Purple;Purple;A;false;
+;WOW555BDY003;6282006;BIG W Winner;BIG W Winner;A;false;approved;;
+;WOW555BDY004;6282006;Dick Smith Divisional Gift Card;Dick Smith Divisional Gift Card;I;false;unapproved;;
+;WOW555BDY005;6282006;Dick Smith Divisional Gift Card Digital - Digital;Dick Smith Divisional Gift Card Digital - Digital;I;true;unapproved;;
+;WOW555BDY006;6282006,MEM_500035;WISH Gift Card. Cool Chic - Digital;WISH Gift Card. Cool Chic - Digital;A;true;approved;;
+;WOW555BDY007;6282006;WISH Light Digital - Digital;WISH Light Digital - Digital;A;true;approved;;
+;WOW555BDY008;6282006;WISH DragonFly - Digital;WISH DragonFly - Digital;A;true;approved;;
+;WOW555CASH4;6282006;WISH Gift Card - Digital;WISH Gift Card - Digital;A;true;approved;;
+;WOW555CBN001;6282006,MEM_500006,MEM_500009;WISH Gift Card. Young at Heart - Digital;WISH Gift Card. Young at Heart - Digital;A;true;approved;;
+;WOW555CBN002;6282006,MEM_500035;WISH Gift Card. Time to Celebrate - Digital;WISH Gift Card. Time to Celebrate - Digital;A;true;approved;;
+;WOW555CBN003;6282006;WISH BlueSteel - Digital;WISH BlueSteel - Digital;A;true;approved;;
+;WOW555CBN004;6282006;WISH Gift Card. A Class Above - Digital;WISH Gift Card. A Class Above - Digital;A;true;approved;;
+;WOW555CBN005;6282007;Supermarkets Divisional Gift Card - Physical;Supermarkets Divisional Gift Card - Physical;A;false;approved;;
+;WOW555CBN006;6282007,MEM_500041,MEM_500042,MEM_500044;WISH Gift Card - Heritage series 1;WISH Gift Card - Heritage series 1;A;false;approved;;
+;WOW555CELLAR;6282007;WISH Gift Card - Heritage series 6;WISH Gift Card - Heritage series 6;A;false;approved;;
+;WOW555ENT001;6282007;WISH Gift Card - Heritage series 4;WISH Gift Card - Heritage series 4;A;false;approved;;
+;WOW555FEM001;6282007,MEM_500001,MEM_500002,MEM_500017;WISH Life Insurance Gift Card;WISH Life Insurance Gift Card;A;false;approved;;
+;WOW555INS002;6282007;WISH DragonFly - Physical;WISH DragonFly - Physical;A;false;approved;;
+;WOW555MAL001;6282007,MEM_500003,MEM_500009,MEM_500010,MEM_500011,MEM_500012,MEM_500020,MEM_500021,MEM_500022,MEM_500029,MEM_500034,MEM_500043,MEM_500045,MEM_500046,MEM_500047,MEM_500048,MEM_500049,MEM_500050,MEM_500053; WISH XMAS Gift Card 2016 - Physical; WISH XMAS Gift Card 2016 - Physical;A;false;approved;;
+;WOW555NRMA;6282007,MEM_500011;WISH XMAS Gift Card 2016 - Digital;WISH XMAS Gift Card 2016 - Digital;A;true;approved;;
+;WOW555NTAA;6282007;WISH Christmas - Digital;WISH Christmas - Digital;I;true;unapproved;;
+;WOW555RAA;6282007,MEM_500022;WISH Gift Card - Digital;WISH Gift Card - Digital;A;true;approved;;
+;WOW555RACQ;6282007,MEM_500018,MEM_500051;WISH XMAS Gift Card - Digital;WISH XMAS Gift Card - Digital;I;true;unapproved;;
+;WOW555RACT;6282007,MEM_500036,MEM_500052;WISH XMAS Gift Card - Physical;WISH XMAS Gift Card - Physical;I;false;unapproved;;
+;WOW555RACV;6282007,MEM_500017;New BIG W Xmas Gift Card - Physical;New BIG W Xmas Gift Card - Physical;A;false;approved;;
+;WOW555XMS014;6282007;WISH Christmas - Digital;WISH Christmas - Digital;A;true;approved;;
+;WOW555XMS016;6282007;WISH Christmas - Physical;WISH Christmas - Physical;A;false;approved;;
+;WOW555XMS017;6282007;Cellarmasters 711 Voucher Code Store eGift Card;Cellarmasters 711 Voucher Code Store eGift Card;A;true;approved;;
+;WOW555XMSBAL;6282007;Petrol 711 Voucher Code Store eGift Card;Petrol 711 Voucher Code Store eGift Card;A;true;approved;;
+;WOW555XMSBLU;6282007;BWS 711 Voucher Code Store eGift Card;BWS 711 Voucher Code Store eGift Card;A;true;approved;;
+;WOW555XMSGLD;6282007; Dan Murphy 711 Voucher Code Store eGift Card; Dan Murphy 711 Voucher Code Store eGift Card;A;true;approved;;
+;WOW555XMSRED;6282007;Supermarket 711 Voucher Code Store eGift Card;Supermarket 711 Voucher Code Store eGift Card;A;true;approved;;
+;WOW711ESMKT1;6282008;BIG W 711 Voucher Code Store eGift Card;BIG W 711 Voucher Code Store eGift Card;A;true;approved;;
+;WOW712EBW001;6282008;Thomas Dux 711 Voucher Code Store eGift Card;Thomas Dux 711 Voucher Code Store eGift Card;A;true;approved;;
+;WOW712EBW004;6282008; Masters 711 Voucher Code Store eGift Card; Masters 711 Voucher Code Store eGift Card;A;true;approved;;
+;WOW713EMST01;6282008;WISH Gift Card - Digital;WISH Gift Card - Digital;A;true;approved;;
+;WOW714EBWS01;6282009;WISH Christmas - Digital;WISH Christmas - Digital;A;true;approved;;
+;WOW715EDMY01;6282009;Supermarkets Divisional Gift Card - Physical;Supermarkets Divisional Gift Card - Physical;A;false;approved;;
+;WOW716EPTL01;6282009; WISH Contact Centre Gift Card;WISH Contact Centre Gift Card;A;false;approved;;
+;WOW717ECMS01;6282009,MEM_500040;BIG W 712-4 Voucher Code Store eGift Card;BIG W 712-4 Voucher Code Store eGift Card;A;true;approved;;
+;WOW718ETDX01;6282009;Woolworths Online Store eGift Card - Digital;Woolworths Online Store eGift Card - Digital;A;true;approved;;
+;WOW719ONL001;6282009;WISH Gift Card. Serenity Sunset - Digital A;WISH Gift Card. Serenity Sunset - Digital;A;true;approved;;
+
+# Insert Products
+INSERT_UPDATE Product;code[unique=true];$supercategoriesNz;name;description;activeStatus(code);isEGiftCard;$approved;$catalogVersionNz;
+;WOW5000092AB;6211002;WISH Gift Card. Celebrating You - Digital;WISH Gift Card. Celebrating You - Digital;A;true;approved
+
+
+
+# Insert Category Structure
+#INSERT_UPDATE Product2UserGroupsRel;$productsAu;$usergroups

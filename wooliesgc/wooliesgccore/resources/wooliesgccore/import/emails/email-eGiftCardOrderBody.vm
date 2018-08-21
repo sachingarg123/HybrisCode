@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+   <head>
+      <meta name="viewport" content="width=device-width">
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <title>Woolworths eGift Card</title>
+   </head>
+   <body class="" style="background-color: #f6f6f6; font-family: Helvetica; -webkit-font-smoothing: antialiased; font-size: 14px; line-height: 1.4; margin: 0; padding: 0; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;">
+      <table border="0" cellpadding="0" cellspacing="0" class="body" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%; background-color: #f6f6f6;">
+      <tr>
+         <td style="font-family: Helvetica; font-size: 14px; vertical-align: top;">&nbsp;</td>
+         <td class="container" style="font-family: Helvetica; font-size: 14px; vertical-align: top; display: block; margin: 0 auto; max-width: 580px; padding: 10px; width: 600px;">
+            <div class="content" style="box-sizing: border-box; display: block; margin: 0 auto; max-width: 600px; padding: 10px;">
+               <!-- START CENTERED WHITE CONTAINER -->
+               <span class="preheader" style="color: transparent; display: none; height: 0; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; mso-hide: all; visibility: hidden; width: 0;">This is preheader text. Some clients will show this text as a preview.</span>
+               <table class="main" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;">
+                  <!-- START MAIN CONTENT AREA -->
+                  <tr>
+                     <td class="wrapper" style="font-family: Helvetica; font-size: 14px; vertical-align: top; box-sizing: border-box; padding: 0px;">
+                        <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;">
+                           <!-- START MAIN CONTENT AREA -->
+                           <tr>
+                              <td style="font-family:Helvetica,Arial; text-align: center;background-color: #125430; padding: 15px 10px; padding-left: 40px; color: #fff">
+                                 <a href="" target="_blank">
+                                 <img src="https://dev-giftcards.woolworths.com.au/content/dam/Woolworths/GiftCards/images/icon-header-logo.png" style="width:50%;"></a>
+                                 <a href="https://dev-giftcards.woolworths.com.au" style=" color:#fff; font-size: 10px;  display: inline; float: right; vertical-align: top;">View in browser</a>
+                              </td>
+                           </tr>
+                           <tr>
+                              <td style="font-family: Helvetica; background: #469C46; color: #fff; font-size:16px;padding: 10px 0px; font-weight: 600;">
+                                 <div style="text-align: center;line-height: 1;">Gift Cards</div>
+                              </td>
+                           </tr>
+                           <table cellspacing="0"  border="0" cellpadding="0" class="main" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%; ">
+                              <tbody>
+                                 <tr>
+                                    <td style="font-family: Helvetica; font-size: 16px;   background: #f2f2f2; color:#39464e;">
+                                       <div style="background: #fff;padding: 30px 25px; margin: 25px 30px;">
+                                          <p style="color: #25861e; font-weight:bold; font-size:18px;"> Hi ${ctx.displayName},</p>
+                                          <p><b>${ctx.toName}</b> has sent you an eGift Card!</p>
+                                          <p style="color: #25861e; font-weight:bold;">"Hope you have a fantastic day and have fun finding the perfect present! Happy Birthday!" ${ctx.message}</p>
+                                          <p>Your eGift Card can be redeemed in-store or online at participating Woolworths Limited Group Stores.</p>
+                                          <p>For a list of paricipating stores, please visit<a href="https://everydaygiftcards.com.au" target="_blank" style="color: #fff">everydaygiftcards.com.au</a></p>
+                                          <p>For security, we recommend that you delete this email from your inbox once you have downloaded your eGift Card</p>
+                                          <p>Thank you from the Woolworths Money Team.</p>
+                                       </div>
+                                    </td>
+                                 </tr>
+                                 <tr>
+                                    <td>
+                                       <img src="https://dev-giftcards.woolworths.com.au/content/dam/Woolworths/GiftCards/images/WoolworthsMoneyMobileApp.jpg" style="width: 100%;">
+                                    </td>
+                                 </tr>
+                                 <tr>
+                                    <td style="font-family: Helvetica; font-size: 12px; vertical-align: top; padding: 15px;background: #165432; color: #fff; text-align: center;">
+                                       <p style="margin: 0px;">Woolworths Group Limited ABN 88 000 014 675</p>
+                                       <p style="margin: 0px;">Woolworths Group Limited is the issuer of the Woolworths branded Gift Cards, which are redeemable at participating stores only. Terms and conditions apply and are available at everydaygiftcards.<span>com.</span>au. Please do not reply to this email - to contact us please go to <a href="https://everydaygiftcards.com.au" target="_blank" style="color: #fff;text-decoration: underline;">everydaygiftcards.com.au</a> and submit a query.</p>
+                                       <div style="display: inline-block;">
+                                          <ul style="display: flex; list-style: none;padding: 0px;">
+                                             <li style="margin-left:0px;">
+                                                <a style="color:#fff;border-right: 1px solid #fff;padding-right: 4px;padding-left: 4px;" href="https://everydaygiftcards.com.au" target="_blank">Privacy Policy</a>
+                                             </li>
+                                             <li style="margin-left:0px;">
+                                                <a style="color:#fff;border-right: 1px solid #fff;padding-right: 4px;padding-left: 4px;" href="https://everydaygiftcards.com.au" target="_blank">FAQ</a>
+                                             </li>
+                                             <li style="margin-left:0px;">
+                                                <a style="color:#fff;padding-right: 4px;padding-left: 4px;" href="https://everydaygiftcards.com.au" target="_blank">Contact Us</a>
+                                             </li>
+                                          </ul>
+                                       </div>
+                                    </td>
+                                 </tr>
+                              </tbody>
+                           </table>
+                        </table>
+            </div>
+            </td>
+            </tr>
+            </table>
+   </body>
+</html>

@@ -1,0 +1,11 @@
+#Ant properties
+#Thu Nov 09 00:09:39 UTC 2017
+builddate=20171109 0009
+description=wooliesgcwebservices
+group.id=de.hybris.platform
+module.name=platform-module
+name=wooliesgcwebservices
+releasedate=20171108 0451
+vendor=hybris
+version=6.6.0.0
+version.api=6.6.0

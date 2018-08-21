@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2017 SAP SE or an SAP affiliate company.  All rights reserved.
+
+ This software is the confidential and proprietary information of SAP
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with SAP.
+-->
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="beans.xsd">
+	<enum class="com.woolies.webservices.rest.populator.options.PaymentInfoOption">
+		<value>BASIC</value>
+		<value>BILLING_ADDRESS</value>
+	</enum>
+
+	<!--auth response  -->
+	<bean class="com.woolies.webservices.rest.auth.data.LogoutResponse">
+		<property name="success" type="boolean"/>
+	</bean>
+
+	<!-- storesession data -->
+
+	<bean class="com.woolies.webservices.rest.storesession.data.LanguageDataList">
+		<property name="languages"
+		          type="java.util.Collection&lt;de.hybris.platform.commercefacades.storesession.data.LanguageData>"/>
+	</bean>
+
+	<bean class="com.woolies.webservices.rest.storesession.data.CurrencyDataList">
+		<property name="currencies"
+		          type="java.util.Collection&lt;de.hybris.platform.commercefacades.storesession.data.CurrencyData>"/>
+	</bean>
+
+	<!-- order data -->
+
+	<bean class="com.woolies.webservices.rest.order.data.CartDataList">
+		<property name="carts"
+		          type="java.util.List&lt;de.hybris.platform.commercefacades.order.data.CartData>"/>
+	</bean>
+
+	<bean class="com.woolies.webservices.rest.order.data.OrderEntryDataList">
+		<property name="orderEntries"
+		          type="java.util.List&lt;de.hybris.platform.commercefacades.order.data.OrderEntryData>"/>
+	</bean>
+
+	<bean class="com.woolies.webservices.rest.order.data.CardTypeDataList">
+		<property name="cardTypes"
+		          type="java.util.List&lt;de.hybris.platform.commercefacades.order.data.CardTypeData>"/>
+	</bean>
+
+	<bean class="de.hybris.platform.commercefacades.order.data.CartModificationDataList">
+		<property name="cartModificationList"
+		          type="java.util.List&lt;de.hybris.platform.commercefacades.order.data.CartModificationData>"/>
+	</bean>
+
+	<!-- product data -->
+
+	<bean class="com.woolies.webservices.rest.product.data.ProductDataList">
+		<property name="products"
+		          type="java.util.List&lt;de.hybris.platform.commercefacades.product.data.ProductData>"/>
+		<property name="catalog" type="String"/>
+		<property name="version" type="String"/>
+		<property name="totalProductCount" type="int"/>
+		<property name="totalPageCount" type="int"/>
+		<property name="currentPage" type="int"/>
+	</bean>
+
+	<bean class="com.woolies.webservices.rest.product.data.PromotionDataList">
+		<property name="promotions"
+		          type="java.util.List&lt;de.hybris.platform.commercefacades.product.data.PromotionData>"/>
+	</bean>
+
+	<bean class="com.woolies.webservices.rest.product.data.PromotionResultDataList">
+		<property name="promotions"
+		          type="java.util.List&lt;de.hybris.platform.commercefacades.product.data.PromotionResultData>"/>
+	</bean>
+
+	<bean class="com.woolies.webservices.rest.product.data.ReviewDataList">
+		<property name="reviews" type="java.util.List&lt;de.hybris.platform.commercefacades.product.data.ReviewData>"/>
+	</bean>
+
+	<bean class="com.woolies.webservices.rest.product.data.SuggestionDataList">
+		<property name="suggestions"
+		          type="java.util.List&lt;de.hybris.platform.commercefacades.product.data.SuggestionData>"/>
+	</bean>
+
+	<!-- user data -->
+
+	<bean class="com.woolies.webservices.rest.user.data.TitleDataList">
+		<property name="titles" type="java.util.List&lt;de.hybris.platform.commercefacades.user.data.TitleData>"/>
+	</bean>
+
+	<bean class="com.woolies.webservices.rest.user.data.CountryDataList">
+		<property name="countries" type="java.util.List&lt;de.hybris.platform.commercefacades.user.data.CountryData>"/>
+	</bean>
+
+	<bean class="com.woolies.webservices.rest.user.data.AddressDataList">
+		<property name="addresses" type="java.util.List&lt;de.hybris.platform.commercefacades.user.data.AddressData>"/>
+	</bean>
+
+	<!-- voucher data -->
+	<bean class="com.woolies.webservices.rest.voucher.data.VoucherDataList">
+		<property name="vouchers"
+		          type="java.util.List&lt;de.hybris.platform.commercefacades.voucher.data.VoucherData>"/>
+	</bean>
+
+	<!-- validation data -->
+	<bean class="com.woolies.webservices.rest.validation.data.AddressValidationData">
+		<property name="errors" type="de.hybris.platform.webservicescommons.dto.error.ErrorListWsDTO"/>
+		<property name="decision" type="String"/>
+		<property name="suggestedAddressesList"
+		          type="com.woolies.webservices.rest.user.data.AddressDataList"/>
+	</bean>
+
+	<!-- Additional title property for CustomerData -->
+	<bean class="de.hybris.platform.commercefacades.user.data.CustomerData"
+	      extends="de.hybris.platform.commercefacades.user.data.PrincipalData">
+		<property name="title" type="String"/>
+	</bean>
+
+	<bean class="com.woolies.webservices.rest.user.data.LoginChangeResponse">
+		<property name="success" type="boolean"/>
+	</bean>
+
+	<bean class="com.woolies.webservices.rest.user.data.PasswordRestoreResponse">
+		<property name="success" type="boolean"/>
+	</bean>
+
+	<!-- update queues -->
+
+	<bean class="com.woolies.webservices.rest.queues.data.ProductExpressUpdateElementData">
+		<property name="code" type="String"/>
+		<property name="catalogId" type="String"/>
+		<property name="catalogVersion" type="String"/>
+	</bean>
+
+	<bean class="com.woolies.webservices.rest.queues.data.ProductExpressUpdateElementDataList">
+		<property name="productExpressUpdateElements"
+		          type="java.util.List&lt;com.woolies.webservices.rest.queues.data.ProductExpressUpdateElementData>"/>
+	</bean>
+
+	<bean class="com.woolies.webservices.rest.queues.data.OrderStatusUpdateElementData">
+		<property name="code" type="String"/>
+		<property name="status" type="String"/>
+		<property name="baseSiteId" type="String"/>
+	</bean>
+
+	<bean class="com.woolies.webservices.rest.queues.data.OrderStatusUpdateElementDataList">
+		<property name="orderStatusUpdateElements"
+		          type="java.util.List&lt;com.woolies.webservices.rest.queues.data.OrderStatusUpdateElementData>"/>
+	</bean>
+	
+	<bean
+		class="de.hybris.platform.commerceservices.service.data.CommerceCartParameter">
+		<property name="customerPrice" type="Double"></property>
+		<property name="message" type="String"></property>
+		<property name="toName" type="String"></property>
+		<property name="fromName" type="String"></property>
+		<property name="image" type="de.hybris.platform.cmsfacades.data.MediaData"></property>
+		<property name="customizeForAlleCards" type="Boolean"></property>
+	</bean>
+
+	<bean
+		class="de.hybris.platform.commerceservices.order.CommerceCartModification">
+		<property name="customerPrice" type="Double"></property>
+		<property name="isAddtoCartDisable" type="Boolean"></property>
+		<property name="message" type="String"></property>
+		<property name="toName" type="String"></property>
+		<property name="fromName" type="String"></property>
+		<property name="image" type="de.hybris.platform.cmsfacades.data.MediaData"></property>
+		<property name="customizeForAlleCards" type="Boolean"></property>
+		<property name="isEGiftCard" type="Boolean" />
+		<property name="cartTotal" type="Double"></property>
+		<property name="cartGiftCardCount" type="String"></property>
+		<property name="cartItemCount" type="int"></property>
+
+	</bean>
+	
+	<bean
+		class="de.hybris.platform.commercewebservicescommons.dto.order.OrderEntryWsDTO">
+		<property name="customerPrice" type="Double"></property>
+		<property name="isAddtoCartDisable" type="Boolean"></property>
+		<property name="customizeEGiftCards" type="java.util.List&lt;com.woolies.webservices.dto.eGiftCardWsDTO>"></property>
+		<property name="listOfPID" type="java.util.List&lt;Integer>"></property>
+		<property name="isEGiftCard" type="Boolean" />
+		<property name="coBrandMedia" type="java.util.List&lt;de.hybris.wooliesegiftcard.facades.dto.CoBrandImageWsDTO>" />
+		<property name="salesPrice" type="de.hybris.platform.commercewebservicescommons.dto.product.PriceWsDTO" />
+		<property name="canPersonalize" type="Boolean" />
+	</bean>
+
+	
+	<bean class="com.woolies.webservices.rest.user.data.OrderListData">
+	      <property name="orders"
+		          type="java.util.List&lt;de.hybris.platform.commercefacades.order.data.OrderData>"/>
+		          <property name="orderStatuses" type="java.util.List&lt;de.hybris.platform.commercefacades.order.data.OrderStatusData>"/>
+		          <property name="totalCount" type="int"/>
+				  <property name="currentIndex" type="int"/>
+	      </bean> 
+
+	<bean class="de.hybris.platform.commercewebservicescommons.dto.catalog.CategoryHierarchyWsDTO"
+	      extends="de.hybris.platform.commercewebservicescommons.dto.catalog.AbstractCatalogItemWsDTO" abstract="true">    
+		<property name="products"
+		          type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.ProductWsDTO>"/>
+	</bean>
+	
+	<bean
+		class="com.woolies.webservices.dto.eGiftCardWsDTO">
+		<property name="message" type="String"></property>
+		<property name="toName" type="String"></property>
+		<property name="fromName" type="String"></property>
+		<property name="customImage" type="de.hybris.platform.cmssmarteditwebservices.dto.MediaWsDTO"></property>
+		<property name="customizeForAlleCards" type="Boolean"></property>
+		<property name="PID" type="Integer"></property>
+		<property name="toEmail" type="String"></property>
+		<property name="productBannerImage" type="de.hybris.platform.cmssmarteditwebservices.dto.MediaWsDTO"></property>
+		<property name="defaultImage" type="de.hybris.platform.cmssmarteditwebservices.dto.MediaWsDTO"></property>
+	</bean>
+	
+	<!-- Payment Info data -->
+
+	<bean
+		class="com.woolies.webservices.dto.PaymentInfoDetails">
+		<property name="paymentDetails"
+			type="java.util.List&lt;com.woolies.webservices.dto.PaymentDetails>" />
+
+	</bean>
+
+<!-- 	<bean
+		class="com.woolies.webservices.dto.ErrorMessage">
+		<property name="errorCode" type="String" />
+		<property name="errorMessage" type="java.lang.String" />
+		<property name="errorDescription" type="java.lang.String" />
+	</bean> -->
+	
+	<bean
+		class="de.hybris.platform.webservicescommons.dto.error.ErrorWsDTO">
+		<property name="errorCode" type="String"></property>
+		 <property name="errorMessage" type="java.lang.String" />
+         <property name="errorDescription" type="java.lang.String" />
+	</bean> 
+	
+	<bean
+		class="com.woolies.webservices.dto.PaymentDetails">
+		<property name="paymentCode" type="String" />
+		<property name="paymentDetails" type="java.lang.String" />
+		<property name="paymentDescription" type="java.lang.String" />
+		<property name="isActive" type="boolean" />
+		<property name="errorCode" type="String" />
+	</bean>
+	<!-- Payment Info data End -->
+	
+	<bean class="de.hybris.platform.wooliegcwebservices.dto.order.CardDeliveryDateWsDto">
+		<property name="cardType" type="String" />
+		<property name="cardTypeLabel" type="String" />
+		<property name="deliveryDate" type="String" />
+		<property name="deliveryModeType" type="String" />
+	</bean>
+	
+	<bean class="de.hybris.platform.commercewebservicescommons.dto.order.OrderWsDTO">
+		<property name="cardDeliveryDate" type="java.util.List&lt;de.hybris.platform.wooliegcwebservices.dto.order.CardDeliveryDateWsDto>"/>
+         <property name="customer" type="com.woolies.webservices.dto.customerDTO"/>
+		  <property name="taxCosts" type="de.hybris.platform.commercewebservicescommons.dto.product.PriceWsDTO" />
+		 <property name="payment" type="com.woolies.webservices.dto.paymentDTO" />
+         <property name="date" type="String"/>		
+         <property name="taxInvoiceId" type="String"/> 
+		 <property name="isMinimalPackage" type="java.lang.Boolean"/>
+	</bean>
+	<bean class="de.hybris.platform.commercewebservicescommons.dto.order.DeliveryModeWsDTO">
+		<property name="deliveryType" type="String" />
+		<property name="estStart" type="long"/>
+		<property name="estEnd" type="long"/>
+	</bean>
+
+<bean class="de.hybris.platform.commercewebservicescommons.dto.order.CartWsDTO">
+		<property name="cartTotal" type="Double"></property>
+		<property name="cartGiftCardCount" type="String"></property>
+		<property name="cartItemCount" type="int"></property>
+		<property name="isBulkOrder" type="java.lang.Boolean"/>
+		<property name="isMinimalPackage" type="java.lang.Boolean"/>
+	 </bean>
+	 
+	   <bean class="de.hybris.platform.commercefacades.order.data.CartData">
+		<property name="cartTotal" type="Double"></property>
+		<property name="cartGiftCardCount" type="String"></property>
+		<property name="cartItemCount" type="int"></property>
+		<property name="isMinimalPackage" type="java.lang.Boolean"/>
+	</bean>
+		<bean class="de.hybris.platform.commercewebservicescommons.dto.product.ProductWsDTO">
+		<property name="skuCode" type="String"/>
+		<property name="imageURL" type="String"/>
+		<property name="minQty" type="Integer"/>
+		<property name="maxQty" type="Integer"/>
+		<property name="unitPrices" type="java.util.List&lt;Double>"></property>
+		<property name="productType" type="String"/>
+	</bean>
+	<bean
+		class="com.woolies.webservices.dto.customerDTO">
+		<property name="membername" type="String"></property>
+		<property name="firstName" type="String"></property>
+		<property name="lastName" type="String"></property>
+		<property name="email" type="String"></property>
+		<property name="coorporateid" type="String"></property>
+		<property name="memberuserid" type="String"></property>
+		<property name="customerType" type="String"></property>
+	</bean>
+	<bean
+		class="com.woolies.webservices.dto.paymentDTO">
+		<property name="suffix" type="String"/>
+		<property name="schema" type="String"/>
+		<property name="paymentOption" type="String"/>
+		<property name="paymentName" type="String"/>
+	</bean>
+	<bean class="de.hybris.platform.commercewebservicescommons.dto.product.ImageWsDTO">
+		<property name="mime" type="String"/>
+	</bean>
+	<bean class="de.hybris.platform.wooliesgcwebservices.category.dto.ItemsWsDTO">
+		<property name="categoryId" type="String"/>
+		<property name="name" type="String"/>
+		<property name="description" type="String"/>
+		<property name="imageURL" type="String"/>
+		
+	</bean> 
+
+	<bean class="de.hybris.platform.wooliesgcwebservices.category.dto.SubCategoriesWsDTO">
+		<property name="classification" type="String"/>
+		<property name="items" type="java.util.List&lt;de.hybris.platform.wooliesgcwebservices.category.dto.ItemsWsDTO>"/>
+	</bean> 
+	<bean class="de.hybris.platform.commercewebservicescommons.dto.product.CategoryWsDTO">
+		<property name="name" type="String" />
+		<property name="description" type="String" />
+		<property name="classification" type="String" />
+		<property name="imageURL" type="String"/>
+		<property name="categories" type="de.hybris.platform.wooliesgcwebservices.category.dto.SubCategoriesWsDTO" />
+		<property name="products" type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.product.ProductWsDTO>" />
+	</bean>
+	
+	<bean class="de.hybris.platform.commercefacades.order.data.AbstractOrderData">
+		<property name="deliveryModes" type="java.util.List&lt;de.hybris.platform.commercefacades.order.data.DeliveryModeData>"/>
+		<property name="maxQty" type="java.lang.String" />
+		<property name="minQty" type="java.lang.String" />
+	</bean>
+	
+	<bean class="de.hybris.platform.commercewebservicescommons.dto.order.AbstractOrderWsDTO">
+		<property name="deliveryModes" type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.order.DeliveryModeWsDTO>"/>
+		<property name="maxQty" type="java.lang.String" />
+		<property name="minQty" type="java.lang.String" />
+	</bean>
+	
+	<bean class="de.hybris.platform.commercewebservicescommons.dto.product.PromotionResultWsDTO">
+		<property name="totalDiscount" type="de.hybris.platform.commercewebservicescommons.dto.product.PriceWsDTO" />
+	</bean>
+	
+	<bean
+		class="de.hybris.platform.commercewebservicescommons.dto.order.CartModificationWsDTO">
+		<property name="totalDiscounts" type="de.hybris.platform.commercefacades.product.data.PriceData"/>
+		<property name="totalPrice" type="de.hybris.platform.commercefacades.product.data.PriceData"/>
+		<property name="subTotal" type="de.hybris.platform.commercefacades.product.data.PriceData"/>
+		<property name="appliedOrderPromotions" type="java.util.List&lt;de.hybris.platform.commercefacades.product.data.PromotionResultData>"></property>
+		<property name="appliedProductPromotions" type="java.util.List&lt;de.hybris.platform.commercefacades.product.data.PromotionResultData>"></property>
+		
+	</bean>
+	<bean class="de.hybris.platform.commercewebservicescommons.dto.user.WooliesPaginationWsDTO">
+		<property name="startIndex" type="int" />
+		<property name="pageSize" type="int" />
+		<property name="totalCount" type="int" />
+		<property name="currentIndex" type="int" />
+		<property name="firstImageIds" type="java.util.List&lt;String>"></property>
+	</bean>
+	
+	<bean class="de.hybris.platform.commercewebservicescommons.dto.order.GiftCardRequestWsDTO">
+		<property name="giftCardToken" type="java.lang.String" />
+	</bean>
+	<bean class="de.hybris.platform.wooliegcwebservices.dto.order.GiftCardResponseWsDTO">
+		<property name="giftCardNumber" type="java.lang.Long" />
+		<property name="inStoreCardNumber" type="java.lang.String" />
+		<property name="pin" type="java.lang.String" />
+		<property name="imageURL" type="java.lang.String" />
+		<property name="amount" type="de.hybris.platform.commercewebservicescommons.dto.product.PriceWsDTO"/>
+		<property name="personalisationGiftCard" type="com.woolies.webservices.dto.eGiftCardWsDTO" />
+	</bean> 
+	
+	
+</beans>

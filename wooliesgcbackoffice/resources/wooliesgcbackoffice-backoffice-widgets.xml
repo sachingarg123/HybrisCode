@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2017 SAP SE or an SAP affiliate company.  All rights reserved.
+
+ This software is the confidential and proprietary information of SAP
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with SAP.
+-->
+<widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://www.hybris.com/schema/cockpitng/widgets.xsd">
+
+    <!-- <widget-extension widgetId="backofficeMainSlot">
+        <widget id="wooliesgcbackoffice-perspective" widgetDefinitionId="de.hybris.wooliesegiftcard.widgets.wooliesgcbackofficewidget"
+            template="false" slotId="perspectives" title="Hello wooliesgcbackoffice">
+            <setting key="perspectiveImageUrl" value="/cng/images/perspective.png"
+                type="String" />
+        </widget>
+    </widget-extension> -->
+    
+    <widget-extension widgetId="backofficeMainSlot">
+
+        <widget id="wooliesgc_conditionevaluator" widgetDefinitionId="com.hybris.cockpitng.conditionevaluator" slotId="cockpitWidgetChildrenInvisible" template="false">
+            <widget id="wooliesgc_multiconditionsearch" widgetDefinitionId="de.wooliesgcbackoffice.widgets.orderPersonalisationMedia" slotId="cockpitWidgetChildrenInvisible" template="false"/>
+            <setting key="expression" type="String" value="#root.id EQ 'OrderPersonalisationMedia'"></setting>
+            <setting key="socketDataType_$T" type="String" value="com.hybris.backoffice.navigation.NavigationNode"></setting>
+            <setting key="widgetStyleAttribute" type="String" value=""></setting>
+            <setting key="widgetStyleClass" type="String" value=""></setting>
+            <virtual-sockets/>
+        </widget>
+
+    </widget-extension>
+    
+    <widget-connection sourceWidgetId="explorerTree" outputId="nodeSelected" targetWidgetId="wooliesgc_conditionevaluator" inputId="input"/>
+    <widget-connection sourceWidgetId="wooliesgc_conditionevaluator" outputId="true" targetWidgetId="wooliesgc_multiconditionsearch" inputId="nodeSelected"/>
+    <widget-connection sourceWidgetId="wooliesgc_multiconditionsearch" outputId="outContext" targetWidgetId="advancedSearch" inputId="initContext"/>
+
+</widgets>

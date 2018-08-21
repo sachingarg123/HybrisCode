@@ -1,0 +1,47 @@
+# -----------------------------------------------------------------------
+# [y] hybris Platform
+#
+# Copyright (c) 2017 SAP SE or an SAP affiliate company.  All rights reserved.
+#
+# This software is the confidential and proprietary information of SAP
+# ("Confidential Information"). You shall not disclose such Confidential
+# Information and shall use it only in accordance with the terms of the
+# license agreement you entered into with SAP.
+# -----------------------------------------------------------------------
+# 
+# Import the Product Catalog and Classification Catalog
+#
+
+$productCatalogAu=auWooliesProductCatalog
+$classificationCatalogAu=auWooliesProductCatalogClassfication
+$catalogVersionAu=catalogversion(catalog(id[default=$productCatalogAu]),version[default='Online'])[unique=true,default=$productCatalogAu:Online]
+
+$productCatalogNz=nzWooliesProductCatalog
+$classificationCatalogNz=nzWooliesProductCatalogClassfication
+$catalogVersionNz=catalogversion(catalog(id[default=$productCatalogNz]),version[default='Online'])[unique=true,default=$productCatalogNz:Online]
+
+$languages=en
+
+# Product catalog
+INSERT_UPDATE Catalog;id[unique=true]
+;$productCatalogAu
+;$productCatalogNz
+
+# Classification catalog
+INSERT_UPDATE ClassificationSystem;id[unique=true]
+;$classificationCatalogAu
+;$classificationCatalogNz
+
+# Product versions for product catalogs
+INSERT_UPDATE CatalogVersion;catalog(id)[unique=true];version[unique=true];active;languages(isoCode);readPrincipals(uid)
+;$productCatalogAu;Staged;false;$languages;employeegroup
+;$productCatalogAu;Online;true;$languages;employeegroup
+;$productCatalogNz;Staged;false;$languages;employeegroup
+;$productCatalogNz;Online;true;$languages;employeegroup
+
+# Insert Classifications System Version
+INSERT_UPDATE ClassificationSystemVersion;catalog(id)[unique=true];version[unique=true];active;inclPacking[virtual=true,default=true];inclDuty[virtual=true,default=true];inclFreight[virtual=true,default=true];inclAssurance[virtual=true,default=true]
+;$classificationCatalogAu;1.0;true
+;$classificationCatalogNz;1.0;true
+
+

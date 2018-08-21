@@ -1,0 +1,199 @@
+## messageSource=classpath:/wooliesgccore/messages/email-invoiceTax_$lang.properties
+#macro( genHtmlBoldFont $text )
+<font color="#414a4f" size="2" face="Arial, Helvetica, sans-serif"><b>$text</b></font>
+#end
+#macro(genHtmlLinkStartTag $url)
+<a href="$url"><font color="#666666">
+#end
+#macro(genHtmlLinkEndTag)
+</font></a>
+#end
+#macro(genHtmlLink $url $textColor $bodyContent)
+<a href="$url"><font color="$textColor">$bodyContent</font></a>
+#end
+#macro(displayNegationForDiscount $priceData)
+	#if (${priceData.value} > 0)
+    -
+	#end
+	${priceData.formattedValue}
+#end
+
+
+<!doctype html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Tax Invoice</title>
+</head>
+<style>
+tr.border_bottom td {
+  border-bottom: 1px solid #E4E4E4;
+}
+tr.border_bottom_dark td {
+  border-bottom: 3px solid #E4E4E4;
+}
+</style>
+
+<body class="" style="background-color: #f6f6f6; font-family: Helvetica; -webkit-font-smoothing: antialiased; font-size: 14px; line-height: 1.4; margin: 0; padding: 0; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;">
+    <table border="0" cellpadding="0" cellspacing="0" class="body" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%; background-color: #f6f6f6;">
+        <tr>
+            <td style="font-family: Helvetica; font-size: 14px;">&nbsp;</td>
+            <td class="container" style="font-family: Helvetica; font-size: 14px; display: block; Margin: 0 auto; max-width: 580px; width: 600px;">
+                <div class="content" style="box-sizing: border-box; display: block; Margin: 0 auto;">
+
+                    <!-- START CENTERED WHITE CONTAINER -->
+                    <table cellspacing="0" class="main" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%; background: #ffffff;">
+
+                        <!-- START MAIN CONTENT AREA -->
+                        <tr>
+
+                            <td style="font-family:Helvetica,Arial; text-align: center;background-color: #125430; padding: 15px 10px; padding-left: 40px; color: #fff">        
+                                 <a href="" target="_blank">
+                                     <img src="https://dev-giftcards.woolworths.com.au/content/dam/Woolworths/GiftCards/images/icon-header-logo.png" style="width:50%;"></a>
+                                     
+                            </td>
+                       </tr>
+                       <tr>
+                           <td style="font-family: Helvetica; background: #469C46; color: #fff; font-size:16px;padding: 10px 0px; font-weight: 600;">
+                              <div style="font-family: Helvetica; float:left; padding-left:30px;">${ctx.messages.getMessage('groupLimited')}
+                              </div>
+                              <div style="font-family: Helvetica;  float:right ; padding-right:30px;">#if($ctx.abn && $ctx.abn != '')${ctx.abn}#end
+                                </td>
+                                   </tr>
+                                    <tr>
+                                        <td style="font-family: Helvetica; font-size: 16px; color: #39464e; background: #f2f2f2;">
+                                           <div style="background: #fff; padding: 32px 25px;margin: 28px;">
+                                             <p style="font-family: Helvetica; font-size: 1.5rem;  text-align:center; font-weight: 700; margin: 0; Margin-bottom: 15px;">${ctx.messages.getMessage('header')}</p>
+                                               <table cellpadding="0" cellspacing="0" style="width: 100%; margin-top: 10px;">
+                                                   <tbody>
+                                                     <tr style="background: #f2f2f2; ">
+                                                        <td style="font-weight:bold; padding: 10px 25px;">${ctx.messages.getMessage('orderNumber')}</td>
+                                                        <td>${ctx.order.code}</td>
+                                                     </tr>
+                                                     <tr>
+                                                       <td style="font-weight:bold; padding: 10px 25px;">${ctx.messages.getMessage('invoiceNumber')}</td>
+                                                      <td>${ctx.order.taxInvoiceId}</td>
+                                                     </tr>
+                                        <tr style="background: #f2f2f2; ">
+                                            <td style="font-weight:bold; padding: 10px 25px;">${ctx.messages.getMessage('invoiceDate')}</td>
+                                            <td>${ctx.date}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight:bold; padding: 10px 25px;">${ctx.messages.getMessage('paymentMethod')}</td>
+                                            <td>${ctx.order.payment.paymentName}</td>
+                                        </tr>
+                                        <tr style="background: #f2f2f2; ">
+                                            <td style="font-weight:bold; padding: 10px 25px;">${ctx.messages.getMessage('totalAmount')}</td>
+                                            <td >${ctx.order.totalPrice.formattedValue}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight:bold; padding: 10px 25px;">${ctx.messages.getMessage('discount')}</td>
+                                            <td>${ctx.order.totalDiscounts.formattedValue}</td>
+                                        </tr>
+                                        
+                                         </tbody>
+                                     </table>
+                                     <div style="background: #f2f2f2; display: flex; padding: 10px 25px;">
+                                            <div style="border-right: 2px solid #E4E4E4; float:left; padding-right:20px">
+                                                <p style="font-weight:bold;">${ctx.messages.getMessage('invoicedTo')}</p>
+                                                <p>##if(${ctx.billingaddress.firstName})${ctx.billingaddress.firstName}#end<br>
+                                                #if(${ctx.billingaddress.address1})${ctx.billingaddress.address1}#end,#if(${ctx.billingaddress.address2}) ${ctx.billingaddress.address2}#end<br>
+                                                #if(${ctx.billingaddress.city})${ctx.billingaddress.city}#end,#if(${ctx.billingaddress.state}) ${ctx.billingaddress.state}#end #if(${ctx.billingaddress.postalCode}) ${ctx.billingaddress.postalCode}#end<br>
+                                                #if(${ctx.billingaddress.country})${ctx.billingaddress.country.name}#end<br>
+                                                #if(${ctx.billingaddress.phone})${ctx.billingaddress.phone}#end</p>
+                                            </div>
+                                            <div style="float:right; padding-left:20px;">
+                                                <p style="font-weight:bold;">${ctx.messages.getMessage('shippedTo')}</p>
+                                                <p>##if(${ctx.shippingaddress.firstName})${ctx.shippingaddress.firstName}#end<br>
+                                                #if(${ctx.shippingaddress.address1})${ctx.shippingaddress.address1}#end,#if(${ctx.shippingaddress.address2}) ${ctx.shippingaddress.address2}#end<br>
+                                                #if(${ctx.shippingaddress.city})${ctx.shippingaddress.city}#end,#if(${ctx.shippingaddress.state}) ${ctx.shippingaddress.state}#end #if(${ctx.shippingaddress.postalCode}) ${ctx.shippingaddress.postalCode}#end<br>
+                                                #if(${ctx.shippingaddress.country})${ctx.shippingaddress.country.name}#end<br>
+                                                #if(${ctx.shippingaddress.phone})${ctx.shippingaddress.phone}#end</p>
+                                            </div>
+                                    </div>
+                                <table  cellpadding="0" cellspacing="0" style="width: 100%; margin-top: 35px;">
+                                    <tbody>
+                                            <tr style="background: #f2f2f2; ">
+                                            <td style="font-weight:bold; padding: 10px 25px;">${ctx.messages.getMessage('qty')}</td>
+                                           <td style="font-weight:bold; ">${ctx.messages.getMessage('type')}</td>
+                                            <td style="font-weight:bold; ">${ctx.messages.getMessage('total')}</td>
+                                        </tr>
+                                       #foreach( $entries in ${ctx.order.entries} )
+                                        <tr class="border_bottom">
+                                            <td style="padding: 10px 25px;">$entries.quantity*$entries.basePrice.value</td>
+                                            <td>$entries.product.description</td>
+                                            #set ($Total3 = $entries.quantity*$entries.basePrice.value)
+                                            <td style="font-weight:bold;">$ $Total3</td>
+                                        </tr>
+                                        #end
+                                        <tr class="border_bottom">
+                                            <td style="padding: 10px 25px;">${ctx.messages.getMessage('delivery')}</td>
+                                            <td></td>
+                                            <td style="font-weight:bold;">${ctx.deliverycost}</td>
+                                        </tr>
+                                        <tr class="border_bottom_dark" style="border-bottom: 2px solid #E4E4E4;">
+                                            <td style="padding: 10px 25px;">${ctx.messages.getMessage('discount')}</td>
+                                            <td></td>
+                                            <td style="font-weight:bold;">${ctx.order.totalDiscounts.formattedValue}</td>
+                                        </tr>
+                                        <tr class="border_bottom">
+                                            <td style="font-weight:bold; padding: 10px 25px;">${ctx.messages.getMessage('total')}</td>
+                                            <td></td>
+                                            <td style="font-weight:bold;">${ctx.order.totalPrice.formattedValue}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight:bold; padding: 10px 25px;">${ctx.messages.getMessage('amountPaid')}</td>
+                                            <td></td>
+                                            <td style="font-weight:bold;">#if(${ctx.order.payment.paymentOption} == 'PAY_1002')$0.00 #else ${ctx.order.totalPrice.formattedValue} #end</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div style="text-align:center; padding:10px 0px;">
+                                    <p>${ctx.messages.getMessage('orderDetails')}</p>
+                                </div>
+                                <div style="text-align:center; background: #f2f2f2; padding:10px 25px; line-height:0.8;">
+                                <div style=" border-bottom: 2px solid #E4E4E4;">
+                                    <p style="font-weight:bold; padding-bottom:5px;">${ctx.messages.getMessage('directDeposit')}</p>
+                                    <p>${ctx.messages.getMessage('account')}</p>
+                                    <p>${ctx.messages.getMessage('bank')}</p>
+                                    <p>${ctx.messages.getMessage('bsb')}</p>
+                                    <p>${ctx.messages.getMessage('accountNumber')}</p>
+                                    <p style="font-weight:bold; padding-bottom: 5px;">${ctx.messages.getMessage('referenceNumber')}</p>
+                    
+                                </div>
+                                <div>
+                                    <p style="font-weight:bold; padding-bottom:5px;">${ctx.messages.getMessage('chequePayment')}</p>
+                                    <p>${ctx.messages.getMessage('groupLimited')}</p>
+                                    <p>${ctx.messages.getMessage('tpc')}</p>
+                                    <p>${ctx.messages.getMessage('giftCardTeam')}</p>
+                                    <p>${ctx.messages.getMessage('processingCentre')}</p>
+                                    <p style="font-weight:bold;">${ctx.messages.getMessage('poBox')}</p>
+                                    <p style="font-weight:bold ;">${ctx.messages.getMessage('parkTax')}</p>
+                                </div>
+                            </div>
+                                <div style="text-align:center; padding: 5px 31px;">
+                                    <p>
+                                      ${ctx.messages.getMessage('currentBalance')}
+                                       <a href="https://everydaygiftcards.com.au" style="color:#2B8526; ">everydaygiftcards.com.au</a> ${ctx.messages.getMessage('callNumber')}
+                                    </p>
+                                </div>
+                            </div>
+                                <div style="text-align:center; background: #125430; color:#fff; padding:10px 25px; font-size:12px;">
+                                    <p style="line-height:0.8;">${ctx.messages.getMessage('giftCardTeam')}</p>
+                                    <p style="line-height:0.8; ">${ctx.messages.getMessage('footerPostBox')}</p>
+                                    <p style="line-height:0.8;"><a href="mailto:giftcard@woolworths.com.au" style="text-decoration: underline; color: #fff">giftcard@woolworths.com.au</p>
+                                    <p style="font-size:14px;">${ctx.messages.getMessage('groupLimited')} #if($ctx.abn && $ctx.abn != '')${ctx.abn}#end</p>
+                                </div>
+                         
+                            </td>
+                        </tr>
+                           
+                        </table>
+                        </div>
+                        </td>
+        </tr>
+    </table>
+</body>
+</html>

@@ -1,0 +1,905 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2017 SAP SE or an SAP affiliate company.  All rights reserved.
+
+ This software is the confidential and proprietary information of SAP
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with SAP.
+-->
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="beans.xsd">
+
+	<bean class="de.hybris.platform.commercefacades.product.data.ProductData">
+		<property name="skuCode" type="String"/>
+		<property name="imageURL" type="String"/>
+		<property name="minQty" type="Integer"/>
+		<property name="maxQty" type="Integer"/>
+		<property name="unitPrices" type="java.util.List&lt;Double>"></property>
+		<property name="productType" type="String"/>
+	</bean>
+
+	<bean class="de.hybris.wooliesegiftcard.facades.product.data.GenderData">
+		<property name="code" type="String"/>
+		<property name="name" type="String"/>
+	</bean>
+	
+	<bean class="de.hybris.platform.commercefacades.order.data.AddToCartParams">
+		<property name="customerPrice" type="Double" />
+		<property name="message" type="String"></property>
+		<property name="toName" type="String"></property>
+		<property name="fromName" type="String"></property>
+		<property name="image" type="de.hybris.platform.cmsfacades.data.MediaData"></property>
+		<property name="customizeForAlleCards" type="Boolean"></property>
+	</bean>
+	
+	<bean
+		class="de.hybris.platform.commercefacades.order.data.CartModificationData">
+		<property name="customerPrice" type="Double"></property>
+		<property name="isAddtoCartDisable" type="Boolean"></property>
+		<property name="message" type="String"></property>
+		<property name="toName" type="String"></property>
+		<property name="fromName" type="String"></property>
+		<property name="image" type="de.hybris.platform.cmsfacades.data.MediaData"></property>
+		<property name="customizeForAlleCards" type="Boolean"></property>
+		<property name="cartTotal" type="Double"></property>
+		<property name="cartGiftCardCount" type="String"></property>
+		<property name="cartItemCount" type="int"></property>
+		<property name="isEGiftCard" type="Boolean" />
+		<property name="totalDiscounts" type="de.hybris.platform.commercefacades.product.data.PriceData"/>
+		<property name="totalPrice" type="de.hybris.platform.commercefacades.product.data.PriceData"/>
+		<property name="subTotal" type="de.hybris.platform.commercefacades.product.data.PriceData"/>
+		<property name="appliedOrderPromotions" type="java.util.List&lt;de.hybris.platform.commercefacades.product.data.PromotionResultData>"></property>
+		<property name="appliedProductPromotions" type="java.util.List&lt;de.hybris.platform.commercefacades.product.data.PromotionResultData>"></property>
+		
+	</bean>
+	
+	<bean class="de.hybris.platform.commercefacades.order.data.OrderEntryData">
+			<property name="customerPrice" type="Double"></property>
+				<property name="customizeEGiftCards" type="java.util.List&lt;de.hybris.wooliesegiftcard.facades.eGiftCardData>"></property>
+				<property name="cartTotal" type="Double"></property>
+				<property name="cartGiftCardCount" type="String"></property>
+				<property name="cartItemCount" type="int"></property>
+				<property name="listOfPID" type="java.util.List&lt;Integer>"></property>
+				<property name="isAddtoCartDisable" type="Boolean"></property>
+				<property name="isEGiftCard" type="Boolean" />
+				<property name="coBrandMedia" type="java.util.List&lt;de.hybris.wooliesegiftcard.facades.product.data.CoBrandImageData>" />
+				<property name="salesPrice" type="de.hybris.platform.commercefacades.product.data.PriceData" />
+				<property name="canPersonalize" type="Boolean" />
+	</bean>
+
+
+	<bean
+		class="de.hybris.wooliesegiftcard.facades.eGiftCardData">
+		<property name="message" type="String"></property>
+		<property name="toName" type="String"></property>
+		<property name="fromName" type="String"></property>
+		<property name="customImage" type="de.hybris.platform.cmsfacades.data.MediaData"></property>
+		<property name="productBannerImage" type="de.hybris.platform.cmsfacades.data.MediaData"></property>
+		<property name="PID" type="Integer"></property>
+		<property name="toEmail" type="String"></property>
+		<property name="defaultImage" type="de.hybris.platform.cmsfacades.data.MediaData"></property>
+	</bean>
+
+	
+	<bean class="de.hybris.platform.commercefacades.user.data.RegisterData">
+	 <property name="email" type="String"/>
+		 <property name="dob" type="String"/>
+		<property name="phone" type="java.lang.String"/>
+		<property name="addresses" type="java.util.List&lt;de.hybris.platform.commercefacades.user.data.AddressData>"/> 
+		<property name="cardNo" type="java.lang.String"/>
+		<property name="CRNnumber" type="java.lang.String"/>
+		<property name="optInForMarketing" type="java.lang.Boolean"/>
+		<property name="policyAgreement" type="java.lang.Boolean"/>
+		</bean>
+
+	<bean class="de.hybris.platform.commercefacades.user.data.CustomerData">
+		 <property name="dob" type="String"/>
+		<property name="phone" type="java.lang.String"/>
+		<!-- <property name="billingAddress" type="de.hybris.platform.commercefacades.user.data.AddressData"/> -->
+		<property name="addresses" type="java.util.List&lt;de.hybris.platform.commercefacades.user.data.AddressData>"/> 
+		<property name="cardNo" type="java.lang.String"/>
+		<property name="CRNnumber" type="java.lang.String"/>
+		 <property name="isCorpAdminUser" type="java.lang.Boolean" />
+		  <property name="orderLimit" type="de.hybris.platform.commercefacades.product.data.PriceData" />
+		 		  <property name="optInForMarketing" type="java.lang.Boolean" />
+		<property name="policyAgreement" type="java.lang.Boolean" />
+		  <property name="companyType" type="String" />
+		<property name="charityOrganization" type="java.lang.Boolean" />
+	</bean>
+	
+	<bean class="de.hybris.platform.commercefacades.user.data.AddressData">
+		<property name="address1" type="String" />
+		<property name="address2" type="String" />
+		<property name="city" type="String" />
+		<property name="state" type="String" />
+		<property name="isShipping" type="Boolean"/>
+		<property name="isBilling" type="Boolean"/>
+		<property name="addressID" type="String" />
+		<property name="saveToProfile" type="java.lang.Boolean" />
+	</bean>
+	<bean class="de.hybris.platform.commercewebservicescommons.dto.user.UserSignUpWsDTO">
+		 <property name="dob" type="String"/> 
+		<property name="phone" type="java.lang.String"/>
+		<property name="addresses" type="java.util.List&lt;de.hybris.platform.commercefacades.user.data.AddressData>"/> 
+		<property name="cardNo" type="java.lang.String"/>
+		<property name="CRNnumber" type="java.lang.String"/>
+		<property name="POReferenceNo" type="java.lang.String"/>
+		<property name="corporateName" type="String" />
+		<property name="corporateABN" type="String" />
+		<property name="isCorpAdminUser" type="java.lang.Boolean" />
+			<property name="orderLimit" type="de.hybris.platform.commercewebservicescommons.dto.product.PriceWsDTO" />
+		<property name="adminUid" type="java.lang.String" />
+		<property name="companyType" type="String" />
+		<property name="charityOrganization" type="java.lang.Boolean" />
+		<property name="memberId" type="java.lang.String" />
+		<property name="memberToken" type="java.lang.String" />
+		<property name="email" type="java.lang.String" />
+		<property name="optInForMarketing" type="java.lang.Boolean" />
+		<property name="policyAgreement" type="java.lang.Boolean" />
+		<property name="tradingName" type="String" />
+		<property name="customerId" type="String"/>
+
+	</bean>
+	<bean class="de.hybris.platform.commercewebservicescommons.dto.user.UserWsDTO">
+		 <property name="dob" type="String"/> 
+		<property name="phone" type="java.lang.String"/>
+		<property name="addresses" type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.user.AddressWsDTO>"/> 
+		<property name="cardNo" type="java.lang.String"/>
+		<property name="CRNnumber" type="java.lang.String"/>
+		<property name="accountType" type="java.lang.String" />
+		<property name="accountId" type="java.lang.String" />
+		<property name="isCorpAdminUser" type="java.lang.Boolean" />
+		<property name="cartTotal" type="Double"></property>
+		<property name="cartGiftCardCount" type="long"></property>
+		<property name="cartLineItemCount" type="int"></property>
+		<property name="email" type="java.lang.String" />
+		<property name="optInForMarketing" type="java.lang.Boolean" />
+		<property name="policyAgreement" type="java.lang.Boolean" />
+		
+		<property name="member" type="de.hybris.wooliesegiftcard.facades.MemberWsDTO" />
+			</bean>
+
+ <bean class="de.hybris.platform.commercewebservicescommons.dto.user.AddressWsDTO">
+		<property name="address1" type="String"/>
+		<property name="address2" type="String"/>
+		<property name="city" type="String"/>
+		<property name="state" type="String"/>
+		<property name="isShipping" type="Boolean"/>
+		<property name="isBilling" type="Boolean"/>
+		<property name="billingAddress" type="Boolean"/>
+		<property name="addressID" type="String" />
+		<property name="saveToProfile" type="java.lang.Boolean"/>
+			</bean> 
+			
+
+<bean class="de.hybris.wooliesegiftcard.facades.dto.OrderDetailsRequestDTO">
+		<property name="uid" type="String"/>
+		<property name="orderNumber" type="String"/>
+		<property name="orderStatus" type="java.util.List&lt;String>" />
+		<property name="toDate" type="String"/>
+		<property name="fromDate" type="String"/>
+		<property name="startIndex" type="int"/>
+		<property name="pageSize" type="int"/>
+</bean> 
+		
+<bean class="de.hybris.wooliesegiftcard.facades.dto.OrderHistoryResponseDTO" 
+		extends="de.hybris.platform.commercewebservicescommons.dto.order.AbstractOrderWsDTO">
+		<property name="orderNo" type="String"/>
+		<property name="orderDate" type="String"/>
+		<property name="amount" type="de.hybris.platform.commercewebservicescommons.dto.product.PriceWsDTO"/>
+		<property name="orderStatus" type="String"/>
+		<property name="quantity" type="String"/>
+		</bean> 
+		
+<bean class="de.hybris.wooliesegiftcard.facades.dto.OrderHistoryStatusResponseDTO" 
+		extends="de.hybris.platform.commercewebservicescommons.dto.order.AbstractOrderWsDTO">
+		<property name="orderStatusId" type="String"/>
+		<property name="name" type="String"/>
+		</bean> 
+		
+		
+<bean class="de.hybris.wooliesegiftcard.facades.dto.OrderHistoryListResponseDTO">
+		<property name="orders" type="java.util.List&lt;de.hybris.wooliesegiftcard.facades.dto.OrderHistoryResponseDTO>"/> 
+		<property name="orderStatuses" type="java.util.List&lt;de.hybris.wooliesegiftcard.facades.dto.OrderHistoryStatusResponseDTO>"/> 
+		<property name="totalCount" type="int"/>
+		<property name="currentIndex" type="int"/>
+		</bean> 
+
+<bean class="de.hybris.platform.commercewebservicescommons.dto.order.CartModificationWsDTO">
+	<property name="isAddtoCartDisable" type="Boolean"></property>
+	<property name="cartTotal" type="Double"></property>
+	<property name="cartGiftCardCount" type="String"></property>
+	<property name="cartItemCount" type="int"></property>
+	</bean> 
+	<bean class="de.hybris.platform.commercefacades.order.data.DeliveryModeData">
+		<property name="taxCost" type="de.hybris.platform.commercefacades.product.data.PriceData" />
+		<property name="deliveryType" type="String" />
+		<property name="estStart" type="long"/>
+		<property name="estEnd" type="long"/>
+		<property name="selectedFlag" type="Boolean"/>
+	</bean>
+	<bean
+		class="de.hybris.platform.commercewebservicescommons.dto.order.DeliveryModeWsDTO">
+		<property name="taxCost" type="de.hybris.platform.commercewebservicescommons.dto.product.PriceWsDTO" />
+		<property name="selectedFlag" type="Boolean"/>
+	</bean>
+	
+	<!-- b2b corporate Unit -->
+<bean class="de.hybris.platform.b2bcommercefacades.company.data.B2BUnitData">
+		<property name="corporateName" type="String" />
+		<property name="corporateABN" type="String" />
+			<property name="companyType" type="String" />
+		<property name="charityOrganization" type="java.lang.Boolean" />
+		<property name="tradingName" type="String" />
+		<property name="CRNnumber" type="java.lang.String"/>
+	</bean>
+	
+	<bean class="de.hybris.platform.cmsfacades.data.MediaData">
+		<property name="approvedImages" type="java.util.List&lt;String>" />
+	</bean>
+	
+	
+	<bean class="de.hybris.platform.wooliesgcfacades.order.data.CardDeliveryDateData">
+		<property name="cardType" type="String" />
+		<property name="cardTypeLabel" type="String" />
+		<property name="deliveryDate" type="String" />
+		<property name="deliveryModeType" type="String" />
+	</bean>
+	
+	<bean class="de.hybris.platform.commercefacades.order.data.OrderData">
+		<property name="cardDeliveryDate" type="java.util.List&lt;de.hybris.platform.wooliesgcfacades.order.data.CardDeliveryDateData>"/> 
+		<property name="customer" type="de.hybris.wooliesegiftcard.facades.customersdata"/>
+		<property name="taxCosts" type="de.hybris.platform.commercefacades.product.data.PriceData" />
+		<property name="payment" type="de.hybris.wooliesegiftcard.facades.paymentData"/>
+		<property name="date" type="long"/>
+		<property name="orderNo" type="String"/>
+		<property name="orderDate" type="String"/>
+		<property name="amount" type="de.hybris.platform.commercefacades.product.data.PriceData"/>
+		<property name="orderStatus" type="String"/>
+		<property name="quantity" type="String"/>
+		<property name="taxInvoiceId" type="String"/>
+		<property name="isMinimalPackage" type="java.lang.Boolean"/>
+	</bean>
+	
+	<bean class="de.hybris.platform.commercefacades.order.data.AbstractOrderData">
+		<property name="isBulkOrder" type="java.lang.Boolean"/>
+	</bean>
+	
+	<bean class="de.hybris.platform.commercefacades.order.data.OrderStatusData" 
+		extends="de.hybris.platform.commercefacades.order.data.AbstractOrderData">
+		<property name="orderStatusId" type="String"/>
+		<property name="name" type="String"/>
+		</bean> 
+	
+		<bean
+		class="de.hybris.platform.commercewebservicescommons.dto.order.B2BCustomerListWsDTO">
+		<property name="email" type="java.util.List" />
+		</bean>
+<bean class="de.hybris.platform.wooliesgcfacades.category.dto.CategoryDetailsRequestDTO">
+		<property name="uid" type="String"/>
+		<property name="countryISOCode" type="String"/>
+		<property name="categoryId" type="String"/>
+</bean> 
+
+
+	<bean class="de.hybris.platform.commercefacades.product.data.ImageData">
+		<property name="mime" type="String"/>
+	</bean>
+	
+	<bean class="de.hybris.platform.wooliesgcfacades.category.data.ItemsData">
+		<property name="categoryId" type="String"/>
+		<property name="name" type="String"/>
+		<property name="description" type="String"/>
+		<property name="imageURL" type="String"/>
+	</bean> 
+ <bean
+		class="de.hybris.wooliesegiftcard.facades.paymentData">
+		<property name="suffix" type="String"/>
+		<property name="schema" type="String"/>
+		<property name="paymentOption" type="String"/>
+		<property name="paymentName" type="String"/>
+	</bean>
+ <bean class="de.hybris.wooliesegiftcard.facades.customersdata">
+ 	    <property name="membername" type="String"></property>
+		<property name="firstName" type="String"></property>
+		<property name="lastName" type="String"></property>
+		<property name="emailaddress" type="String"></property>
+	    <property name="customerType" type="String"></property>
+	    <property name="coorporateid" type="String"></property>
+		<property name="memberuserid" type="String"></property>	
+	</bean>
+	<bean class="de.hybris.platform.wooliesgcfacades.category.data.SubCategoriesData">
+		<property name="classification" type="String"/>
+		<property name="items" type="java.util.List&lt;de.hybris.platform.wooliesgcfacades.category.data.ItemsData>"/>
+	</bean> 
+		
+	<bean class="de.hybris.platform.commercefacades.product.data.CategoryData">
+		<property name="categories" type="de.hybris.platform.wooliesgcfacades.category.data.SubCategoriesData" />
+		<property name="products" type="java.util.List&lt;de.hybris.platform.commercefacades.product.data.ProductData>" />
+		<property name="classification" type="String"/>
+		<property name="imageURL" type="String"/>
+	</bean>
+
+	<bean class="de.hybris.wooliesegiftcard.facades.UserProfileData">
+		<property name="isCorpAdminUser" type="java.lang.Boolean" />
+		<property name="accountType" type="java.lang.String" />
+		<property name="accountId" type="java.lang.String" />
+		<property name="cartTotal" type="Double"></property>
+		<property name="cartGiftCardCount" type="long"></property>
+		<property name="cartLineItemCount" type="int"></property>	
+		<property name="firstName" type="String"/>
+		<property name="lastName" type="String"/>
+		<property name="phone" type="String"/>
+		<property name="member" type="de.hybris.wooliesegiftcard.facades.MemberData"></property>
+		<property name="uid" type="String"/>
+		<property name="customerId" type="String"/>
+		<property name="email" type="java.lang.String" />
+		
+	</bean>
+  
+  <bean class="de.hybris.wooliesegiftcard.facades.MemberData">
+		<property name="memberName" type="String"/>
+		<property name="memberBackgroundImage" type="de.hybris.platform.cmsfacades.data.MediaData"/>
+		<property name="memberLogoImage" type="de.hybris.platform.cmsfacades.data.MediaData"/>
+		<property name="heading1" type="String"/>
+		<property name="fontColor1" type="String"/>
+		<property name="heading2" type="String"/>
+		<property name="fontColor2" type="String"/>
+		<property name="heading3" type="String"/>
+		<property name="fontColor3" type="String"/>
+		</bean>
+  	<bean class="de.hybris.wooliesegiftcard.facades.MemberWsDTO">
+	
+		<property name="memberName" type="String"/>
+		<property name="memberBackgroundImage" type="de.hybris.platform.cmssmarteditwebservices.dto.MediaWsDTO"/>
+		<property name="memberLogoImage" type="de.hybris.platform.cmssmarteditwebservices.dto.MediaWsDTO"/>
+		<property name="heading1" type="String"/>
+		<property name="fontColor1" type="String"/>
+		<property name="heading2" type="String"/>
+		<property name="fontColor2" type="String"/>
+		<property name="heading3" type="String"/>
+		<property name="fontColor3" type="String"/>
+	</bean>
+	
+	
+	 <bean class="de.hybris.wooliesegiftcard.facades.GuestCartProfileData">
+		<property name="guid" type="String"/>
+		<property name="cartTotal" type="Double"></property>
+		<property name="cartGiftCardCount" type="long"></property>
+		<property name="cartLineItemCount" type="int"></property>	
+		</bean>
+  	<bean class="de.hybris.wooliesegiftcard.facades.GuestCartProfileWsDTO">
+		<property name="guid" type="String"/>
+		<property name="cartTotal" type="Double"></property>
+		<property name="cartGiftCardCount" type="long"></property>
+		<property name="cartLineItemCount" type="int"></property>	
+	</bean>
+	
+	<bean class="de.hybris.wooliesegiftcard.facades.CorporateDetailsDTO">
+		<property name="corporateName" type="String" />
+		<property name="corporateABN" type="String" />
+			<property name="companyType" type="String" />
+		<property name="charityOrganization" type="java.lang.Boolean" />
+		<property name="tradingName" type="String" />
+	</bean>
+	
+	<!-- b2b User management -->
+		<bean class="de.hybris.wooliesegiftcard.facades.CustomerDataList">
+		<property name="users" type="java.util.List&lt;de.hybris.platform.commercefacades.user.data.CustomerData>" />
+	</bean>
+	<bean class="de.hybris.wooliesegiftcard.facades.CustomerDataListDTO">
+		<property name="users" type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.user.UserSignUpWsDTO>" />
+	</bean>
+	
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.PlaceOrderRequestDTO">
+		<property name="uid" type="String"/>
+		<property name="email" type="String"/>
+		<property name="clientIP" type="String"/>
+		<property name="localDate" type="String"/>
+		<property name="firstName" type="String"/>
+		<property name="lastName" type="String"/>
+		<property name="phoneNumber" type="String"/>
+		<property name="billingAddress"
+			type="de.hybris.platform.commercewebservicescommons.dto.user.AddressWsDTO" />
+		<property name="shippingAddress" type="de.hybris.platform.commercewebservicescommons.dto.user.AddressWsDTO" />
+		<property name="payment" type="de.hybris.wooliesegiftcard.facades.dto.PaymentRequestDTO" />
+		<property name="poReference" type="String"/>
+		<property name="agreedToTermsAndConditions" type="String"/>
+		<property name="otpCode" type="String"/>
+		<property name="securityCheck" type="String"/>
+		<property name="guid" type="String"/>
+	</bean>
+	
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.ShippingAddressRequestDTO">
+		<property name="addressId" type="String"/>
+		<property name="extendedAddress" type="String"/>
+		<property name="streetAddress" type="String"/>
+		<property name="suburb" type="String"/>
+		<property name="stateOrTerritory" type="String"/>
+		<property name="postalCode" type="String"/>
+		<property name="countryISOCode" type="String"/>
+		<property name="countryName" type="String"/>
+		<property name="saveToProfile" type="java.lang.Boolean"/>
+	</bean> 
+
+
+<!-- 	<bean class="de.hybris.wooliesegiftcard.facades.dto.BillingAddressRequestDTO">
+		<property name="addressId" type="String" />
+		<property name="extendedAddress" type="String" />
+		<property name="streetAddress" type="String" />
+		<property name="suburb" type="String" />
+		<property name="stateOrTerritory" type="String" />
+		<property name="postalCode" type="String" />
+		<property name="countryISOCode" type="String" />
+		<property name="countryName" type="String" />
+		<property name="saveToProfile" type="java.lang.Boolean" />
+	</bean> --> 
+		
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.PaymentRequestDTO">
+		<property name="paymentInstrumentId" type="String" />
+		<property name="stepUpToken" type="String" />
+		<property name="suffix" type="String" />
+		<property name="schema" type="String" />
+		<property name="paymentOption" type="String" />
+		<property name="accessToken" type="String" />
+		<property name="isTest" type="Boolean" />
+	</bean>
+
+
+
+	<bean class="de.hybris.wooliesegiftcard.facades.CustomerDetailDTO">
+		<property name="firstName" type="java.lang.String" />
+		<property name="lastName" type="java.lang.String" />
+		<property name="email" type="java.lang.String" />
+		<property name="dob" type="java.lang.String" />
+		<property name="uid" type="java.lang.String"/>
+		<property name="phone" type="java.lang.String" />
+		<property name="cardNo" type="java.lang.String" />
+		<property name="customerId" type="java.lang.String" />
+		<property name="optInForMarketing"  type="java.lang.String" />
+  </bean>
+
+	
+	<bean class="de.hybris.wooliesegiftcard.facades.RemoveCustomerDTO">
+		<property name="uid" type="String" />
+		<property name="users"
+			type="java.util.List&lt;de.hybris.platform.commercewebservicescommons.dto.user.UserSignUpWsDTO>" />
+	</bean>
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.BulkOrderRequestDTO">
+		<property name="uid" type="String" />
+		<property name="items"
+			type="java.util.List&lt;de.hybris.wooliesegiftcard.facades.dto.BulkOrderRequestItem>"></property>
+
+	</bean>
+
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.BulkOrderRequestItem">
+		<property name="rowNumber" type="Integer" />
+		<property name="skuCode" type="String" />
+		<property name="unitPrice" type="Double" />
+		<property name="toName" type="String" />
+		<property name="toEmail" type="String" />
+		<property name="fromName" type="String" />
+		<property name="fromEmail" type="String" />
+		<property name="message" type="String" />
+
+	</bean>
+	
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.BulkOrderResponseDTO">
+		<property name="referenceNumber" type="String" />
+		<property name="message" type="String" />
+		<property name="errors"
+			type="java.util.List&lt;de.hybris.wooliesegiftcard.facades.dto.BulkOrderResponseError>"></property>
+
+	</bean>
+
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.BulkOrderResponseError">
+		<property name="rowNumber" type="Integer" />
+		<property name="property" type="String" />
+		<property name="value" type="String" />
+		<property name="errorCode" type="String" />
+		<property name="errorMessage" type="String" />
+	</bean>
+	<bean class="de.hybris.wooliesegiftcard.facades.product.data.PersonalisationMediaData" extends="de.hybris.platform.cmsfacades.data.MediaData">
+		<property name="imageApprovalStatus" type="String"/>
+		<property name="PID" type="Integer"/>
+	</bean>
+		<bean class="de.hybris.wooliesegiftcard.facades.dto.PersonalisationMediaWsDTO" extends="de.hybris.platform.cmssmarteditwebservices.dto.MediaWsDTO">
+		<property name="imageApprovalStatus" type="String"/>
+		<property name="PID" type="Integer"/>
+	</bean>
+	
+	
+	<bean class="de.hybris.wooliesegiftcard.facades.PersonalisationMediaDataList">
+		<property name="imageList" type="java.util.List&lt;de.hybris.wooliesegiftcard.facades.product.data.PersonalisationMediaData>" />
+		<property name="pageData" type="de.hybris.platform.commercefacades.user.data.WooliesPaginationData"/>
+	</bean>
+	<bean class="de.hybris.wooliesegiftcard.facades.PersonalisationMediaDataDataListDTO">
+		<property name="imageList" type="java.util.List&lt;de.hybris.wooliesegiftcard.facades.dto.PersonalisationMediaWsDTO>" />
+		<property name="pageData" type="de.hybris.platform.commercewebservicescommons.dto.user.WooliesPaginationWsDTO"/>
+	</bean>
+	<bean class="de.hybris.wooliesegiftcard.facades.product.data.CoBrandImageData" extends="de.hybris.platform.cmsfacades.data.MediaData">
+		<property name="product" type="String"/>
+		<property name="imageID" type="String"/>
+		<property name="selected" type="Boolean"/>
+	</bean>
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.CoBrandImageWsDTO" extends="de.hybris.platform.cmssmarteditwebservices.dto.MediaWsDTO">
+		<property name="product" type="String"/>
+		<property name="imageID" type="String"/>
+		<property name="selected" type="Boolean"/>
+	</bean>
+	
+	<bean class="de.hybris.platform.commercefacades.product.data.PromotionResultData">
+	<property name="totalDiscount" type="de.hybris.platform.commercefacades.product.data.PriceData"/>
+	<property name="couponCode" type="String"/>
+	</bean>
+	<bean class="de.hybris.platform.commercewebservicescommons.dto.product.PromotionWsDTO">
+		<property name="name" type="String"/>
+	</bean>
+	<bean class="de.hybris.platform.commercefacades.product.data.PromotionData">
+		<property name="name" type="String"/>
+	</bean>
+	<bean class="de.hybris.platform.commercewebservicescommons.dto.product.PromotionResultWsDTO">
+		<property name="couponCode" type="String"/>
+	</bean>
+	
+	<bean class="de.hybris.platform.commercefacades.user.data.WooliesPaginationData">
+		<property name="startIndex" type="int" />
+		<property name="pageSize" type="int" />
+		<property name="totalCount" type="int" />
+		<property name="currentIndex" type="int" />
+	</bean>
+
+	<!-- Payment Auth related data -->
+
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.PaymentAuthRequest">
+		<property name="clientReference" type="String" />
+		<property name="orderNumber" type="String" />
+		<property name="transactionType"
+			type="de.hybris.wooliesegiftcard.facades.dto.TransactionType" />
+		<property name="payments"
+			type="java.util.List&lt;de.hybris.wooliesegiftcard.facades.dto.Payment>" />
+		<property name="fraudPayload" type="de.hybris.wooliesegiftcard.facades.dto.FraudPayload" />
+	</bean>
+
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.TransactionType">
+		<property name="creditCard" type="String" />
+	</bean>
+
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.Payment">
+		<property name="paymentInstrumentId" type="String" />
+		<property name="amount" type="Double" />
+		<property name="stepUpToken" type="String" />
+	</bean>
+	
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.FraudPayload">
+		<property name="provider" type="String" />
+		<property name="version" type="String" />
+		<property name="format" type="String" />
+		<property name="responseFormat" type="String" />
+		<property name="message" type="String" />
+	</bean>
+
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.PaymentAuthResponse">
+		<property name="transactionReceipt" type="String" />
+		<property name="partialSuccess" type="Boolean" />
+		<property name="fraudResponse"
+			type="de.hybris.wooliesegiftcard.facades.dto.FraudResponse" />
+		<property name="creditCards"
+			type="java.util.List&lt;de.hybris.wooliesegiftcard.facades.dto.CreditCardsResponse>" />
+		<property name="giftCards"
+			type="java.util.List&lt;de.hybris.wooliesegiftcard.facades.dto.GiftCardsResponse>" />
+		<property name="payPal"
+			type="java.util.List&lt;de.hybris.wooliesegiftcard.facades.dto.PayPalResponse>" />
+		<property name="androidPay"
+			type="java.util.List&lt;de.hybris.wooliesegiftcard.facades.dto.AndroidPayResponse>" />
+		<property name="applePay"
+			type="java.util.List&lt;de.hybris.wooliesegiftcard.facades.dto.ApplePayResponse>" />
+		<property name="unknown"
+			type="java.util.List&lt;de.hybris.wooliesegiftcard.facades.dto.UnknownResponse>" />
+	</bean>
+
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.FraudResponse">
+		<property name="clientId" type="String" />
+		<property name="reasonCode" type="String" />
+		<property name="decision" type="String" />
+	</bean>
+
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.CreditCardsResponse">
+		<property name="paymentInstrumentId" type="String" />
+		<property name="paymentTransactionRef" type="String" />
+		<property name="receiptData" type="de.hybris.wooliesegiftcard.facades.dto.ReceiptDataResponse" />
+	</bean>
+
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.ReceiptDataResponse">
+		<property name="cardSuffix" type="String" />
+		<property name="expiryMonth" type="String" />
+		<property name="expiryYear" type="String" />
+		<property name="scheme" type="String" />
+	</bean>
+
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.GiftCardsResponse">
+	</bean>
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.PayPalResponse">
+	</bean>
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.AndroidPayResponse">
+	</bean>
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.ApplePayResponse">
+	</bean>
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.UnknownResponse">
+	</bean>
+
+
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.PaymentAuthError">
+		<property name="httpStatusCode" type="Integer" />
+		<property name="errorCode" type="String" />
+		<property name="errorMessage" type="String" />
+		<property name="errorDetail" type="String" />
+		<property name="creditCards"
+			type="java.util.List&lt;de.hybris.wooliesegiftcard.facades.dto.PaymentCreditCardError>" />
+		<property name="giftCards"
+			type="java.util.List&lt;de.hybris.wooliesegiftcard.facades.dto.GiftCardsError>" />
+		<property name="payPal"
+			type="java.util.List&lt;de.hybris.wooliesegiftcard.facades.dto.PayPalError>" />
+		<property name="androidPay"
+			type="java.util.List&lt;de.hybris.wooliesegiftcard.facades.dto.AndroidPayError>" />
+		<property name="applePay"
+			type="java.util.List&lt;de.hybris.wooliesegiftcard.facades.dto.ApplePayError>" />
+		<property name="unknown"
+			type="java.util.List&lt;de.hybris.wooliesegiftcard.facades.dto.PaymentUnknownError>" />
+	</bean>
+
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.PaymentCreditCardError">
+		<property name="errorCode" type="String" />
+		<property name="errorMessage" type="String" />
+		<property name="errorDetail" type="String" />
+		<property name="paymentInstrumentId" type="String" />
+		<property name="receiptData" type="de.hybris.wooliesegiftcard.facades.dto.ReceiptDataResponse" />
+		<property name="stepUp"
+			type="de.hybris.wooliesegiftcard.facades.dto.PaymentStepUpDetails" />
+	</bean>
+
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.PaymentStepUpDetails">
+		<property name="mandatory" type="Boolean" />
+		<property name="url" type="String" />
+	</bean>
+
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.PaymentUnknownError">
+		<property name="errorCode" type="String" />
+		<property name="errorMessage" type="String" />
+		<property name="errorDetail" type="String" />
+		<property name="paymentInstrumentId" type="String" />
+	</bean>
+
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.GiftCardsError">
+	</bean>
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.PayPalError">
+	</bean>
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.AndroidPayError">
+	</bean>
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.ApplePayError">
+	</bean>
+	
+	<!-- Payment Completion Start-->
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.Completions">
+		<property name="paymentTransactionRef" type="String" />
+		<property name="amount" type="Double" />
+	</bean>
+	
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.CompletionResponses">
+		<property name="paymentTransactionRef" type="String" />
+		<property name="completionTransactionRef" type="String" />
+		<property name="amount" type="Double" />
+		
+	</bean>
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.PaymentCompletionRequest">
+		<property name="clientReference" type="String" />
+		<property name="orderNumber" type="String" />
+		<property name="completions"
+			type="java.util.List&lt;de.hybris.wooliesegiftcard.facades.dto.Completions>" />
+	</bean>
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.PaymentCompletionResponse">
+		<property name="transactionReceipt" type="String" />
+		<property name="partialSuccess" type="Boolean" />
+		<property name="completionResponses"
+			type="java.util.List&lt;de.hybris.wooliesegiftcard.facades.dto.CompletionResponses>" />
+	</bean>
+	
+	
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.PaymentCompletionError">
+		<property name="httpStatusCode" type="Integer" />
+		<property name="errorCode" type="String" />
+		<property name="errorMessage" type="String" />
+		<property name="requestMessageId" type="String" />
+	</bean>
+	
+	<!-- Payment Completion End-->
+	<!-- WEX Integration -->
+	
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.WoolworthsOrderRequest">
+		<property name="requestMessageId" type="String" />
+		<property name="purchaseOrderReference" type="String" />
+		<property name="deliveryMethod" type="String" />
+		<property name="storeId" type="String" />
+		<property name="corporateAccountId" type="String" />
+		<property name="paymentTypeId" type="String" />
+		<property name="paymentDetail" type="String" />
+		<property name="freightFee" type="Double" />
+		<property name="isRegisteredPost" type="Boolean" />
+		<property name="discountTypeId" type="String" />
+		<property name="discountPercentage" type="Double" />
+		<property name="discountAuthNumber" type="String" />
+		<property name="organisationNumber" type="String" />
+		<property name="isBulkOrder" type="Boolean" />
+		<property name="specialInstruction" type="String" />
+		<property name="orderType" type="String" />
+		<property name="purchaserType" type="String" />
+		<property name="corporateAccountDetail" type="de.hybris.wooliesegiftcard.facades.dto.CorporateAccountDetail" />
+		<property name="publicPurchaserDetail" type="de.hybris.wooliesegiftcard.facades.dto.PublicPurchaserDetail" />
+		<property name="deliveryDetail" type="de.hybris.wooliesegiftcard.facades.dto.DeliveryDetail" />
+		<property name="orders" type="java.util.List&lt;de.hybris.wooliesegiftcard.facades.dto.Order>" />		
+	</bean>
+
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.CorporateAccountDetail">
+		<property name="accountName" type="String" />
+		<property name="firstName" type="String" />
+		<property name="lastName" type="String" />
+		<property name="title" type="String" />
+		<property name="email" type="String" />
+		<property name="phone" type="String" />
+		<property name="fax" type="String" />
+		<property name="address1" type="String" />
+		<property name="address2" type="String" />
+		<property name="suburb" type="String" />
+		<property name="state" type="String" />
+		<property name="postCode" type="String" />
+		<property name="countryId" type="String" />
+	</bean>
+	
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.PublicPurchaserDetail">
+		<property name="firstName" type="String" />
+		<property name="lastName" type="String" />
+		<property name="title" type="String" />
+		<property name="email" type="String" />
+		<property name="phone" type="String" />
+		<property name="fax" type="String" />
+		<property name="address1" type="String" />
+		<property name="address2" type="String" />
+		<property name="suburb" type="String" />
+		<property name="state" type="String" />
+		<property name="postCode" type="String" />
+		<property name="countryId" type="String" />
+	</bean>
+	
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.DeliveryDetail">
+		<property name="recipientFirstName" type="String" />
+		<property name="recipientLastName" type="String" />
+		<property name="recipientTitle" type="String" />
+		<property name="recipientEmail" type="String" />
+		<property name="recipientPhone" type="String" />
+		<property name="recipientFax" type="String" />
+		<property name="recipientAddress1" type="String" />
+		<property name="recipientAddress2" type="String" />
+		<property name="recipientAddress3" type="String" />
+		<property name="recipientSuburb" type="String" />
+		<property name="recipientState" type="String" />
+		<property name="recipientPostCode" type="String" />
+		<property name="recipientCountryId" type="String" />
+		<property name="recipientCompanyName" type="String" />
+	</bean>
+	
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.Order">
+		<property name="orderReferenceId" type="String" />
+		<property name="voucherProductCode" type="String" />
+		<property name="amount" type="Double" />
+		<property name="quantity" type="Double" />
+		<property name="additionalDiscountVouchers" type="Double" />
+		<property name="includeCarrier" type="Boolean" />
+		<property name="cardDescriptor" type="String" />
+		<property name="validFrom" type="String" />
+		<property name="validTo" type="String" />
+		<property name="externalLogo" type="String" />
+	</bean>	
+	
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.WoolworthsOrderResponse">
+		<property name="requestMessageId" type="String" />
+		<property name="invoiceNo" type="String" />
+		<property name="orderTotal" type="Double" />
+		<property name="discountApplied" type="Double" />
+		<property name="freightFee" type="Double" />
+		<property name="orderStatus" type="String" />
+		<property name="paymentDetail" type="String" />
+		<property name="effectiveDate" type="String" />  
+	</bean>
+	
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.WexIntegrationError">
+		<property name="httpStatusCode" type="Integer" />
+		<property name="errorCode" type="String" />
+		<property name="errorMessage" type="String" />
+		<property name="requestMessageId" type="String" />
+	</bean>	
+
+	<!-- request and response bean for updating order status for fraud -->
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.FraudOrderStatusRequest">
+	<property name="merchantId"
+			type="String"></property>
+		<property name="orders" type=
+		"java.util.List&lt;de.hybris.wooliesegiftcard.facades.dto.FraudOrderStatus>" />
+	</bean>
+	
+	
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.FraudOrderStatus">
+		<property name="merchantReferenceNumber" type="String"></property>
+		<property name="requestId" type="String"></property>
+		<property name="originalDecision" type="String"></property>
+		<property name="newDecision" type="String"></property>
+		<property name="date" type="String"></property>
+		<property name="reviewer" type="String"></property>
+		<property name="reviewerComments" type="String"></property>
+		<property name="queue" type="String"></property>
+		<property name="profile" type="String"></property>
+		<property name="notes" type="java.util.List&lt;de.hybris.wooliesegiftcard.facades.dto.FraudNotes>" />
+	</bean>
+	
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.FraudNotes">
+		<property name="date" type="String"></property>
+		<property name="addedBy" type="String"></property>
+		<property name="comment" type="String"></property>
+	</bean>
+	
+
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.VoidRequests">
+		<property name="paymentTransactionRef" type="String"></property>
+	</bean>
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.VoidResponse">
+		<property name="paymentTransactionRef" type="String"></property>
+		<property name="voidTransactionRef" type="String"></property>
+	</bean>
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.CancelPaymentRequest">
+		<property name="clientReference" type="String"></property>
+		<property name="orderNumber" type="String"></property>
+		<property name="voids"
+			type="java.util.List&lt;de.hybris.wooliesegiftcard.facades.dto.VoidRequests>" />
+	</bean>
+	
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.CancelPaymentResponse">
+		<property name="transactionReceipt" type="String"></property>
+		<property name="partialSuccess" type="Boolean" />
+		<property name="voidResponses" type="java.util.List&lt;de.hybris.wooliesegiftcard.facades.dto.VoidResponse>" />
+	</bean>
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.CancelPaymentError">
+		<property name="httpStatusCode" type="Integer" />
+		<property name="errorCode" type="String" />
+		<property name="errorMessage" type="String" />
+		<property name="errorDetail" type="String" />
+		</bean>
+
+
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.FraudRequestCron">
+		<property name="startDate" type="String"></property>
+		<property name="startTime" type="String"></property>
+		<property name="endDate" type="String"></property>
+		<property name="endTime" type="String"></property>
+	</bean>
+	
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.FraudErrorResponse">
+		<property name="httpStatusCode" type="Integer" />
+		<property name="errorCode" type="String" />
+		<property name="errorMessage" type="String" />
+		<property name="errorDetail" type="String" />
+</bean>
+
+	<bean class="de.hybris.wooliesegiftcard.facades.GiftCardResponseData">
+		<property name="giftCardNumber" type="java.lang.Long" />
+		<property name="inStoreCardNumber" type="java.lang.String" />
+		<property name="pin" type="java.lang.String" />
+		<property name="imageURL" type="java.lang.String" />
+		<property name="amount" type="de.hybris.platform.commercefacades.product.data.PriceData"/>
+		<property name="personalisationGiftCard" type="de.hybris.wooliesegiftcard.facades.eGiftCardData" />
+	</bean>
+	
+	<bean class="de.hybris.wooliesegiftcard.facades.dto.DecryptOrderTokenDTO">
+		<property name="encryptedOrderToken" type="String" />
+	</bean>
+</beans>

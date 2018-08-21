@@ -1,0 +1,27 @@
+# -----------------------------------------------------------------------
+# [y] hybris Platform
+#
+# Copyright (c) 2017 SAP SE or an SAP affiliate company.  All rights reserved.
+#
+# This software is the confidential and proprietary information of SAP
+# ("Confidential Information"). You shall not disclose such Confidential
+# Information and shall use it only in accordance with the terms of the
+# license agreement you entered into with SAP.
+# -----------------------------------------------------------------------
+#
+# Import Constraints for Product Cockpit
+# 
+
+
+INSERT_UPDATE ConstraintGroup;id[unique = true];dedicatedTypes(code);interfaceName
+;defaultBackofficeValidationGroup;Item;de.hybris.platform.validation.groupinterfaces.DefaultBackofficeValidationGroup
+
+INSERT_UPDATE SizeConstraint;active[allownull = true, default = true];descriptor(enclosingType(code),qualifier);id[unique = true];message[lang = en];min[allownull = true];max[allownull = true];qualifier[allownull = true];severity(code, itemtype(code));target[allownull = true];type(code);constraintGroups(id)
+;;MemberUnit:fontColor1;MemberUnitFontOneSizeConstraint;The Attribute "fontColor1" must not be greater than 100 characters;0;100;fontColor1;ERROR:Severity;de.hybris.wooliesegiftcard.core.model.MemberUnitModel;MemberUnit;defaultBackofficeValidationGroup;
+;;MemberUnit:fontColor2;MemberUnitFontTwoSizeConstraint;The Attribute "fontColor2" must not be greater than 100 characters;0;100;fontColor2;ERROR:Severity;de.hybris.wooliesegiftcard.core.model.MemberUnitModel;MemberUnit;defaultBackofficeValidationGroup;
+;;MemberUnit:fontColor3;MemberUnitFontThreeSizeConstraint;The Attribute "fontColor3" must not be greater than 100 characters;0;100;fontColor3;ERROR:Severity;de.hybris.wooliesegiftcard.core.model.MemberUnitModel;MemberUnit;defaultBackofficeValidationGroup;
+;;MemberUnit:heading1;MemberUnitHeadOneSizeConstraint;The Attribute "heading1" must not be greater than 250 characters;0;250;heading1;ERROR:Severity;de.hybris.wooliesegiftcard.core.model.MemberUnitModel;MemberUnit;defaultBackofficeValidationGroup;
+;;MemberUnit:heading2;MemberUnitHeadTwoSizeConstraint;The Attribute "heading2" must not be greater than 250 characters;0;250;heading2;ERROR:Severity;de.hybris.wooliesegiftcard.core.model.MemberUnitModel;MemberUnit;defaultBackofficeValidationGroup;
+;;MemberUnit:heading3;MemberUnitHeadThreeSizeConstraint;The Attribute "heading3" must not be greater than 250 characters;0;250;heading3;ERROR:Severity;de.hybris.wooliesegiftcard.core.model.MemberUnitModel;MemberUnit;defaultBackofficeValidationGroup;
+  
+$de.hybris.platform.core.Registry.getApplicationContext().getBean(de.hybris.platform.validation.services.ValidationService.class).reloadValidationEngine()

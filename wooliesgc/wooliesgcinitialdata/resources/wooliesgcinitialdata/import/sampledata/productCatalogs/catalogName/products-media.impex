@@ -1,0 +1,205 @@
+# -----------------------------------------------------------------------
+# [y] hybris Platform
+#
+# Copyright (c) 2017 SAP SE or an SAP affiliate company.  All rights reserved.
+#
+# This software is the confidential and proprietary information of SAP
+# ("Confidential Information"). You shall not disclose such Confidential
+# Information and shall use it only in accordance with the terms of the
+# license agreement you entered into with SAP.
+# -----------------------------------------------------------------------
+# ImPex for Importing Product Media
+
+# Macros / Replacement Parameter definitions
+$productCatalog=auWooliesProductCatalog
+
+$catalogVersion=catalogversion(catalog(id[default=$productCatalog]),version[default='Staged'])[unique=true,default=$productCatalog]
+$media=@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator]
+$thumbnail=thumbnail(code, $catalogVersion)
+$picture=picture(code, $catalogVersion)
+$thumbnails=thumbnails(code, $catalogVersion)
+$detail=detail(code, $catalogVersion)
+$normal=normal(code, $catalogVersion)
+$others=others(code, $catalogVersion)
+$data_sheet=data_sheet(code, $catalogVersion)
+$media=@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator]
+$galleryImages=galleryImages(qualifier, $catalogVersion)
+$siteResource=jar:de.hybris.wooliesegiftcard.initialdata.setup.InitialDataSystemSetup&/wooliesgcinitialdata/import/sampledata/productCatalogs/$productCatalog
+
+
+$productCatalogNz=nzWooliesProductCatalog
+$siteResourceNz=jar:de.hybris.wooliesegiftcard.initialdata.setup.InitialDataSystemSetup&/wooliesgcinitialdata/import/sampledata/productCatalogs/$productCatalogNz
+$catalogVersionNz=catalogversion(catalog(id[default=$productCatalogNz]),version[default='Staged'])[unique=true,default=$productCatalogNz]
+
+# Create Media for nz
+INSERT_UPDATE Media;code[unique=true];$media;mime[default='image/jpeg'];$catalogVersionNz;folder(qualifier)
+;DefaultImageForGiftCard;$siteResourceNz/images/Store/DefaultImageForGiftCard.png;image/png;;images
+
+# Create Media
+INSERT_UPDATE Media;code[unique=true];$media;mime[default='image/jpeg'];$catalogVersion;folder(qualifier)
+;wishDragonfly.jpg;$siteResource/images/wishDragonfly.jpg;image/jpeg;;images
+;wishStreamers.jpg;$siteResource/images/wishDragonfly.jpg;image/jpeg;;images
+;wishTraditional.jpg;$siteResource/images/wishDragonfly.jpg;image/jpeg;;images
+#Essentials
+;WOW400001BLU.png;$siteResource/images/Essential/WOW400001BLU.png;image/png;;images
+;WOW400002GRN.png;$siteResource/images/Essential/WOW400002GRN.png;image/png;;images
+;WOW400004RED.png;$siteResource/images/Essential/WOW400004RED.png;image/png;;images
+;WOW400005YLW.png;$siteResource/images/Essential/WOW400005YLW.png;image/png;;images
+;WOW400007PRP.png;$siteResource/images/Essential/WOW400007PRP.png;image/png;;images
+
+#Groceries
+;WOW487001GRC.png;$siteResource/images/Groceries/WOW487001GRC.png;image/png;;images
+
+#Brand
+;ecard-defaultimage.jpeg;$siteResource/images/Store/ecard-defaultimage.jpg;image/jpeg;;images
+;WOW500005SMK.png;$siteResource/images/Store/WOW500005SMK.png;image/png;;images
+;WOW5010005BW.png;$siteResource/images/Store/WOW5010005BW.png;image/png;;images
+;WOW5020005DS.png;$siteResource/images/Store/WOW5020005DS.png;image/png;;images
+;WOW5030005PT.png;$siteResource/images/Store/WOW5030005PT.png;image/png;;images
+;WOW504005BWS.png;$siteResource/images/Store/WOW504005BWS.png;image/png;;images
+;WOW5050005DM.jpg;$siteResource/images/Store/WOW5050005DM_1.jpg;image/jpeg;;images
+;WOW5060005TD.png;$siteResource/images/Store/WOW5060005TD.png;image/png;;images
+;WOW508001BLU.png;$siteResource/images/Store/WOW508001BLU.png;image/png;;images
+;WOW508002ORA.png;$siteResource/images/Store/WOW508002ORA.png;image/png;;images
+;WOW508003GRN.png;$siteResource/images/Store/WOW508003GRN.png;image/png;;images
+;WOW509CELLAR.png;$siteResource/images/Store/WOW509CELLAR.png;image/png;;images
+;WOW5550005WL.png;$siteResource/images/Store/WOW5550005WL.png;image/png;;images
+;WOW711ESMKT1.jpg;$siteResource/images/Store/WOW711ESMKT1.jpg;image/jpeg;;images
+;WOW712EBW001_p.jpg;$siteResource/images/Store/WOW712EBW001_p.jpg;image/jpeg;;images
+;WOW712EBW001.jpg;$siteResource/images/Store/WOW712EBW001.jpg;image/jpeg;;images
+;WOW713EMST01.jpg;$siteResource/images/Store/WOW713EMST01.jpg;image/jpeg;;images
+;WOW714EBWS01.jpg;$siteResource/images/Store/WOW714EBWS01.jpg;image/jpeg;;images
+;WOW715EDMY01.jpg;$siteResource/images/Store/WOW715EDMY01.jpg;image/jpeg;;images
+;WOW716EPTL01.jpg;$siteResource/images/Store/WOW716EPTL01.jpg;image/jpeg;;images
+;WOW717ECMS01.jpg;$siteResource/images/Store/WOW717ECMS01.jpg;image/jpeg;;images
+;WOW718ETDX01.jpg;$siteResource/images/Store/WOW718ETDX01.jpg;image/jpeg;;images
+;WOW719ONL001.png;$siteResource/images/Store/WOW719ONL001_1.png;image/png;;images
+
+
+;ecard-defaultimage.jpg;$siteResource/images/Wish/celebration/ecard-defaultimage.jpg;image/jpeg;;images
+
+;WOW309XMSBLU.jpg;$siteResource/images/Wish/christmas/WOW309XMSBLU.jpg;image/jpeg;;images
+;WOW555005SAN.jpg;$siteResource/images/Wish/christmas/WOW555005SAN.jpg;image/jpeg;;images
+;WOW555ANGEL.jpg;$siteResource/images/Wish/christmas/WOW555ANGEL.jpg;image/jpeg;;images
+;WOW555XMSBAL.jpg;$siteResource/images/Wish/christmas/WOW555XMSBAL.jpg;image/jpeg;;images
+;WOW555XMSGLD.jpg;$siteResource/images/Wish/christmas/WOW555XMSGLD.jpg;image/jpeg;;images
+;WOW555XMSRED.jpg;$siteResource/images/Wish/christmas/WOW555XMSRED.jpg;image/jpeg;;images
+
+
+;WOW555CASH4.jpg;$siteResource/images/Wish/corporate/WOW555CASH4.jpg;image/jpeg;;images
+;WOW555INS002.jpg;$siteResource/images/Wish/corporate/WOW555INS002.jpg;image/jpeg;;images
+;WOW555NRMA_1.jpg;$siteResource/images/Wish/corporate/WOW555NRMA_1.jpg;image/jpeg;;images
+
+
+
+;WOW3090092LG.png;$siteResource/images/Wish/traditional/WOW3090092LG.png;image/png;;images
+;WOW3090093ST.png;$siteResource/images/Wish/traditional/WOW3090093ST.png;image/png;;images
+;WOW309FEM001.png;$siteResource/images/Wish/traditional/WOW309FEM001.png;image/png;;images
+;WOW309INS001_1.jpg;$siteResource/images/Wish/traditional/WOW309INS001_1.jpg;image/jpeg;;images
+;WOW309MAL001.png;$siteResource/images/Wish/traditional/WOW309MAL001.png;image/png;;images
+;WOW309NTAA.png;$siteResource/images/Wish/traditional/WOW309NTAA.png;image/png;;images
+;WOW309RAA.png;$siteResource/images/Wish/traditional/WOW309RAA.png;image/png;;images
+;WOW309RACQ.png;$siteResource/images/Wish/traditional/WOW309RACQ.png;image/png;;images
+;WOW309RACT.png;$siteResource/images/Wish/traditional/WOW309RACT.png;image/png;;images
+;WOW309RACV.png;$siteResource/images/Wish/traditional/WOW309RACV.png;image/png;;images
+;WOW309XMS016.png;$siteResource/images/Wish/traditional/WOW309XMS016.png;image/png;;images
+;WOW309XMSBLU_1.jpg;$siteResource/images/Wish/traditional/WOW309XMSBLU_1.jpg;image/jpeg;;images
+;WOW501ANGEL.jpg;$siteResource/images/Wish/traditional/WOW501ANGEL.jpg;image/jpeg;;images
+
+# default image for e gift card
+;DefaultImageForGiftCard;$siteResource/images/Store/DefaultImageForGiftCard.png;image/png;;images
+
+# Create Media Containers
+INSERT_UPDATE MediaContainer;qualifier[unique=true];$medias;$catalogVersion
+
+# Update Products with Media and Media Containers
+UPDATE Product;code[unique=true];$picture;$catalogVersion
+;WOW3090092LG;WOW3090092LG.png;
+;WOW3090093ST;WOW3090093ST.png;
+;WOW30900POND;wishTraditional.jpg;
+;WOW309BOTANICA;wishDragonfly.jpg;
+;WOW309CC001;wishStreamers.jpg;
+;WOW309ENT001;wishTraditional.jpg;
+;WOW309FEM001;wishDragonfly.jpg;
+;WOW309INS001;wishStreamers.jpg;
+;WOW309MAL001;wishTraditional.jpg;
+;WOW309NSW;wishDragonfly.jpg;
+;WOW309NTAA;wishStreamers.jpg;
+;WOW309RACQ;wishDragonfly.jpg;
+;WOW309RACT;wishTraditional.jpg;
+;WOW309RACV;wishDragonfly.jpg;
+;WOW309XMS014;wishTraditional.jpg;
+;WOW309XMS016;wishTraditional.jpg;
+;WOW309XMS017;wishTraditional.jpg;
+;WOW309XMSBLU;wishTraditional.jpg;
+#Essentials Start
+;WOW400001BLU;WOW400001BLU.png;
+;WOW400002GRN;WOW400002GRN.png;
+;WOW400004RED;WOW400004RED.png;
+;WOW400005YLW;WOW400005YLW.png;
+;WOW400007PRP;WOW400007PRP.png;
+#Essentials End
+#Groceries
+;WOW487001GRC;WOW487001GRC.png;
+#Brand
+;WOW500005SMK;WOW500005SMK.png;
+;WOW5010005BW;WOW5010005BW.png;
+;WOW501ANGEL;wishTraditional.jpg;
+;WOW501WINNER;wishTraditional.jpg;
+;WOW5020005DS;WOW5020005DS.png;
+;WOW5030005PT;WOW5030005PT.png;
+;WOW504005BWS;WOW504005BWS.png;
+;WOW5050005DM;WOW5050005DM.jpg;
+;WOW5060005TD;WOW5060005TD.png;
+;WOW508001BLU;WOW508001BLU.png;
+;WOW711ESMKT1;WOW711ESMKT1.jpg
+;WOW508001QFF;wishTraditional.jpg;
+;WOW508002ORA;WOW508002ORA.png;
+;WOW508003GRN;WOW508003GRN.png;
+;WOW509CELLAR;WOW509CELLAR.png;
+;WOW5550005WL;WOW5550005WL.png;
+;WOW712EBW001;WOW712EBW001.jpg;
+;WOW713EMST01;WOW713EMST01.jpg;
+;WOW714EBWS01;WOW714EBWS01.jpg;
+;WOW715EDMY01;WOW715EDMY01.jpg;
+;WOW716EPTL01;WOW716EPTL01.jpg;
+;WOW717ECMS01;WOW717ECMS01.jpg;
+;WOW718ETDX01;WOW718ETDX01.jpg;
+;WOW719ONL001;WOW719ONL001.png;
+
+;WOW5550005BW;wishTraditional.jpg;
+;WOW5550005DM;wishTraditional.jpg;
+;WOW5550005DS;wishTraditional.jpg;
+;WOW5550005PT;wishTraditional.jpg;
+;WOW5550005TD;wishTraditional.jpg;
+;WOW555001BLU;wishTraditional.jpg;
+;WOW555002ORA;wishTraditional.jpg;
+;WOW555003GRN;wishTraditional.jpg;
+;WOW555005BWS;wishTraditional.jpg;
+;WOW555005INS;wishTraditional.jpg;
+;WOW555005SAN;wishTraditional.jpg;
+;WOW555005SMK;wishTraditional.jpg;
+;WOW5550092LG;wishTraditional.jpg;
+;WOW5550093ST;wishTraditional.jpg;
+;WOW5550094BL;wishTraditional.jpg;
+;WOW555ANGEL;wishTraditional.jpg;
+;WOW555ARC001;wishTraditional.jpg;
+;WOW555ARC002;wishTraditional.jpg;
+;WOW555ARC002;wishTraditional.jpg;
+;WOW555ARC003;wishTraditional.jpg;
+;WOW555ARC004;wishTraditional.jpg;
+;WOW555ARC005;wishTraditional.jpg;
+;WOW555ARC006;wishTraditional.jpg;
+;WOW555ARC007;wishTraditional.jpg;
+;WOW555ARC008;wishTraditional.jpg;
+;WOW555ARC009;wishTraditional.jpg;
+;WOW555BDY001;wishTraditional.jpg;
+;WOW555BDY002;wishTraditional.jpg;
+;WOW555BDY003;wishTraditional.jpg;
+;WOW555BDY004;wishTraditional.jpg;
+;WOW555BDY005;wishTraditional.jpg;
+;WOW555BDY006;wishTraditional.jpg;
+;WOW555BDY007;wishTraditional.jpg;
+;WOW555BDY008;wishTraditional.jpg;
+
+

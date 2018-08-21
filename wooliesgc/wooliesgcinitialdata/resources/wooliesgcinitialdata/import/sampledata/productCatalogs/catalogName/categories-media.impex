@@ -1,0 +1,31 @@
+# -----------------------------------------------------------------------
+# [y] hybris Platform
+#
+# Copyright (c) 2017 SAP SE or an SAP affiliate company.  All rights reserved.
+#
+# This software is the confidential and proprietary information of SAP
+# ("Confidential Information"). You shall not disclose such Confidential
+# Information and shall use it only in accordance with the terms of the
+# license agreement you entered into with SAP.
+# -----------------------------------------------------------------------
+# ImpEx for Importing Category Media
+
+# Macros / Replacement Parameter definitions
+$productCatalog=auWooliesProductCatalog
+$productCatalogName=auWooliesProductCatalog
+$medias=medias(code, $catalogVersion)
+$media=@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator]
+$catalogVersion=catalogversion(catalog(id[default=$productCatalog]),version[default='Online'])[unique=true,default=$productCatalog:Online]
+$thumbnail=thumbnail(code, $catalogVersion)
+$picture=picture(code, $catalogVersion)
+$siteResource=jar:de.hybris.wooliesegiftcard.initialdata.setup.InitialDataSystemSetup&/wooliesgcinitialdata/import/sampledata/productCatalogs/$productCatalog
+
+# Import Category Media
+INSERT_UPDATE Media;code[unique=true];$media;mime[default='image/jpeg'];$catalogVersion;folder(qualifier)
+;wishDragonfly.jpg;$siteResource/images/wishDragonfly.jpg;image/jpeg;;images
+
+UPDATE Category;code[unique=true];$picture;$catalogVersion
+;6280001;wishDragonfly.jpg;
+;6280002;wishDragonfly.jpg;
+;6281001;wishDragonfly.jpg;
+;6281002;wishDragonfly.jpg;

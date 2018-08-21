@@ -1,0 +1,11 @@
+INSERT_UPDATE B2BUnit;uid;locName[lang=en];memberDescription;memberContact;memberEmail;memberActiveStatus;accountType;memberAccountGroup;discount
+;Entertainment_Book;Entertainment Book;Entertainment Book;Kevin Lee;klee@entertainmentbook.com.au;Active;Member;MEM_ACC_1;10
+;Frequent_Values;Frequent Values;Frequent Values;Kevin Lee;klee@entertainmentbook.com.au;Active;Member;MEM_ACC_1;10
+;Rewardshere;Rewardshere;Rewardshere;Tracey Easterbrook;tracey@pricepal.com.au;Active;Member;MEM_ACC_1;10
+;RAC;RAC;Royal Automobile Club WA;Julian Gomez;Julian.Gomez@rac.com.au;Active;Member;MEM_ACC_1;10
+;Cash Rewards;Cash Rewards;Cash Rewards;Natasha Chow;natasha.chow@cashrewards.com;Active;Member;MEM_ACC_1;10
+;PricePal;PricePal;PricePal;Tracey Easterbrook;tracey@pricepal.com.au;Active;Member;MEM_ACC_1;10
+;NRMA;NRMA;NRMA;Madison Porter;Madison.Porter@mynrma.com.au;Active;Member;MEM_ACC_1;10
+;Where_To_Enjoy;Where To Enjoy;Where To Enjoy;Kerry Jones;kerryj@wheretoenjoy.com;Active;Member;MEM_ACC_1;10
+;BWS;BWS;Beer Wine and Spirits;Melissa Iler;Melissa Iler;Active;Member;MEM_ACC_1;10
+;test;Test;Sample;Jason Elias;jelias@woolworths.com.au;Active;Member;MEM_ACC_1;10

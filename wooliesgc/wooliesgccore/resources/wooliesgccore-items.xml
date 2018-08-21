@@ -1,0 +1,1008 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- [y] hybris Platform Copyright (c) 2017 SAP SE or an SAP affiliate company. 
+	All rights reserved. This software is the confidential and proprietary information 
+	of SAP ("Confidential Information"). You shall not disclose such Confidential 
+	Information and shall use it only in accordance with the terms of the license 
+	agreement you entered into with SAP. -->
+
+<items xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="items.xsd">
+
+	<collectiontypes>
+
+		<collectiontype code="CoBrandImageCollection" elementtype="CoBrandImage" autocreate="true" generate="true"/>
+		
+		<collectiontype code="PersonasBasedPriceCollection" elementtype="java.lang.Integer" autocreate="true" generate="false" type="list"/>
+	</collectiontypes>
+
+	<enumtypes>
+		<!-- order -->
+		<enumtype code="ActiveStatus" autocreate="true" generate="true">
+			<value code="A" />
+			<value code="I" />
+		</enumtype>
+		<enumtype code="AddressType" autocreate="true" generate="true">
+			<value code="Billing" />
+			<value code="Shipping" />
+		</enumtype>
+
+		<enumtype code="BulkOrderStatus" autocreate="true" generate="true"
+			dynamic="true">
+			<value code="IN_PROCESS" />
+			<value code="VALIDATE_SUCCESS" />
+			<value code="VALIDATE_FAILED" />
+			<value code="SUCCESS" />
+		</enumtype>
+
+		<enumtype code="ImageApprovalStatus" autocreate="true"
+			generate="true">
+			<value code="PENDING" />
+			<value code="APPROVED" />
+			<value code="REJECT" />
+			<value code="DELETE" />
+		</enumtype>
+
+		<enumtype code="CorporateStatus" autocreate="true" generate="true">
+			<value code="Active" />
+			<value code="InActive" />
+		</enumtype>
+
+		<enumtype code="UserDataType" autocreate="true" generate="true">
+			<value code="B2C" />
+			<value code="B2B" />
+			<value code="MEM" />
+		</enumtype>
+		
+        
+        <enumtype code="PaymentOptions" autocreate="true" generate="true">
+            <value code="PAY_1001"/>
+            <value code="PAY_1002"/>
+            <value code="PAY_1003"/>
+        </enumtype>
+
+        <enumtype code="LookUpType" autocreate="true" generate="true">
+			<value code="PAYMENT_TYPE" />
+		</enumtype>
+		
+		<enumtype code="PaymentStatus" autocreate="false" generate="false">
+			<value code="ERROR_PAYMENT_COMPLETION" />
+			<value code="ERROR_PAYMENT_CANCELLATION" />
+		</enumtype>
+		
+		<enumtype code="OrderStatus" autocreate="false" generate="false">
+            <value code="ERROR_SENDING_WEX"/>  
+			<value code="GENERATEGIFTCARD"/>
+			<value code="MAIL_NOTIFICATION_COMPLETED" />
+        </enumtype>
+		<enumtype code="GiftCardStatus" autocreate="true" generate="true" dynamic="true">
+			<value code="GENERATED" />
+		</enumtype>
+	</enumtypes>
+
+	<relations>
+		<relation code="User2PersonalisationMedia" generate="true" localized="false" autocreate="true">
+            <sourceElement type="User" cardinality="one" qualifier="user">
+                <modifiers read="true" write="true" search="true" optional="false"/>
+            </sourceElement>
+            <targetElement type="PersonalisationMedia" cardinality="many" qualifier="giftCardMedias" collectiontype="set">
+                <modifiers read="true" write="true" search="true" optional="true" partof="true"/>
+            </targetElement>
+       </relation>
+       
+       <relation code="MemberUnit2PriceValueBasedOnCustomerRel" localized="false"	generate="true" autocreate="true">
+			<description>This relation defines the mapping between MemberUnit and priceValue.</description>
+			<sourceElement qualifier="memberunit" type="MemberUnit" cardinality="one" />
+			<targetElement qualifier="pricevaluecustomer" type="PriceValueCustomer" cardinality="many" collectiontype="list" ordered="true" />
+		</relation>
+		
+		<relation code="Category2PriceValueBasedOnCustomerRel" localized="false"	generate="true" autocreate="true">
+			<description>This relation defines mapping between Category and exclusion price.</description>
+			<sourceElement qualifier="category" type="Category" cardinality="one" />
+			<targetElement qualifier="pricevaluecustomer" type="PriceValueCustomer" cardinality="many" collectiontype="list" ordered="true" />
+		</relation>
+    
+        <relation code="Personalisation2OrderEntryRel" localized="false"	generate="true" autocreate="true">
+			<sourceElement qualifier="orderEntry" type="AbstractOrderEntry" cardinality="one" />
+			<targetElement qualifier="personalisationDetail" type="PersonalisationEGiftCard" cardinality="many" collectiontype="list" ordered="true" />
+		</relation>
+	</relations>
+
+	<itemtypes>
+		<!-- Add your item definitions here -->
+		<itemtype code="Product" autocreate="false" generate="false">
+			<description>Base product model extension that contains custom attributes for wooliesGC platform</description>
+			<attributes>
+				<attribute autocreate="true" qualifier="activeStatus"
+					type="ActiveStatus">
+					<description>Check the status of card i.e Active or Inactive</description>
+					<modifiers read="true" write="true" search="true"
+						optional="true" />
+					<persistence type="property" />
+				</attribute>
+				<attribute autocreate="true" qualifier="isEGiftCard" type="java.lang.Boolean">
+					<description>Check for Card type i.e plastic or E-Gift card</description>
+					<modifiers read="true" write="true" search="true"
+						optional="false" />
+					<persistence type="property" />
+				</attribute>
+			</attributes>
+		</itemtype>
+		<itemtype code="AbstractOrderEntry" autocreate="false"
+			generate="false">
+			<description>Base AbstractEntry model extension that contains custom attributes for wooliesGC platform</description>
+			<attributes>
+				<attribute autocreate="true" qualifier="customPrice" type="java.lang.Double"
+					generate="true">
+					<persistence type="property">
+						<columntype>
+							<value>java.math.BigDecimal</value>
+						</columntype>
+					</persistence>
+					<modifiers read="true" write="true" search="false"
+						optional="true" />
+					<defaultvalue>Double.valueOf(0.0d)</defaultvalue>
+				</attribute>
+				<attribute autocreate="true" qualifier="coBrandID" 
+ 						type="java.lang.String"> 
+ 						<modifiers read="true" write="true" search="true" 
+ 							optional="true"/> 
+ 						<persistence type="property" /> 
+ 					</attribute>
+ 					<attribute autocreate="true" qualifier="orderLineID" type="java.lang.String">
+                    <modifiers read="true" write="true" search="true" />
+                    <persistence type="property" /> 
+                </attribute> 
+			</attributes>
+		</itemtype>
+		
+		<typegroup name="WooliesGC">
+			<itemtype code="Customer" autocreate="false" generate="false">
+			<description>Base Customer model extension that contains custom attributes for wooliesGC platform</description>
+				<attributes>
+					<attribute type="java.util.Date" qualifier="dob">
+						<modifiers optional="true" />
+						<persistence type="property" />
+						<description>Customer Date of birth</description>
+					</attribute>
+
+					<attribute type="java.lang.String" qualifier="phone">
+						<modifiers optional="false" />
+						<persistence type="property" />
+						<description>Customer Phone Number</description>
+					</attribute>
+
+					<attribute type="java.lang.String" qualifier="cardNo">
+						<modifiers optional="true" />
+						<persistence type="property" />
+						<description>B2B Customer Card Number</description>
+					</attribute>
+					
+					<attribute type="java.lang.Boolean" qualifier="optInForMarketing">
+						<persistence type="property" />
+						<defaultvalue>Boolean.FALSE</defaultvalue>
+						<description>Attribute is required to enable Opt-inForrMarketing feature for customer at time of Registration</description>
+					</attribute>
+
+					<attribute type="java.lang.Boolean" qualifier="policyAgreement">
+						<persistence type="property" />
+						<defaultvalue>Boolean.FALSE</defaultvalue>
+						<description>Attribute is takes care of PolicyAgreement at time of Registration</description>
+					</attribute>
+
+					<!-- UserType to define customer type -->
+					<attribute type="UserDataType" qualifier="customerType">
+						<modifiers optional="false" />
+						<persistence type="property" />
+						<description>Attribute specify the type of Customer i.e B2C,B2B,MEM etc</description>
+					</attribute>
+					<attribute qualifier="firstName" type="java.lang.String">
+						<description>The customer's first name</description>
+						<modifiers read="true" write="true" search="true"
+							optional="true" />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="lastName" type="java.lang.String">
+						<description>The customer's last name</description>
+						<modifiers read="true" write="true" search="true"
+							optional="true" />
+						<persistence type="property" />
+					</attribute>
+						<attribute qualifier="userEmail" type="java.lang.String">
+						<modifiers read="true" write="true" search="true"
+							optional="true" />
+						<persistence type="property" />
+					</attribute>
+				</attributes>
+			</itemtype>
+
+			<itemtype code="Address" autocreate="false" generate="false">
+			<description>Base Address model extension that contains custom attributes for wooliesGC platform</description>
+				<attributes>
+					<attribute autocreate="true" qualifier="addressID" 
+ 						type="java.lang.String"> 
+ 						<modifiers read="true" write="true" search="true" 
+ 							optional="true"/> 
+ 						<persistence type="property" /> 
+ 					</attribute> 
+				</attributes>
+			</itemtype> 
+
+			<!-- B2B corporate Customer -->
+
+			<itemtype code="CorporateB2BUnit" autocreate="true"
+				generate="true" extends="B2BUnit"
+				jaloclass="de.hybris.wooliesegiftcard.core.jalo.CorporateB2BUnit">
+				<description>Custom Model created by extending OOB B2BUnit that contains custom attributes for wooliesGC platform</description>
+				<attributes>
+					<attribute qualifier="corporateABN" type="java.lang.String">
+						<modifiers read="true" write="true" search="true" />
+						<persistence type="property" />
+					</attribute>
+					
+					<attribute qualifier="charityOrganization" type="java.lang.Boolean">
+						<modifiers read="true" write="true" search="true"/>
+						<persistence type="property" />
+						<defaultvalue>Boolean.FALSE</defaultvalue>
+					</attribute>
+					
+					<attribute qualifier="sendAutomatedSalesReport" type="java.lang.Boolean">
+						<modifiers read="true" write="true" search="true" />
+						<persistence type="property" />
+						<defaultvalue>Boolean.FALSE</defaultvalue>
+					</attribute>
+										
+					<attribute qualifier="discount" type="java.lang.Double">
+						<persistence type="property">
+							<columntype>
+								<value>java.math.BigDecimal</value>
+							</columntype>
+						</persistence>
+						<modifiers read="true" write="true" search="true" />
+						<defaultvalue>Double.valueOf(0.0d)</defaultvalue>
+					</attribute>
+
+					<attribute qualifier="companyType" type="java.lang.String">
+						<modifiers read="true" write="true" search="true"
+							optional="false" />
+						<persistence type="property" />
+					</attribute>
+
+					<attribute qualifier="coBrandImages" type="CoBrandImageCollection">
+					<modifiers read="true" write="true" search="true" optional="true"/>
+					<persistence type="property"/>
+				</attribute>
+	<attribute qualifier="tradingName" type="java.lang.String">
+						<modifiers read="true" write="true" search="true"
+							optional="true" />
+						<persistence type="property" />
+					</attribute>
+				</attributes>
+			</itemtype>
+
+				<itemtype code="CorporateB2BCustomer" generate="true"
+				autocreate="true" extends="B2BCustomer"
+				jaloclass="de.hybris.wooliesegiftcard.core.jalo.CorporateB2BCustomer">
+				<description>Custom model created by extending B2BCustomer that contains custom attributes for wooliesGC platform</description>
+				<attributes>
+				</attributes>
+			</itemtype>
+
+			<!--Member Customer Unit -->
+			<itemtype code="MemberUnit" generate="true" autocreate="true"
+				extends="B2BUnit" jaloclass="de.hybris.wooliesegiftcard.core.jalo.MemberUnit">
+				<description>Custom Model created by extending B2BUnit that contains custom attributes for wooliesGC platform</description>
+				<deployment table="MemberUnitTable" typecode="11102" />
+				<attributes>
+					<attribute qualifier="memberDescription" type="java.lang.String">
+						<modifiers read="true" write="true" search="true"
+							optional="true" />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="memberEmail" type="java.lang.String">
+						<modifiers read="true" write="true" search="true"
+							optional="true" />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="memberActiveStatus" type="CorporateStatus">
+						<modifiers read="true" write="true" search="true"
+							optional="false" />
+						<persistence type="property" />
+						<defaultvalue>em().getEnumerationValue("CorporateStatus","Active")</defaultvalue>
+					</attribute>
+					<attribute qualifier="memberContact" type="java.lang.String">
+						<modifiers read="true" write="true" search="true"
+							optional="true" />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="memberAccountGroup" type="java.lang.String">
+						<modifiers read="true" write="true" search="true"
+							optional="true" />
+						<persistence type="property" />
+					</attribute>
+					<!-- GCD-507 -->
+					<attribute qualifier="memberBackgroundImage" type="Media">
+						<modifiers read="true" write="true" search="true"
+							optional="true" />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="memberLogoImage" type="Media">
+						<modifiers read="true" write="true" search="true"
+							optional="true" />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="heading1" type="java.lang.String">
+						<modifiers read="true" write="true" search="true"
+							optional="true" />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="fontColor1" type="java.lang.String">
+						<modifiers read="true" write="true" search="true"
+							optional="true" />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="heading2" type="java.lang.String">
+						<modifiers read="true" write="true" search="true"
+							optional="true" />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="fontColor2" type="java.lang.String">
+						<modifiers read="true" write="true" search="true"
+							optional="true" />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="heading3" type="java.lang.String">
+						<modifiers read="true" write="true" search="true"
+							optional="true" />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="fontColor3" type="java.lang.String">
+						<modifiers read="true" write="true" search="true"
+							optional="true" />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="memberKey" type="java.lang.String">
+						<modifiers read="true" write="true" search="true"
+							optional="false" />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="accountType" type="java.lang.String">
+						<modifiers read="true" write="true" search="true"
+							optional="false" />
+						<persistence type="property" />
+					</attribute>
+				</attributes>
+			</itemtype>
+
+			<itemtype code="MemberCustomer" generate="true" autocreate="true"
+				extends="B2BCustomer" jaloclass="de.hybris.wooliesegiftcard.core.jalo.MemberCustomer">
+				<description>Custom model created by extending B2BCustomer that contains custom attributes for wooliesGC platform</description>
+				<deployment table="MemberCustomer" typecode="11104" />
+				<attributes>
+				</attributes>
+			</itemtype>
+			
+			<itemtype code="DeliveryMode" generate="false" autocreate="false">
+			<description>Added custom attribute in OOB DeliveryMode itemtype for wooliesGC platform</description>
+				<attributes>
+					<attribute qualifier="deliveryDays" type="java.lang.Integer">
+						<modifiers read="true" write="true" search="true"
+							optional="false" />
+						<persistence type="property" />
+					</attribute>
+				</attributes>
+			</itemtype>
+
+
+			<!-- Categories customization for woolies -->
+
+			<itemtype code="Category" autocreate="false" generate="false">
+			<description>Base Category model extension that contains custom attributes for wooliesGC platform</description>
+				<attributes>
+					<attribute type="java.lang.String" qualifier="classification">
+						<persistence type="property" />
+						<modifiers read="true" write="true" search="true"
+							optional="true" />
+						<description>Classification of categories</description>
+					</attribute>
+				</attributes>
+			</itemtype>
+				
+             <itemtype code="WWHtmlLookUp" autocreate="true"
+				generate="true" jaloclass="de.hybris.wooliesegiftcard.core.jalo.WWHtmlLookUp">
+				<description>Custom model created for storing payment information</description>
+				<deployment table="WWHtmlLookUp" typecode="11106" />
+				<attributes>
+					<attribute qualifier="id" type="PaymentOptions">
+						<description>ID of lookup options</description>
+						<modifiers initial="true" read="true" write="true"
+							optional="false" search="true" />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="details" type="java.lang.String">
+						<description>Details of lookup options</description>
+						<modifiers initial="true" read="true" write="true"
+							optional="false" search="true" />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="description" type="java.lang.String">
+						<description>Description of Lookup Options</description>
+						<modifiers initial="true" read="true" write="true"
+							optional="true" search="true" />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="lookUpType" type="LookUpType">
+						<description>Description for LookUp Type</description>
+						<modifiers initial="true" read="true" write="true"
+							optional="false" search="true" />
+						<persistence type="property" />
+					</attribute>
+				</attributes>
+				<indexes>
+                <index name="LookUpTypeIdx">
+                    <key attribute="lookUpType"/>
+                </index>
+            </indexes>
+			</itemtype>
+			
+			<itemtype code="PersonalisationEGiftCard" generate="true"
+				autocreate="true" jaloclass="de.hybris.wooliesgiftcard.PersonalisationEGiftCard">
+				<description>Custom model created for storing the customization information of egift card</description>
+				<deployment table="PersonalisationEGiftCard" typecode="20000"/>
+				<attributes>
+				<attribute autocreate="true" qualifier="orderLineID" type="java.lang.String">
+                    	<modifiers read="true" write="true" search="true" />
+                    	<persistence type="property" /> 
+                	</attribute> 
+                	<attribute autocreate="true" qualifier="uid" type="java.lang.String">
+                    	<modifiers read="true" write="true" search="true" />
+                    	<persistence type="property" /> 
+                	</attribute> 
+					<attribute qualifier="customerImage" type="PersonalisationMedia">
+						<modifiers initial="true" read="true" write="true"
+							optional="true" search="true" />
+						<persistence type="property"></persistence>
+					</attribute>
+					<attribute autocreate="true" qualifier="message" type="java.lang.String"
+						generate="true">
+						<persistence type="property">
+						</persistence>
+						<modifiers read="true" write="true" search="false"
+							optional="true" />
+					</attribute>
+					<attribute autocreate="true" qualifier="toName" type="java.lang.String"
+						generate="true">
+						<persistence type="property">
+						</persistence>
+						<modifiers read="true" write="true" search="false"
+							optional="true" />
+					</attribute>
+					<attribute autocreate="true" qualifier="toEmail" type="java.lang.String"
+						generate="true">
+						<persistence type="property">
+						</persistence>
+						<modifiers read="true" write="true" search="false"
+							optional="true" />
+					</attribute>
+					<attribute autocreate="true" qualifier="fromName" type="java.lang.String"
+						generate="true">
+						<persistence type="property">
+						</persistence>
+						<modifiers read="true" write="true" search="false"
+							optional="true" />
+					</attribute>
+					<attribute autocreate="true" qualifier="pid" type="java.lang.Integer"
+						generate="true">
+						<persistence type="property">
+						</persistence>
+						<modifiers read="true" write="true" search="false"
+							optional="true" />
+					</attribute>
+					<attribute autocreate="true" qualifier="eGiftCard" type="EGiftCard"
+						generate="true">
+						<persistence type="property">
+						</persistence>
+						<modifiers read="true" write="true" search="false"
+							optional="true" />
+					</attribute>
+				</attributes>
+
+			</itemtype>
+
+			<itemtype code="PersonalisationMedia" extends="Media" generate="true"
+				autocreate="true" jaloclass="de.hybris.wooliesgiftcard.PersonalisationMedia">
+				<description>Custom model created for storing the Personalization information of media object(images) only</description>
+					<attributes>
+						<attribute qualifier="imageApprovalStatus" type="ImageApprovalStatus">
+							<description>Image Approval Status</description>
+							<modifiers initial="true" read="true" write="true"
+								optional="true" search="true" />
+							<persistence type="property" />
+							<defaultvalue>em().getEnumerationValue("ImageApprovalStatus","PENDING")</defaultvalue>
+						</attribute>
+						<attribute autocreate="true" qualifier="pid" type="java.lang.Integer" generate="true">
+						<persistence type="property"/>
+						<modifiers read="true" write="true" search="false" optional="true" />
+					</attribute>
+					<attribute qualifier="hasOrder" type="boolean">
+						<persistence type="property" />
+						<defaultvalue>Boolean.FALSE</defaultvalue>
+					</attribute>
+					</attributes>
+				</itemtype>
+
+			
+	<itemtype code="ResellerCustomer" autocreate="true" generate="true" jaloclass="de.hybris.platform.wooliesgccore.reseller.jalo.ResellerCustomer">
+	<description>Custom model created for storing the ResellerCustomer information</description>
+	<deployment table="ResellerCustomer" typecode="10122"/>
+		<attributes>
+			<attribute qualifier="resellerId" type="java.lang.String" >
+				<description>Generate a Reseller ID to uniquely identify a reseller</description>
+				<modifiers read="true" write="true"  optional="true" search="true" />
+				<persistence type="property"/>
+			</attribute>
+			<attribute qualifier="name" type="java.lang.String" >
+				<description>Reseller Name </description>
+				<modifiers read="true" write="true"  optional="false" search="true" />
+				<persistence type="property"/>
+			</attribute>
+			<attribute qualifier="contactName" type="java.lang.String" >
+				<description>Reseller Contact Name </description>
+				<modifiers read="true" write="true"  optional="true" search="true" />
+				<persistence type="property"/>
+			</attribute>
+			<attribute qualifier="contactEmailId" type="java.lang.String" >
+				<description>Reseller Contact Email Name </description>
+				<modifiers read="true" write="true"  optional="true" />
+				<persistence type="property"/>
+			</attribute>
+			<attribute qualifier="order" type="Order" >
+				<description>Reseller Order Details </description>
+				<modifiers read="true" write="true"  optional="true" />
+				<persistence type="property"/>
+			</attribute>
+		</attributes>
+	</itemtype> 
+	<itemtype code="AccountsRemovalCronJob" extends="CronJob" jaloclass="de.hybris.platform.cronjob.jalo.AccountsRemovalCronJob"
+                  autocreate="true" generate="true">
+    		<description>Custom Cronjob by extending OOB CronJob Model created for removing customer account on day basis</description>
+            <attributes>
+                <attribute qualifier="xDaysOld" type="int">
+                    <modifiers read="true" write="true" optional="false"/>
+                    <defaultvalue>Integer.valueOf(30)</defaultvalue>
+                    <description>All Accounts older than this value in days will be removed
+                    </description>
+                    <persistence type="property"/>
+                </attribute>
+            </attributes>
+        </itemtype>
+			<itemtype code="CoBrandImage" extends="Media" generate="true"
+				autocreate="true" jaloclass="de.hybris.wooliesegiftcard.core.jalo.CoBrandImage">
+				<description>Custom model created by extending OOB Media Model for storing the information of Co-Branded images</description>
+				<attributes>
+					<attribute qualifier="product" type="Product">
+						<modifiers initial="true" read="true" write="true"
+							optional="true" search="true" />
+						<persistence type="property"></persistence>
+					</attribute>
+					<attribute autocreate="true" qualifier="imageID" type="java.lang.String">
+						<modifiers read="true" write="true" search="true"
+							optional="false" />
+						<persistence type="property" />
+					</attribute>
+				</attributes>
+			</itemtype>
+
+			<itemtype code="Order" autocreate="false" generate="false">
+				<description>Base Order model extension with added custom attributes for Woolies GC platform</description>
+				<attributes>
+					<attribute qualifier="cartId" type="java.lang.String">
+						<description>Cart ID</description>
+						<modifiers initial="true" read="true" write="true"
+							optional="true" search="true" />
+						<persistence type="property" />
+					</attribute>
+					
+					<attribute qualifier="invoiceNumber" type="java.lang.String">
+						<description>Invoice Number</description>
+						<modifiers initial="true" read="true" write="true"
+							optional="true" search="true" />
+						<persistence type="property" />
+					</attribute>
+					
+					<attribute qualifier="retryCount" type="OrderRetryCount">
+						<description>Order Retry Count</description>
+						<modifiers initial="true" read="true" write="true"/>
+						<persistence type="property" />
+					</attribute>				
+				</attributes>
+			</itemtype>
+
+			<itemtype code="WWBulkOrderData" autocreate="true" generate="true"
+				jaloclass="de.hybris.wooliesegiftcard.core.jalo.WWBulkOrderData">
+				<description>Custom model created for storing the information for Bulk Order data</description>
+				<deployment table="WWBulkOrderData" typecode="10123" />
+				<attributes>
+					<attribute qualifier="uid" type="java.lang.String">
+						<description>uid of customer</description>
+						<modifiers initial="true" read="true" write="true"
+							optional="false" search="true" />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="referenceNumber" type="java.lang.String">
+						<description>reference Number</description>
+						<modifiers initial="true" read="true" write="true"
+							optional="false" search="true" />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="bulkOrderStatus" type="BulkOrderStatus">
+						<description>Define status of bulk order</description>
+						<modifiers initial="true" read="true" write="true"
+							optional="false" search="true" />
+						<persistence type="property" />
+					</attribute>
+					<attribute autocreate="true" qualifier="totalPrice" type="java.lang.Double"
+						generate="true">
+						<persistence type="property">
+							<columntype>
+								<value>java.math.BigDecimal</value>
+							</columntype>
+						</persistence>
+						<modifiers read="true" write="true" search="false"
+							optional="false" />
+						<defaultvalue>Double.valueOf(0.0d)</defaultvalue>
+					</attribute>
+
+				</attributes>
+			</itemtype>
+
+
+			<itemtype code="WWBulkOrderItemsData" autocreate="true"
+				generate="true" jaloclass="de.hybris.wooliesegiftcard.core.jalo.WWBulkOrderItemsData">
+				<description>Custom model created for storing the information for Bulk Order Items Data</description>
+				<deployment table="WWBulkOrderItemsData" typecode="11110" />
+				<attributes>
+					<attribute qualifier="skuCode" type="java.lang.String">
+						<description>sku product description</description>
+						<modifiers initial="true" read="true" write="true"
+							optional="false" search="true" />
+						<persistence type="property" />
+					</attribute>
+					<attribute autocreate="true" qualifier="unitPrice" type="java.lang.Double"
+						generate="true">
+						<persistence type="property">
+							<columntype>
+								<value>java.math.BigDecimal</value>
+							</columntype>
+						</persistence>
+						<modifiers read="true" write="true" search="false"
+							optional="false" />
+						<defaultvalue>Double.valueOf(0.0d)</defaultvalue>
+					</attribute>
+					<attribute qualifier="toName" type="java.lang.String">
+						<description>name of user</description>
+						<modifiers initial="true" read="true" write="true"
+							optional="true" search="true" />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="fromName" type="java.lang.String">
+						<description>from name of user</description>
+						<modifiers initial="true" read="true" write="true"
+							optional="true" search="true" />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="toEmail" type="java.lang.String">
+						<description>email of sender</description>
+						<modifiers initial="true" read="true" write="true"
+							optional="true" search="true" />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="fromEmail" type="java.lang.String">
+						<description>email of reciever</description>
+						<modifiers initial="true" read="true" write="true"
+							optional="true" search="true" />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="message" type="java.lang.String">
+						<description>Message</description>
+						<modifiers initial="true" read="true" write="true"
+							optional="true" search="true" />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="rowNumber" type="java.lang.Integer">
+						<description>Row number of excel</description>
+						<modifiers initial="true" read="true" write="true"
+							optional="false" search="true" />
+						<persistence type="property" />
+					</attribute>
+					<attribute qualifier="referenceNumber" type="java.lang.String">
+						<description>reference Number</description>
+						<modifiers initial="true" read="true" write="true"
+							optional="false" search="true" />
+						<persistence type="property" />
+					</attribute>
+				</attributes>
+			</itemtype>			
+			<itemtype code="OrderLimitPriceRow" extends="GenericItem"
+				jaloclass="de.hybris.wooliesegiftcard.core.jalo.OrderLimitPriceRow"
+				autocreate="true" generate="true">
+				<description>Custom model created for storing OrderLimit information in context of Bulk Order Upload.</description>
+				<deployment table="OrderLimitPriceRow" typecode="20002" />
+				<attributes>
+
+					<attribute qualifier="currency" type="Currency"
+						autocreate="true">
+						<persistence type="property" />
+						<modifiers read="true" write="true" search="true"
+							optional="false" removable="false" initial="true" private="false"
+							partof="false" />
+					</attribute>
+					<attribute qualifier="price" autocreate="true"
+						type="java.lang.Double">
+						<defaultvalue>Double.valueOf(0.0D)</defaultvalue>
+						<persistence type="property" />
+						<modifiers read="true" write="true" search="true"
+							optional="false" />
+					</attribute>
+				</attributes>
+			</itemtype>
+			
+			<itemtype code="PriceValueCustomer" autocreate="true" generate="true" jaloclass="de.hybris.wooliesegiftcard.core.jalo.PriceValueCustomer"> 
+				<description>Custom model created for storing multi prices in align with Products.These multi-prices will be applicable for Members only.</description>
+				<deployment table="PriceValueCustomer" typecode="20010"/>
+				<attributes>
+				<attribute qualifier="product" type="Product">
+					<modifiers read="true" write="true" search="true" optional="false" />
+					<persistence type="property" />
+				</attribute>
+				<attribute qualifier="personasBasedPriceCollection" type="PersonasBasedPriceCollection">
+					<modifiers read="true" write="true" search="true" optional="false" />
+					<persistence type="property" />
+				</attribute>
+				</attributes>
+			</itemtype>
+			
+			<itemtype code="AbstractOrder" autocreate="false"
+                  generate="false">
+                  <description>Base Order model extension with added custom attributes.</description>
+                  <attributes>
+                         <attribute autocreate="true" qualifier="taxInvoiceId" type="java.lang.String"
+                              generate="true">
+                              <persistence type="property"/>
+                              <modifiers read="true" write="true" search="false"
+                                    optional="true" />
+                        </attribute>
+                    	<attribute autocreate="true" qualifier="isBulkOrder" type="java.lang.Boolean">
+							<description>Define Order is Bulk Order</description>
+							<modifiers read="true" write="true" search="true"/>
+							<persistence type="property" />
+							<defaultvalue>Boolean.FALSE</defaultvalue>
+				        </attribute>
+						<attribute autocreate="true" qualifier="isMinimalPackage" type="java.lang.Boolean">
+							<modifiers read="true" write="true" search="true" />
+							<persistence type="property" />
+							<defaultvalue>Boolean.FALSE</defaultvalue>
+				     </attribute>
+					  <attribute autocreate="true" qualifier="consignmentNo" type="java.lang.String"
+                              generate="true">
+                              <persistence type="property"/>
+                              <modifiers read="true" write="true" search="false"
+                                    optional="true" />
+                        </attribute>
+						
+						 <attribute autocreate="true" qualifier="productCount" type="java.lang.String"
+						generate="true">
+						<persistence type="property" />
+						<modifiers read="true" write="true" search="false"
+							optional="true" />
+					</attribute>
+						<attribute autocreate="true" qualifier="orderId" type="java.lang.String"
+						generate="true">
+						<persistence type="property" />
+						<modifiers read="true" write="true" search="false"
+							optional="true" />
+					</attribute>
+					<attribute autocreate="true" qualifier="orderToken" type="java.lang.String"
+						generate="true">
+						<persistence type="property" />
+						<modifiers read="true" write="true" search="true" unique="true"
+							optional="true" />
+					</attribute>
+        </attributes>
+            </itemtype>
+			
+         <itemtype code="PaymentInfo" autocreate="false" generate="false">
+         		<description>Base PaymentInfo model extension with added custom attributes for storing payment information while connecting DIGIPAY.</description>
+				<attributes>
+					<attribute type="PaymentOptions" qualifier="paymentOption">
+						<persistence type="property" />
+						<modifiers read="true" write="true" search="true"
+							optional="true" />
+						<description>paymentOption</description>
+					</attribute>
+					<attribute type="java.lang.String" qualifier="schema">
+						<persistence type="property" />
+						<modifiers read="true" write="true" search="true"
+							optional="true" />
+						<description>Type of Credit Card</description>
+					</attribute>
+					<attribute type="java.lang.String" qualifier="paymentTransactionRef">
+						<persistence type="property" />
+						<modifiers read="true" write="true" search="true"
+							optional="true" />
+						<description>paymentTransactionRef</description>
+					</attribute>
+					  <attribute qualifier="ccNumber" autocreate="true" type="java.lang.String">
+                    <!--  CAUTION: ONLY CHANGE THE VALUE OF ENCRYPTED WHEN YOU KNOW WHAT YOU DO !!! -->
+                    <modifiers read="true" write="true" search="false" optional="true" encrypted="true"/>
+                    <persistence type="property"/>
+                </attribute>
+				</attributes>
+			</itemtype>
+			
+			<itemtype code="orderRetryCount" autocreate="true" generate="true" jaloclass="de.hybris.wooliesegiftcard.core.jalo.OrderRetryCount">
+			<description>Custom model created with custom attributes for storing retry count in context of payment or Order information sent to DIGIPAY or WEX.</description> 
+			<deployment table="RetryCount" typecode="20011"/>
+				<attributes>
+				<attribute qualifier="paymentCompletionCount" type="java.lang.Integer">
+					<modifiers read="true" write="true"  optional="true" />
+					  <defaultvalue>Integer.valueOf(0)</defaultvalue>
+					  <description>Retry Count for Payment Completion,Cancellation and Transfer to WEX</description>
+					<persistence type="property" />
+				</attribute>
+				<attribute qualifier="wexCount" type="java.lang.Integer">
+					<modifiers read="true" write="true"  optional="false" />
+					  <defaultvalue>Integer.valueOf(0)</defaultvalue>
+					  <description>Retry Count for sending order data to wex</description>
+					<persistence type="property" />
+				</attribute>
+				<attribute qualifier="paymentCancelCount" type="java.lang.Integer">
+					<modifiers read="true" write="true"  optional="true" />
+					  <defaultvalue>Integer.valueOf(0)</defaultvalue>
+					  <description>Retry Count for Payment Cancellation</description>
+					<persistence type="property" />
+				</attribute>
+			</attributes>
+	</itemtype>
+	
+				<itemtype code="EGiftCard" generate="true" autocreate="true"
+				jaloclass="de.hybris.wooliesgiftcard.EGiftCard">
+				<description>Custom Model created with added custom attributes for holding information related to EgiftCard.</description>
+				<deployment table="EGiftCard" typecode="20109" />
+				<attributes>
+					<attribute autocreate="true" qualifier="uid" type="java.lang.String">
+                    	<modifiers read="true" write="true" search="true" />
+                    	<persistence type="property" /> 
+                	</attribute> 
+					<attribute qualifier="code" type="java.lang.String">
+						<modifiers initial="true" read="true" write="true"
+							optional="true" search="true" unique="true" />
+						<persistence type="property"></persistence>
+					</attribute>
+					<attribute autocreate="true" qualifier="isEgiftCard"
+						type="java.lang.Boolean" generate="true">
+						<persistence type="property">
+						</persistence>
+						<modifiers read="true" write="true" search="false"
+							optional="true" />	
+						<defaultvalue>Boolean.FALSE</defaultvalue>
+					</attribute>
+					<attribute autocreate="true" qualifier="orderID" type="java.lang.String"
+						generate="true">
+						<persistence type="property">
+						</persistence>
+						<modifiers read="true" write="true" search="false"
+							optional="true" />
+					</attribute>
+					<attribute autocreate="true" qualifier="ordeLineID" type="java.lang.String"
+						generate="true">
+						<persistence type="property">
+						</persistence>
+						<modifiers read="true" write="true" search="false"
+							optional="true" />
+					</attribute>
+					<attribute qualifier="giftCardStatus" type="GiftCardStatus">
+						<modifiers initial="true" read="true" write="true"
+							optional="true" search="true" />
+						<persistence type="property" />
+						<defaultvalue>em().getEnumerationValue("GiftCardStatus","GENERATED")</defaultvalue>
+					</attribute>
+					<attribute autocreate="true" qualifier="expiryDate" type="java.util.Date"
+						generate="true">
+						<persistence type="property">
+						</persistence>
+						<modifiers read="true" write="true" search="false"
+							optional="true" />
+					</attribute>
+					<attribute autocreate="true" qualifier="giftCardNumber"
+						type="java.lang.Long" generate="true">
+						<persistence type="property">
+						</persistence>
+						<modifiers read="true" write="true" search="false"
+							optional="false" />
+					</attribute>
+					<attribute autocreate="true" qualifier="pin"
+						type="java.lang.String" generate="true">
+						<persistence type="property">
+						</persistence>
+						<modifiers read="true" write="true" search="false"
+							optional="false" />
+					</attribute>
+					 <attribute autocreate="true" qualifier="emailId" type="java.lang.String"
+						generate="true">
+						<persistence type="property">
+						</persistence>
+						<modifiers read="true" write="true" search="false"
+							optional="true" />
+					</attribute>
+					<attribute autocreate="true" qualifier="activationDate"
+						type="java.util.Date" generate="true">
+						<persistence type="property">
+						</persistence>
+						<modifiers read="true" write="true" search="false"
+							optional="true" />
+					</attribute>
+					<attribute autocreate="true" qualifier="giftCardValue"
+						type="java.lang.Double" generate="true">
+						<persistence type="property">
+						</persistence>
+						<modifiers read="true" write="true" search="false"
+							optional="true" />
+					</attribute>
+					<attribute autocreate="true" qualifier="personalisationGiftCard"
+						type="PersonalisationEGiftCard" generate="true">
+						<persistence type="property">
+						</persistence>
+						<modifiers read="true" write="true" search="false"
+							optional="false" />
+					</attribute>
+					<attribute autocreate="true" qualifier="giftCardToken"
+						type="java.lang.String" generate="true">
+						<persistence type="property">
+						</persistence>
+						<modifiers read="true" write="true" search="false"
+							optional="true" />
+					</attribute>
+				</attributes>
+			</itemtype>
+
+			<itemtype code="CronJob" autocreate="false" generate="false">
+				<description>Base CronJob Model extension with added custom attributes for holding last success time for a specified JOB.</description>
+				<attributes>
+					<attribute autocreate="true" qualifier="lastSuccessTime"
+						type="java.lang.String" generate="true">
+						<persistence type="property" />
+						<modifiers read="true" write="true" search="false"
+							optional="true" />
+					</attribute>
+				</attributes>
+		     </itemtype>
+ 		
+            <itemtype code="OrderProcess" autocreate="false" generate="false">
+            <description>Base OrderProcess Model extension with added custom attributes for storing email information while sending Invoice Number mail.</description>
+            <attributes>
+              <attribute qualifier="attachment" type="java.lang.String">
+						<persistence type="property" />
+						<description>Specify the attachement while sending mail.</description>
+					</attribute>
+					<attribute qualifier="toEmail" type="java.lang.String">
+						<persistence type="property" />
+						<description>Specify the to address.</description>
+					</attribute>
+					<attribute qualifier="fromEmail" type="java.lang.String">
+						<persistence type="property" />
+						<description>Specify the from address.</description>
+					</attribute>
+					<attribute qualifier="message" type="java.lang.String">
+						<persistence type="property" />
+						<description>Specify the meesage body i.e content of email.</description>
+					</attribute>
+					<attribute qualifier="toName" type="java.lang.String">
+						<persistence type="property" />
+						<description>Specify the name of person to whom, mail has been sent.</description>
+					</attribute>
+					  </attributes>
+			</itemtype>
+		</typegroup>
+
+	</itemtypes>
+</items>

@@ -1,0 +1,53 @@
+# -----------------------------------------------------------------------
+# [y] hybris Platform
+#
+# Copyright (c) 2017 SAP SE or an SAP affiliate company.  All rights reserved.
+#
+# This software is the confidential and proprietary information of SAP
+# ("Confidential Information"). You shall not disclose such Confidential
+# Information and shall use it only in accordance with the terms of the
+# license agreement you entered into with SAP.
+# -----------------------------------------------------------------------
+#
+# Import the CMS content for the site emails
+#
+$contentCatalog=wooliesContentCatalog
+$productCatalog=auWooliesProductCatalog
+
+$catalogVersion=catalogversion(catalog(id[default=$productCatalog]),version[default='Online'])[unique=true,default=$productCatalog]
+$media=@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator]
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Online])[default=$contentCatalog:Online]
+$siteResource=jar:de.hybris.wooliesegiftcard.initialdata.setup.InitialDataSystemSetup&/wooliesgcinitialdata/import/sampledata/productCatalogs/$productCatalog
+$wideContent=CMSImageComponent,BannerComponent
+$picture=media(code, $contentCV);
+
+# Import config properties into impex macros
+UPDATE GenericItem[processor=de.hybris.platform.commerceservices.impex.impl.ConfigPropertyImportProcessor];pk[unique=true]
+$emailResource=$config-emailResourceValue
+
+# Language
+$lang=en
+
+# Create Media for nz
+INSERT_UPDATE Media;code[unique=true];$media;mime[default='image/jpeg'];$catalogVersion;folder(qualifier)
+;emailFooter;$siteResource/images/Email/emailFooter.jpg;image/jpeg;;images
+;woolworthsEmailLogo;$siteResource/images/Email/woolworthsEmailLogo.png;image/png;;images
+
+
+
+# CMS components and Email velocity templates
+UPDATE RendererTemplate;code[unique=true];description[lang=$lang];templateScript[lang=$lang,translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;woolies_Email_Order_Confirmation_Body;"Order Confirmation Email Body";$emailResource/email-orderConfirmationBody.vm
+;woolies_Email_Order_Confirmation_Subject;"Order Confirmation Email Subject";$emailResource/email-orderConfirmationSubject.vm
+;woolies_Email_InvoiceTax_Body;"InvoiceTax Email Body";$emailResource/email-invoiceTaxBody.vm
+;woolies_Email_InvoiceTax_Subject;"Invoice Tax Email Subject";$emailResource/email-invoiceTaxSubject.vm
+
+;woolies_E_Gift_Card_Email_Order_Confirmation_Body;"E-Gift Card Order Confirmation Email Body";$emailResource/email-eGiftCardOrderBody.vm
+;woolies_E_Gift_Card_Email_Order_Confirmation_Subject;"E-Gift Card Email Subject";$emailResource/email-eGiftCardOrderSubject.vm
+
+
+# Email Pages
+UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];fromEmail[lang=$lang];fromName[lang=$lang]
+;;OrderConfirmationEmail;"noreply@staging.everydaygiftcards.com.au";"Customer Services Team"
+;;InvoiceTaxEmail;"taxinvoice-stg@everydaygiftcards.com.au";"Customer Services Team"
+;;GiftCardOrderConfirmationEmail;"egiftcardtest@everydaygiftcards.com.au";"Customer Services"
